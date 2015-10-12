@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 //import com.badlogic.gdx.math.Vector3;
 
 public class GameChar {
+	// represent a character in-game
+	// store coordinate, direction, ID and all the de/buff
 
 	private static final String TAG = GameChar.class.getName();
 	

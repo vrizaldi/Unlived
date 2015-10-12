@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Intersector;
 
 public class Navigator {
+	// update the map in-game
 
 	private static final String TAG = Navigator.class.getName();
 	

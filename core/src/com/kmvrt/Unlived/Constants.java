@@ -1,6 +1,7 @@
 package com.kmvrt.Unlived;
 
 public class Constants {
+	// store all the constants
 	
 	// game state IDs
 	public static final int STATE_HUB = 201;

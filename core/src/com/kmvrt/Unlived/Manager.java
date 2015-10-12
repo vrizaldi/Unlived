@@ -6,6 +6,7 @@ import com.badlogic.gdx.Graphics.DisplayMode;
 //import com.badlogic.gdx.Screen;
 
 public class Manager extends Game {
+	// manage everything in the game (game loop, etc.)
 
 	// logging tag
 	private static final String TAG = Manager.class.getName();

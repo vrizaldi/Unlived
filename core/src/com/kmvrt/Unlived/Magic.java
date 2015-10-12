@@ -1,6 +1,8 @@
 package com.kmvrt.Unlived;
 
 public class Magic {
+	// represent a magic in-game
+	// have its own properties (specified in the spell)
 
 	// its position 
 	private float x;
@@ -18,7 +20,6 @@ public class Magic {
 		this.y = y;
 		this.dir = dir;
 	}	// new(int, int, int)'s end
-
 
 
 

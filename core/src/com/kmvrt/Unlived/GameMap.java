@@ -1,6 +1,7 @@
 package com.kmvrt.Unlived;
 
 public class GameMap {
+	// represent a map in-game
 
 	private int typeID;
 

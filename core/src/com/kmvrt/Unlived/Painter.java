@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 public class Painter {
+	// render in-game sprites on-screen
 
 	private StateData data;
 

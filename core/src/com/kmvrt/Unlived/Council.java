@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Timer;
 import java.util.Iterator;
 
 public class Council {
+	// update the characters in-game
 	
 	private static final String TAG = Council.class.getName();
 	

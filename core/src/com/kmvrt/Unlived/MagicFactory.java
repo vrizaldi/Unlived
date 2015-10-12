@@ -4,7 +4,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.Gdx;
 
 public class MagicFactory {
-	// create and store spells
+	// initialise, store and return a Magic 
 	
 	private static String TAG = MagicFactory.class.getName();
 	
@@ -27,18 +27,20 @@ public class MagicFactory {
 			// read and use the data from the magic files **********
 			/* every spell has an extension ".spell" 
 			 * and is stored in "local/magic/spells/" */
-			FileHandle[] spells = Gdx.files.local("magic/spells/").list(".spell");
-			BufferedReader file;
+			FileHandle[] files = Gdx.files.local("magic/spells/").list(".spell");
+			BufferedReader reader;
 				// a (reader to a) file
-			for(FileHandle spell : spells) {
+			for(FileHandle file : files) {
 				// read every ".spell" files
 
-				ArrayList<int> acts = new ArrayList<int>();
+				ArrayList<int> atts;
 					// the acts
-				ArrayList<int> actPeriods = new ArrayList<int>();
+				ArrayList<float> attSetters;
 					// the actPeriods
+				boolean initMagic = false;
+				boolean attStated = false;
 
-				file = new BufferedReader(new InputStreamReader(spell.read()));
+				reader = new BufferedReader(new InputStreamReader(reader.read()));
 				while((String line = file.readLine().trim()) != null) {
 					// keep looping until it reach the end of the file
 
@@ -47,50 +49,63 @@ public class MagicFactory {
 						// move to the next line
 						continue;
 					}
+
 					String[] args = line.split("\\s");
-					boolean initMagic = false;
-					boolean actStated = false;
-
 					for(String arg : args) {
-						if(arg.equals(Constants.ARG_MAGIC_INIT)
-								&& !initMagic) {
-							initMagic = true;
+						 if(initMagic) {
+							// initialise a magic
+							if(!actStated) {
+								if(arg.equals(Constants.ARG_ATT_MANA)) {
+									atts.add(Constants.ATT_MANA);
+									attStated = true;
 
-						} else if(arg.equals(Constants.ARG_MAGIC_INITEND)
-								&& initMagic) {
-							initMagic = false;
-						
-						} else if(initMagic) {
-							// act initialisation
-							if(arg.equals(Constants.ARG_ACT_FORWARD)
-									&& !actStated) {
-								acts.add(Constants.ACT_FORWARD);
-								actStated = true;
+								} else if(arg.equals(Constants.ARG_ATT_ACCEL)) {
+									atts.add(Constants.ATT_ACCEL);
+									attStated = true;
 
-							} else if(arg.equals(Constants.ARG_ACT_FORWARD_X_N)
-									&& !actStated) {
-								acts.add(Constants.ACT_FORWARD_X_N);
-								actStated = true;
+								} else if(arg.equals(Constants.ARG_ATT_FORCE)) {
+									atts.add(Constants.ATT_FORCE);
+									attStated = true;
+								}
+							// if actStated == false's end
 
-							} else if(arg.equals(Constants.ARG_ACT_FORWARD_X_S)
-									&& !actStated) {
-								acts.add(Constants.ACT_FORWARD_X_S);
-								actStated = true;
-							
-							// act period initialisation
 							} else if(isNumeric(arg) && actStated) {
-								actPeriods.add(Float.parseFloat(arg));
-								actStated = false;
-
-							// etc.
-							} else {
-								Gdx.app.error(TAG, "Invalid argument in the file: " + spell.path());
-								Gdx.app.exit();
+								attSetters.add(Float.parseFloat(arg));
+								attStated = false;
 							}
-						}	// if init magic's end
-					}	// arg iterator's end
+						// if init magic's end
+
+						}	else if(arg.equals(Constants.ARG_MAGIC_INIT)
+								&& !initMagic) {
+							// start initialisation
+							initMagic = true;
+							atts = new ArrayList<int>();
+							attSetters = new ArrayList<float>();
+
+						} else if(arg.equals(Constants.ARG_MAGIC_INIT_END)
+								&& initMagic) {
+							// end initialisation
+							initMagic = false;
+							Spell nSpell = new Spell(atts, attSetters);
+								// initalise a spell based on the file reading result
+							spellBook.put(file.nameWithoutExtension(), nSpell);
+								// and save it
+								
+						} else {
+							Gdx.app.error(TAG, "Invalid argument in the file: " 
+									+ file.path());
+							Gdx.app.exit();
+						}
+					}	// argument iterator's end
 				}	// line iterator's end
+
+				if(initMagic) {
+					// if magic initalisation hasn't been ended
+					Gdx.app.error(TAG, "Unfinished chain of arguments in the file: "
+							+ file.path());
+				}
 			}	// file iterator's end
+		// if initalised == false 's end
 
 		} else {		// already been initialised
 			Gdx.app.error(TAG, "MagicFactory is initialised more than once");	
@@ -108,7 +123,7 @@ public class MagicFactory {
 
 
 // magic casting --------------------------------------------------------------------------------------------
-	public static Magic[] cast(String spellName) {
+	public static Magic cast(String spellName, float x, float y, int dir) {
 		// return the magic with properties of the specified spell
 	
 		if(!initialized) {
@@ -116,10 +131,8 @@ public class MagicFactory {
 			Gdx.app.exit(0);
 		}
 	
-		// initialise the magics based on the properties
-		for(MagicProperties prop : spellBook.get(name).)
-			return new Magic(prop);
-		}
+		// initialise a magic based on the properties
+		Magic m = new Magic(spellBook.get(spellName), x, y, dir);
 
 	}	// cast(String)'s end
 

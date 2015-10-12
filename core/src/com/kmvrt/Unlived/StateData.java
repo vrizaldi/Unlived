@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;
 
 public class StateData {
+	// data of the current state of the game
+	// store chars, magics, current room, and other game variables
+	// this is the one that updated by the updater and referred by the Painter
 
 	private static final String TAG = StateData.class.getName();
 

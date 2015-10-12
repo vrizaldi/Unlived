@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
 public class Arena implements Screen {
+	// the main gameplay screen
 
 	// logging tag
 	private static final String TAG = Arena.class.getName();
