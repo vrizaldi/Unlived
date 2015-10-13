@@ -1,3 +1,5 @@
+// code by Muhammad Noorghifari
+
 package com.kmvrt.Unlived;
 
 import com.badlogic.gdx.Screen;
@@ -21,6 +23,7 @@ public class Arena implements Screen {
 	private Council council;
 	private Painter painter;
 	private Navigator navigator;
+	private Clock clock;
 
 
 	// constructor -------------------------------------------------------------------------------------------
@@ -36,6 +39,9 @@ public class Arena implements Screen {
 		council = new Council(data);
 		painter = new Painter(data);
 		navigator = new Navigator(data);
+		chemist = new Chemist(data);
+		clock = new Clock(data);
+
 		Gdx.app.log(TAG, "Arena created");
 	}
 
@@ -55,6 +61,7 @@ public class Arena implements Screen {
 		// the order is important: navigator before council
 		navigator.initNewGame();
 		council.initNewGame();
+		chemist.initNewGame();
 		data.initAmmo();
 		if(initProps) {
 			data.initKill();
@@ -75,6 +82,7 @@ public class Arena implements Screen {
 		
 		navigator.disposeGame();
 		council.disposeGame();
+		chemist.disposeGame();
 	}
 
 
@@ -107,6 +115,8 @@ public class Arena implements Screen {
 		// the order is important: council before navigator
 		council.update();
 		navigator.update();
+		chemist.update();
+		clock.update
 
 		// if gameover
 		if(data.switchScreen) {

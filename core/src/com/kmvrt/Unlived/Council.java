@@ -1,3 +1,5 @@
+// code by Muhammad Noorghifari
+
 package com.kmvrt.Unlived;
 
 import com.badlogic.gdx.Gdx;
@@ -84,11 +86,6 @@ public class Council {
 		
 		updateMainChar(delta);
 		updateCreeps(delta);
-		
-		if(data.magics.size() >= 1) {
-			// if there is any magic happening
-			updateMagics(delta);
-		}
 	}	
 
 	private void updateMainChar(float delta) {
@@ -142,15 +139,15 @@ public class Council {
 
 			if(mainChar.getDir() == Constants.DIR_E) {
 				// deploy it in the east of the mainChar
-				Magic magic = new Magic(mainChar.getX() + Constants.CHAR_WIDTH, 
-					mainChar.getY(), mainChar.getDir());
+				Magic magic = MagicFactory.cast("Attack", mainChar.getX() + Constants.CHAR_WIDTH, 
+					mainChar.getY(), Constants.DIR_E);
 				data.magics.add(magic);
 				data.shoot();
 	
 			} else if(mainChar.getDir() == Constants.DIR_W) {
 				// deploy it in the west of the mainChar
-				Magic magic = new Magic(mainChar.getX() - Constants.CHAR_WIDTH, 
-					mainChar.getY(), mainChar.getDir());
+				Magic magic = MagicFactory.cast("Attack", mainChar.getX() - Constants.CHAR_WIDTH, 
+					mainChar.getY(), Constants.DIR_W);
 				data.magics.add(magic);
 				data.shoot();
 			}
@@ -496,14 +493,14 @@ public class Council {
 					// if the mainChar is within the range of the creep shoot
 					if(creep.getDir() == Constants.DIR_E) {
 						// on the right side
-						Magic magic = new Magic(creep.getX() + Constants.CHAR_WIDTH,
-							creep.getY(), creep.getDir());
+						Magic magic = MagicFactory.cast("Attack", creep.getX() + Constants.CHAR_WIDTH,
+							creep.getY(), Constants.DIR_E);
 						data.magics.add(magic);
 
 					} else if(creep.getDir() == Constants.DIR_W) {
 						// on the left side
-						Magic magic = new Magic(creep.getX() - Constants.CHAR_WIDTH,
-							creep.getY(), creep.getDir());
+						Magic magic = MagicFactory.cast("Attack", creep.getX() - Constants.CHAR_WIDTH,
+							creep.getY(), Constants.DIR_W);
 						data.magics.add(magic);
 					}
 				}
@@ -511,52 +508,4 @@ public class Council {
 		}	// for's end
 	}
 	
-	private void updateMagics(float delta) {
-		// update the magic movement
-		
-		for(Iterator<Magic> i = data.magics.iterator(); i.hasNext();) {
-			Magic magic = i.next();
-			
-			if(magic.getDir() == Constants.DIR_E) {
-				// move right
-				magic.move(Constants.MAGIC_SPEED * delta, 0);
-
-			} else if(magic.getDir() == Constants.DIR_W) {
-				// move left
-				magic.move(-Constants.MAGIC_SPEED * delta, 0);
-			}
-
-			// do collision detection here ***************
-			// set the rec1 as current magic's rectangle
-			rec1.setPosition(magic.getX(), magic.getY());
-			rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
-
-			// collision detection with chars
-			for(Iterator<GameChar> it = data.chars.iterator(); it.hasNext();) {
-				GameChar c = it.next();
-				
-				// set rec2 as current char's rectangle				
-				rec2.setPosition(c.getX(), c.getY());
-				rec2.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
-			
-				if(Intersector.intersectRectangles(rec1, rec2, inter)) {
-					// if they're intersect
-					if(c.getID() == Constants.CHAR_MAIN) {
-						data.die();
-						data.gameOver = true;
-					} else {
-						data.kill();
-						it.remove();
-					}
-				}
-			}
-
-			if(magic.totalMove() >= (float)Constants.MAGIC_MAX_DISTANCE) {
-				// if the magic has went far enough
-			 	// destroy it
-				i.remove();
-			}
-		}
-	}	// updateMagics()'s end
-
 } // class' end

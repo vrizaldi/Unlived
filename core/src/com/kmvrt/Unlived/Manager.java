@@ -1,3 +1,5 @@
+// code by Muhammad Noorghifari
+
 package com.kmvrt.Unlived;
 
 import com.badlogic.gdx.Gdx;
@@ -13,7 +15,6 @@ public class Manager extends Game {
 
 	// game screens
 	private Arena arena;
-	private Hub hub;
 	
 
 // constructor ---------------------------------------------------------------------------------------------
@@ -22,10 +23,10 @@ public class Manager extends Game {
 
 		Gdx.app.log(TAG, "Initiating the game...");
 		arena = new Arena(this);
-		hub = new Hub(this);		
 
 		Gdx.app.log(TAG, "Initiating the assets...");
 		Assets.init();
+		MagicFactory.init();
 
 		DisplayMode[] displayMode = Gdx.graphics.getDisplayModes();
 		Gdx.app.log(TAG, "Display Modes available:");
@@ -54,8 +55,8 @@ public class Manager extends Game {
 	public void gameOver(StateData data) {
 	
 		// switch screen to hub
-		Gdx.app.log(TAG, "Switching to Hub...");
-		this.setScreen(hub);
+//		Gdx.app.log(TAG, "Switching to Hub...");
+//		this.setScreen(hub);
 	}
 
 

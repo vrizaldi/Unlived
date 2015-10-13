@@ -1,14 +1,19 @@
+// code by Muhammad Noorghifari
+
 package com.kmvrt.Unlived;
 
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.io.BufferedReader;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 
 public class MagicFactory {
 	// initialise, store and return a Magic 
 	
 	private static String TAG = MagicFactory.class.getName();
 	
-	private static boolean initialized = false;
+	private static boolean initialised = false;
 
 	private static HashMap<String, Spell> spellBook;
 		// store the spells
@@ -26,8 +31,8 @@ public class MagicFactory {
 
 			// read and use the data from the magic files **********
 			/* every spell has an extension ".spell" 
-			 * and is stored in "local/magic/spells/" */
-			FileHandle[] files = Gdx.files.local("magic/spells/").list(".spell");
+			 * and is stored in "internal/magic/spells/" */
+			FileHandle[] files = openSpellFiles();
 			BufferedReader reader;
 				// a (reader to a) file
 			for(FileHandle file : files) {
@@ -41,7 +46,8 @@ public class MagicFactory {
 				boolean attStated = false;
 
 				reader = new BufferedReader(new InputStreamReader(reader.read()));
-				while((String line = file.readLine().trim()) != null) {
+				String line;
+				while((line = file.readLine().trim()) != null) {
 					// keep looping until it reach the end of the file
 
 					if(line.isEmpty()) {
@@ -55,15 +61,15 @@ public class MagicFactory {
 						 if(initMagic) {
 							// initialise a magic
 							if(!actStated) {
-								if(arg.equals(Constants.ARG_ATT_MANA)) {
+								if(arg.equals("mana")) {
 									atts.add(Constants.ATT_MANA);
 									attStated = true;
 
-								} else if(arg.equals(Constants.ARG_ATT_ACCEL)) {
+								} else if(arg.equals("accel")) {
 									atts.add(Constants.ATT_ACCEL);
 									attStated = true;
 
-								} else if(arg.equals(Constants.ARG_ATT_FORCE)) {
+								} else if(arg.equals("force")) {
 									atts.add(Constants.ATT_FORCE);
 									attStated = true;
 								}
@@ -75,14 +81,14 @@ public class MagicFactory {
 							}
 						// if init magic's end
 
-						}	else if(arg.equals(Constants.ARG_MAGIC_INIT)
+						}	else if(arg.equals("spell")
 								&& !initMagic) {
 							// start initialisation
 							initMagic = true;
 							atts = new ArrayList<int>();
 							attSetters = new ArrayList<float>();
 
-						} else if(arg.equals(Constants.ARG_MAGIC_INIT_END)
+						} else if(arg.equals("end")
 								&& initMagic) {
 							// end initialisation
 							initMagic = false;
@@ -104,8 +110,9 @@ public class MagicFactory {
 					Gdx.app.error(TAG, "Unfinished chain of arguments in the file: "
 							+ file.path());
 				}
+
 			}	// file iterator's end
-		// if initalised == false 's end
+		// if initialised == false 's end
 
 		} else {		// already been initialised
 			Gdx.app.error(TAG, "MagicFactory is initialised more than once");	
@@ -114,7 +121,22 @@ public class MagicFactory {
 	
 	}	// init()'s end
 
-	public static boolean isNumeric(String str)	{
+	private static FileHandle[] openSpellFiles() {
+		// return the files for the spells
+		// all the spell files are stored in "internal/magic/data/"
+		// and all have the extension .spell
+		
+		ArrayList<FileHandle> files = new ArrayList<FileHandle>();
+		String[] spellList = {"Attack", "Pusher", "Accellerator"};
+		for(String spellName : spellList) {
+			files.add(Gdx.files.internal(
+					"magic/data/" + spellName + ".spell"));
+		}
+
+		return (FileHandle[])files.toArray();
+	}
+
+	private static boolean isNumeric(String str)	{
 		// return whether the string is numeric
 
 		return str.matches("-?\\d+(\\.\\d+)?"); 
@@ -126,13 +148,13 @@ public class MagicFactory {
 	public static Magic cast(String spellName, float x, float y, int dir) {
 		// return the magic with properties of the specified spell
 	
-		if(!initialized) {
+		if(!initialised) {
 			Gdx.app.error(TAG, "Spell book haven't been initialized yet");
-			Gdx.app.exit(0);
+			Gdx.app.exit();
 		}
 	
 		// initialise a magic based on the properties
-		Magic m = new Magic(spellBook.get(spellName), x, y, dir);
+		return new Magic(spellBook.get(spellName), x, y, dir);
 
 	}	// cast(String)'s end
 

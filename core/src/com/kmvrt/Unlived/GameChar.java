@@ -13,6 +13,11 @@ public class GameChar {
 	private float x;
 	private float y;
 
+	// attributes
+	private float mana;
+	private float accel;
+	private float force;
+
 	private int dir;  // the direction the character facing
 	public float forceX;	// the force pushing the character
 	public float forceY;
@@ -96,4 +101,25 @@ public class GameChar {
 		return ID;
 	} // getID()'s end
 
-}
+
+
+// apply attributes -------------------------------------------------------------------------------------------
+	public void applyMana(float mana) {
+		// apply mana given to the stored one
+
+		this.mana += mana;
+	}	// applyMana(float)'s end
+
+	public void applyAccel(float accel) {
+		// apply acceleration given to the stored one
+	
+		this.accel += accel;
+	}	// applyAccel(float)'s end
+
+	public void applyForce(float force) {
+		// apply force give to the stored one
+	
+		this.force += force;
+	}	// applyForce(float)'s end
+
+}	// class's end

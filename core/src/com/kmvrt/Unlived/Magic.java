@@ -9,12 +9,13 @@ public class Magic {
 	private float y;
 
 	private int dir;	// the direction it's moving
+	private Spell spell;	// the magic's properties
 
 	private float totalMove; // total distance it has moved
 
 
 // constructor -----------------------------------------------------------------------------------------------
-	public Magic(float x, float y, int dir) {
+	public Magic(Spell spell, float x, float y, int dir) {
 	
 		this.x = x;
 		this.y = y;
@@ -57,6 +58,12 @@ public class Magic {
 		return dir;
 	}
 
+	public Spell getSpell() {
+		// return the magic's properties / spell
+		
+		return spell;
+	}
+	
 	public float totalMove() {
 		// return the total distance the magic has moved
 	
