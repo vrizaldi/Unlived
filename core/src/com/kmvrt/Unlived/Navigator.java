@@ -56,19 +56,19 @@ public class Navigator {
 			// check if the char is out of the room
 			if(c.getX() < 0) {
 				// over to the west
-				c.setPos(0, c.getY());
+				c.x = 0;
 			} else if(c.getX() + Constants.CHAR_WIDTH > Constants.ROOM_WIDTH) {
 				// over to the east
-				c.setPos(Constants.ROOM_WIDTH - Constants.CHAR_WIDTH, c.getY());
+				c.x = Constants.ROOM_WIDTH - Constants.CHAR_WIDTH;
 			}
 			
 			if(c.getY() < 0) {
 				// over to the south
-				c.setPos(c.getX(), 0);
+				c.y = 0;
 			
 			} else if(c.getY() + Constants.CHAR_HEIGHT > Constants.ROOM_HEIGHT) {
 				// over to the north
-				c.setPos(c.getX(), Constants.ROOM_HEIGHT - Constants.CHAR_HEIGHT);
+				c.y = Constants.ROOM_HEIGHT - Constants.CHAR_HEIGHT;
 			
 			}
 

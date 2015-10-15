@@ -2,19 +2,10 @@
 
 package com.kmvrt.Unlived;
 
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Intersector;
-
 public class Chemist {
 	// update the magics and chars that got hit by magic
 
 	private StateData data;
-
-	// rectangles for collision detection
-	private Rectangle rec1;
-	private Rectangle rec2;
-	private Rectangle inter;
-
 
 // constructor -----------------------------------------------------------------------------------------------
 	public Chemist(StateData data) {
@@ -23,12 +14,24 @@ public class Chemist {
 	}	// new's end
 
 
+// create or dispose current game ----------------------------------------------------------------------------
+	public void initNewGame() {}
+	
+	public void disposeGame() {
+		// dispose the current game data
+		
+		data.magics.clear();
+	} // disposeGame()'s end
+	
+	
 
 // update the magics -----------------------------------------------------------------------------------------
 	public void update() {
 		// update the magics in the current state of the game
 
-		for(Magic m : data.magics) {
+		for(Iterator iter = data.magics.iterator(); iter.hasNext();) {
+			Magic m = iter.next();
+
 			// move it based on its direction
 			if(m.getDir() == Constants.DIR_E) {
 				// move east
@@ -38,33 +41,16 @@ public class Chemist {
 				// move west
 				m.move(-Constants.NORMAL_SPEED, 0);
 			}
-
-			// check collision
-			// set rec1 as m's rectangle
-			rec1.setPosition(m.getX(), m.getY());
-			rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
-			for(GameChar c : data.chars) {
-				if(areClose(m, c)) {
-					// set rec2 as c's rectangle
-					rec2.setPosition(c.getX(), c.getY());
-					rec2.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
-
-					if(Intersector.intersectRectangles(rec1, rec2, inter)) {
-						// if they intersect
-						c.affectedBy(m);
-					}
-				}
-			}	// char collection iteration's end
 		} // magic collection iteration's end
 
 		// update chars affected by magic 
 		for(GameChar c : data.chars) {
-			if(c.affected()) {
+			if(c.isAffected()) {
 				// apply the spell to c ********************************************
 				Spell spell = c.getSpellAffecting();
-				c.applyMana(spell.getMana());
-				c.applyAccel(spell.getAccel());
-				c.applyForce(spell.getForce());
+				c.atts.applyMana(spell.atts.getMana());
+				c.atts.applyAccel(spell.atts.getAccel());
+				c.atts.applyForce(spell.atts.getForce());
 			}
 		}	
 	} // update's end
@@ -72,8 +58,8 @@ public class Chemist {
 	private boolean areClose(Magic m, GameChar c) {
 		// return whether they're close to each other
 
-		if(Math.abs(m.getX() - c.getX()) < Constants.CHAR_WIDTH * 2
-				&& Math.abs(m.getY() - c.getY()) < Constants.CHAR_HEIGHT * 2) {
+		if(Math.abs(m.x - c.x) < Constants.CHAR_WIDTH * 2
+				&& Math.abs(m.y - c.y) < Constants.CHAR_HEIGHT * 2) {
 			return true;
 
 		} else {

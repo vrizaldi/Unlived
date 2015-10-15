@@ -1,7 +1,6 @@
 package com.kmvrt.Unlived;
 
 import com.badlogic.gdx.Gdx;
-//import com.badlogic.gdx.math.Vector3;
 
 public class GameChar {
 	// represent a character in-game
@@ -10,17 +9,23 @@ public class GameChar {
 	private static final String TAG = GameChar.class.getName();
 	
 	// char position
-	private float x;
-	private float y;
+	public float x;
+	public float y;
 
-	// attributes
-	private float mana;
-	private float accel;
-	private float force;
+	// char last safe position
+	private float sX;
+	private float sY;
+
+	// char next movement
+	private float nX;
+	private float nY;
+
+	private Spell spell;
+		// spell that affects the char
+	public Attributes atts;
+		// store the attribute. e.g. mana, accel, force, etc.
 
 	private int dir;  // the direction the character facing
-	public float forceX;	// the force pushing the character
-	public float forceY;
 	
 	private int ID;	// type
 
@@ -33,40 +38,70 @@ public class GameChar {
 		x = 0;
 		y = 0;
 
+		sX = x;
+		sY = y;
+
+		nX = 0;
+		nY = 0;
+
 		dir = Constants.DIR_E;
-		forceX = 0;
-		forceY = 0;
+
+		atts = new Attributes();
 	}	// new()'s end
 
 
 
 // setter and getter ------------------------------------------------------------------------------------------
-	public void setPos(float x, float y) {
-		// move the char to the specified position
-	
-		this.x = x;
-		this.y = y;
-	}	// setPos(int, int)'s end
-
+	// next move
 	public void move(float x, float y) {
 		// move the char by the specified distance
 	
-		this.x += x;
-		this.y += y;
+		nX += x;
+		nY += y;
 	} // move(int, int)'s end
 
-	public float getX() {
+	public void moved() {
+		// called when the char is moved
+
+		nX = 0;
+		nY = 0;
+	}	// moved()'s
+
+	public float getNextX() {
 		// return the x coordinate
 
-		return this.x;
-	}	// getX()'s end
+		return nX;
+	}	// getNX()'s end
 
-	public float getY() {
+	public float getNextY() {
 		// return the y coordinate
 	
-		return this.y;
-	}	// getY()'s end
+		return nY;
+	}	// getNY()'s end
+
+
+	// safe position
+	public float getSafeX() {
+		// return the last safe x coordinate
+
+		return sX;
+	} // getSafeX()'s
+
+	public float getSafeY() {
+		// return the last safe y coordinate
 	
+		return sY;
+	}	// getSafeY()'s
+	
+	public void updateSafePos() {
+		// change the safe position to the current position
+		
+		sX = x;
+		sY = y;
+	}	// updateSafePos()'s
+
+
+	// facing direction
 	public int getDir() {
 		// return the direction the char facing
 		
@@ -84,7 +119,11 @@ public class GameChar {
 		}
 	}
 
+
+	// type id
 	public void changeCreep(int type) {
+		// change the creep type
+
 		if(ID != Constants.CHAR_MAIN) {
 			if(type == Constants.CHAR_CREEP_AVOID
 				|| type == Constants.CHAR_CREEP_FOLLOW
@@ -93,7 +132,7 @@ public class GameChar {
 				ID = type;
 			}
 		}
-	}
+	} // changeCreep(int)'s
 	
 	public int getID() {
 		// return the type id
@@ -101,25 +140,83 @@ public class GameChar {
 		return ID;
 	} // getID()'s end
 
-
-
-// apply attributes -------------------------------------------------------------------------------------------
-	public void applyMana(float mana) {
-		// apply mana given to the stored one
-
-		this.mana += mana;
-	}	// applyMana(float)'s end
-
-	public void applyAccel(float accel) {
-		// apply acceleration given to the stored one
 	
-		this.accel += accel;
-	}	// applyAccel(float)'s end
-
-	public void applyForce(float force) {
-		// apply force give to the stored one
 	
-		this.force += force;
-	}	// applyForce(float)'s end
+// interaction with magic --------------------------------------------------------------------------------------------------	
+	public boolean isAffected() {
+		// return whether the char is affected by a spell
 
-}	// class's end
+		if(spell == null) {
+			return false;
+
+		} else {
+			return true;
+		}
+	} // isAffected()'s end
+
+	public void affectedBy(Magic m) {
+		// flag that this char is affected by the given spell
+
+		spell = m.getSpell();
+	}	// affectedBy(Spell)'s end
+
+	public Spell getSpellAffecting() {
+		// return the spell affecting this char
+
+		return spell;
+	}	// getSpellAffecting()'s end
+
+
+
+// nested class ---------------------------------------------------------------------------------------------
+	public static class Attributes {
+		// store the char's attribute
+
+		private float mana;
+		private float accel;
+		private float force;
+		
+
+	// constructor --------------------------------------------------------------------
+		public Attributes() {
+			mana = 0;
+			accel = 0;
+			force = 0;
+		}
+
+
+	// apply the attribute ------------------------------------------------------------
+		public void applyMana(float mana) {
+
+			this.mana += mana;
+		}
+
+		public void applyAccel(float accel) {
+		
+			this.accel += accel;
+		}
+
+		public void applyForce(float force) {
+		
+			this.force += force;
+		}
+
+
+	// get the attribute --------------------------------------------------------------
+		public float getMana() {
+		
+			return mana;
+		}
+
+		public float getAccel() {
+		
+			return accel;
+		}
+
+		public float getForce() {
+		
+			return force;
+		}
+	}	// Attribute's end
+
+}	// public class's end

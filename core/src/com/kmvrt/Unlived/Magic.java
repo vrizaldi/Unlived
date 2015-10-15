@@ -8,6 +8,10 @@ public class Magic {
 	private float x;
 	private float y;
 
+	// next movement
+	// magics only move horizontally
+	private float nX;
+
 	private int dir;	// the direction it's moving
 	private Spell spell;	// the magic's properties
 
@@ -25,31 +29,29 @@ public class Magic {
 
 
 // getters and setters ---------------------------------------------------------------------------------------
-	public void move(float x, float y) {
+	public void move(float x) {
 		// move the magic by the specified distance
 		
-		this.x += x;
-		this.y += y;
-
-		totalMove += Math.abs(x) + Math.abs(y);
+		nX += x;
 	} // move(int, int)'s end
 	
-	public void setPos(float x, float y) {
-		
-		this.x = x;
-		this.y = y;
+	public void moved() {
+		// called when the char is moved
+
+		totalMoved += Math.abs(nX);
+		nX = 0;
 	}
-	
-	public float getX() {
+
+	public float getNextX() {
 		// return x coordinate
 		
-		return x;
+		return nX;
 	} // getX()'s end
 
-	public float getY() {
+	public float getNextY() {
 		// return x coordinate
 		
-		return y;
+		return nY;
 	} // getX()'s end
 	
 	public int getDir() {

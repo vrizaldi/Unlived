@@ -60,4 +60,5 @@ public class Constants {
 	// intervals between things happening
 	public static final float CREEPS_ATK_INTERVAL = 1f;		// in second
 	public static final float CREEPS_CHANGE_INTERVAL = 0.5f;	// in second
-}
+
+}	// public class' end

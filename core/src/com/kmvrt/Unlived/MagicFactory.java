@@ -5,6 +5,8 @@ package com.kmvrt.Unlived;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
@@ -25,6 +27,14 @@ public class MagicFactory {
 
 	public static void init() {
 		// initialise the spell book
+		
+		// constants for reading file
+		final String ARG_ATT_MANA = "mana";
+		final String ARG_ATT_ACCEL = "accel";
+		final String ARG_ATT_FORCE = "force";
+		final int ATT_MANA = 205;
+		final int ATT_ACCEL = 206;
+		final int ATT_FORCE = 207;
 	
 		if(!initialised) {
 			initialised = true;
@@ -38,16 +48,14 @@ public class MagicFactory {
 			for(FileHandle file : files) {
 				// read every ".spell" files
 
-				ArrayList<int> atts;
-					// the acts
-				ArrayList<float> attSetters;
-					// the actPeriods
+				GameChar.Attributes atts = null;
 				boolean initMagic = false;
 				boolean attStated = false;
+				int attStatedID = 0;
 
-				reader = new BufferedReader(new InputStreamReader(reader.read()));
+				reader = new BufferedReader(new InputStreamReader(file.read()));
 				String line;
-				while((line = file.readLine().trim()) != null) {
+				while((line = readNextLine(reader)) != null) {
 					// keep looping until it reach the end of the file
 
 					if(line.isEmpty()) {
@@ -60,24 +68,37 @@ public class MagicFactory {
 					for(String arg : args) {
 						 if(initMagic) {
 							// initialise a magic
-							if(!actStated) {
-								if(arg.equals("mana")) {
-									atts.add(Constants.ATT_MANA);
+							if(!attStated) {
+								if(arg.equals(ARG_ATT_MANA)) {
+									attStatedID = ATT_MANA;
 									attStated = true;
 
-								} else if(arg.equals("accel")) {
-									atts.add(Constants.ATT_ACCEL);
+								} else if(arg.equals(ARG_ATT_ACCEL)) {
+									attStatedID = ATT_ACCEL;
 									attStated = true;
 
-								} else if(arg.equals("force")) {
-									atts.add(Constants.ATT_FORCE);
+								} else if(arg.equals(ARG_ATT_FORCE)) {
+									attStatedID = ATT_FORCE;
 									attStated = true;
 								}
 							// if actStated == false's end
 
-							} else if(isNumeric(arg) && actStated) {
-								attSetters.add(Float.parseFloat(arg));
+							} else if(isNumeric(arg) && attStated) {
 								attStated = false;
+								switch(attStatedID) {
+
+								case ATT_MANA:
+									atts.applyMana(Float.parseFloat(arg));
+									break;
+
+								case ATT_ACCEL:
+									atts.applyAccel(Float.parseFloat(arg));
+									break;
+
+								case ATT_FORCE:
+									atts.applyForce(Float.parseFloat(arg));
+									break;
+								}
 							}
 						// if init magic's end
 
@@ -85,21 +106,20 @@ public class MagicFactory {
 								&& !initMagic) {
 							// start initialisation
 							initMagic = true;
-							atts = new ArrayList<int>();
-							attSetters = new ArrayList<float>();
+							atts = new GameChar.Attributes();
 
 						} else if(arg.equals("end")
 								&& initMagic) {
 							// end initialisation
 							initMagic = false;
-							Spell nSpell = new Spell(atts, attSetters);
+							Spell nSpell = new Spell(atts);
 								// initalise a spell based on the file reading result
 							spellBook.put(file.nameWithoutExtension(), nSpell);
 								// and save it
 								
 						} else {
-							Gdx.app.error(TAG, "Invalid argument in the file: " 
-									+ file.path());
+							Gdx.app.error(TAG, "Invalid argument in the file " 
+									+ file.path() + ": " + arg);
 							Gdx.app.exit();
 						}
 					}	// argument iterator's end
@@ -136,6 +156,19 @@ public class MagicFactory {
 		return (FileHandle[])files.toArray();
 	}
 
+	private static String readNextLine(BufferedReader reader) {
+		// return the next line
+		
+		try {
+			String line = reader.readLine();
+			return line;
+		} catch(IOException e) {
+			Gdx.app.error(TAG, "Failed to read the file", e);
+			Gdx.app.exit();
+			return null;
+		}
+	}
+	
 	private static boolean isNumeric(String str)	{
 		// return whether the string is numeric
 

@@ -23,6 +23,7 @@ public class Arena implements Screen {
 	private Council council;
 	private Painter painter;
 	private Navigator navigator;
+	private Chemist chemist;
 	private Clock clock;
 
 
@@ -116,7 +117,7 @@ public class Arena implements Screen {
 		council.update();
 		navigator.update();
 		chemist.update();
-		clock.update
+		clock.update();
 
 		// if gameover
 		if(data.switchScreen) {
