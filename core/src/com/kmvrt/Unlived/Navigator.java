@@ -52,28 +52,9 @@ public class Navigator {
 		// update the current state
 
 		for(GameChar c : data.chars) {
-			
-			// check if the char is out of the room
-			if(c.getX() < 0) {
-				// over to the west
-				c.x = 0;
-			} else if(c.getX() + Constants.CHAR_WIDTH > Constants.ROOM_WIDTH) {
-				// over to the east
-				c.x = Constants.ROOM_WIDTH - Constants.CHAR_WIDTH;
-			}
-			
-			if(c.getY() < 0) {
-				// over to the south
-				c.y = 0;
-			
-			} else if(c.getY() + Constants.CHAR_HEIGHT > Constants.ROOM_HEIGHT) {
-				// over to the north
-				c.y = Constants.ROOM_HEIGHT - Constants.CHAR_HEIGHT;
-			
-			}
 
 			// set rec1 to be the rectangle of current char
-			rec1.setPosition(c.getX(), c.getY());
+			rec1.setPosition(c.x, c.y);
 			rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 //			Rectangle inter = new Rectangle();	// the intersection
 			

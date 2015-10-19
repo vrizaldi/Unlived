@@ -5,8 +5,8 @@ public class Magic {
 	// have its own properties (specified in the spell)
 
 	// its position 
-	private float x;
-	private float y;
+	public float x;
+	public float y;
 
 	// next movement
 	// magics only move horizontally
@@ -38,7 +38,8 @@ public class Magic {
 	public void moved() {
 		// called when the char is moved
 
-		totalMoved += Math.abs(nX);
+		totalMove += Math.abs(nX);
+			// increase total move by the nX coordinate
 		nX = 0;
 	}
 
@@ -46,12 +47,6 @@ public class Magic {
 		// return x coordinate
 		
 		return nX;
-	} // getX()'s end
-
-	public float getNextY() {
-		// return x coordinate
-		
-		return nY;
 	} // getX()'s end
 	
 	public int getDir() {

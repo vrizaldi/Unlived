@@ -56,6 +56,12 @@ public class GameChar {
 	public void move(float x, float y) {
 		// move the char by the specified distance
 	
+		if(x < 0) {
+			dir = Constants.DIR_W;
+		} else if(x > 0) {
+			dir = Constants.DIR_E;
+		}
+		
 		nX += x;
 		nY += y;
 	} // move(int, int)'s end

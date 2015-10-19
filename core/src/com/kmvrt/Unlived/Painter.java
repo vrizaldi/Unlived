@@ -61,7 +61,7 @@ public class Painter {
 		// draw chars **************
 		for(GameChar c : data.chars) {
 		
-			Assets.charImg.setPosition(c.getX(), c.getY());
+			Assets.charImg.setPosition(c.x, c.y);
 			Assets.charImg.draw(batch);
 		}
 
@@ -69,7 +69,7 @@ public class Painter {
 		if(data.magics.size() != 0) {
 			for(Magic  m : data.magics) {
 			
-				Assets.magicImg.setPosition(m.getX(), m.getY());
+				Assets.magicImg.setPosition(m.x, m.y);
 				Assets.magicImg.draw(batch);
 			}
 		}
@@ -105,8 +105,8 @@ public class Painter {
 		
 			if(c.getID() == Constants.CHAR_MAIN) {
 //				Gdx.app.log("Painter", "mainChar found");
-				cam.position.set(c.getX() + (Constants.CHAR_WIDTH / 2), 
-					c.getY() + (Constants.CHAR_HEIGHT / 2), 0);
+				cam.position.set(c.x + (Constants.CHAR_WIDTH / 2), 
+					c.y + (Constants.CHAR_HEIGHT / 2), 0);
 				cam.update();
 				return;
 			}

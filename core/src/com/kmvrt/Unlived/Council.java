@@ -119,7 +119,7 @@ public class Council {
 				// if there's no ammo
 				return;
 			}
-			shoot(mainChar.x, mainChar.y, mainChar.getDir())
+			shoot(mainChar.x, mainChar.y, mainChar.getDir());
 		}
 	} // updateMainChar()'s end
 
@@ -131,14 +131,12 @@ public class Council {
 			Magic magic = MagicFactory.cast("Attack", charX + Constants.CHAR_WIDTH, 
 				charY, Constants.DIR_E);
 			data.magics.add(magic);
-			data.shoot();
 	
 		} else if(dir == Constants.DIR_W) {
 			// deploy it in the west of the mainChar
 			Magic magic = MagicFactory.cast("Attack", charX - Constants.CHAR_WIDTH, 
 				charY, Constants.DIR_W);
 			data.magics.add(magic);
-			data.shoot();
 		}
 	}
 
@@ -397,18 +395,18 @@ public class Council {
 			}, Constants.CREEPS_ATK_INTERVAL);
 		
 		// set rec1 to be the mainChar's y related rectangle
-		rec1.setPosition(0, mainChar.getY());
+		rec1.setPosition(0, mainChar.y);
 		rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 
 		for(GameChar creep : data.chars) {
 			if(creep.getID() != Constants.CHAR_MAIN) {
 				// set rec2 to be current creep's y related rectangle
-				rec2.setPosition(0, creep.getY());
+				rec2.setPosition(0, creep.y);
 				rec2.setSize(Constants.CHAR_WIDTH, Constants.CAM_HEIGHT);
 
 				if(Intersector.intersectRectangles(rec1, rec2, inter)
 					&& Math.abs(
-					mainChar.getX() - creep.getX()) <= Constants.MAGIC_MAX_DISTANCE) {
+					mainChar.x - creep.x) <= Constants.MAGIC_MAX_DISTANCE + 10) {
 					// if the mainChar is within the range of the creep shoot
 					shoot(creep.x, creep.y, creep.getDir());
 				}

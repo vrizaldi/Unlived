@@ -28,10 +28,14 @@ public class MagicFactory {
 	public static void init() {
 		// initialise the spell book
 		
+		spellBook = new HashMap<String, Spell>();
+		
 		// constants for reading file
 		final String ARG_ATT_MANA = "mana";
 		final String ARG_ATT_ACCEL = "accel";
 		final String ARG_ATT_FORCE = "force";
+		final String ARG_INIT_MAGIC = "spell";
+		final String ARG_INIT_MAGIC_END = "end";
 		final int ATT_MANA = 205;
 		final int ATT_ACCEL = 206;
 		final int ATT_FORCE = 207;
@@ -80,7 +84,17 @@ public class MagicFactory {
 								} else if(arg.equals(ARG_ATT_FORCE)) {
 									attStatedID = ATT_FORCE;
 									attStated = true;
-								}
+									
+								} else if(arg.equals("end")) {
+									// end initialisation
+									initMagic = false;
+									Spell nSpell = new Spell(atts);
+										// initialise a spell based on the file reading result
+									spellBook.put(file.nameWithoutExtension(), nSpell);
+										// and save it
+									Gdx.app.log(TAG, "Spell added: " + file.nameWithoutExtension());
+									
+								} 
 							// if actStated == false's end
 
 							} else if(isNumeric(arg) && attStated) {
@@ -89,33 +103,34 @@ public class MagicFactory {
 
 								case ATT_MANA:
 									atts.applyMana(Float.parseFloat(arg));
+									Gdx.app.log(TAG, arg + " mana applied");
 									break;
 
 								case ATT_ACCEL:
 									atts.applyAccel(Float.parseFloat(arg));
+									Gdx.app.log(TAG, arg + " accel applied");
 									break;
 
 								case ATT_FORCE:
 									atts.applyForce(Float.parseFloat(arg));
+									Gdx.app.log(TAG, arg + " force applied");
 									break;
 								}
+							// if(arg is numeric)'s
+								
+							} else {
+								Gdx.app.error(TAG, "Invalid argument in the file " 
+										+ file.path() + ": " + arg);
+								Gdx.app.exit();
 							}
 						// if init magic's end
 
-						}	else if(arg.equals("spell")
+						} else if(arg.equals(ARG_INIT_MAGIC)
 								&& !initMagic) {
 							// start initialisation
+							Gdx.app.log(TAG, "Initialising spell: " + file.nameWithoutExtension());
 							initMagic = true;
 							atts = new GameChar.Attributes();
-
-						} else if(arg.equals("end")
-								&& initMagic) {
-							// end initialisation
-							initMagic = false;
-							Spell nSpell = new Spell(atts);
-								// initalise a spell based on the file reading result
-							spellBook.put(file.nameWithoutExtension(), nSpell);
-								// and save it
 								
 						} else {
 							Gdx.app.error(TAG, "Invalid argument in the file " 
@@ -129,6 +144,7 @@ public class MagicFactory {
 					// if magic initalisation hasn't been ended
 					Gdx.app.error(TAG, "Unfinished chain of arguments in the file: "
 							+ file.path());
+					Gdx.app.exit();
 				}
 
 			}	// file iterator's end
@@ -153,7 +169,9 @@ public class MagicFactory {
 					"magic/data/" + spellName + ".spell"));
 		}
 
-		return (FileHandle[])files.toArray();
+		FileHandle[] spellFiles = new FileHandle[files.size()];
+		spellFiles = files.toArray(spellFiles);
+		return spellFiles;
 	}
 
 	private static String readNextLine(BufferedReader reader) {

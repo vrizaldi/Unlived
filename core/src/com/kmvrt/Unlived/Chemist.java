@@ -2,6 +2,10 @@
 
 package com.kmvrt.Unlived;
 
+import java.util.Iterator;
+
+import com.badlogic.gdx.Gdx;
+
 public class Chemist {
 	// update the magics and chars that got hit by magic
 
@@ -29,17 +33,19 @@ public class Chemist {
 	public void update() {
 		// update the magics in the current state of the game
 
-		for(Iterator iter = data.magics.iterator(); iter.hasNext();) {
+		float delta = Gdx.graphics.getDeltaTime();
+		
+		for(Iterator<Magic> iter = data.magics.iterator(); iter.hasNext();) {
 			Magic m = iter.next();
 
 			// move it based on its direction
 			if(m.getDir() == Constants.DIR_E) {
 				// move east
-				m.move(Constants.NORMAL_SPEED, 0);
+				m.move(Constants.MAGIC_SPEED * delta);
 				
 			} else if(m.getDir() == Constants.DIR_W) {
 				// move west
-				m.move(-Constants.NORMAL_SPEED, 0);
+				m.move(-Constants.MAGIC_SPEED * delta);
 			}
 		} // magic collection iteration's end
 
@@ -54,17 +60,5 @@ public class Chemist {
 			}
 		}	
 	} // update's end
-
-	private boolean areClose(Magic m, GameChar c) {
-		// return whether they're close to each other
-
-		if(Math.abs(m.x - c.x) < Constants.CHAR_WIDTH * 2
-				&& Math.abs(m.y - c.y) < Constants.CHAR_HEIGHT * 2) {
-			return true;
-
-		} else {
-			return false;
-		}
-	}	// areClose(Magic, GameChar)'s end
 
 }	// public class's end

@@ -19,10 +19,8 @@ public class Constants {
 	// sprites moving and facing directions
 	public static final int DIR_W = 1;	// west
 	public static final int DIR_E = 2;	// east
-
-	// moving direction only
-	public static final int DIR_N = 3;	// north
-	public static final int DIR_S = 4;	// south
+	public static final int DIR_N = 3;
+	public static final int DIR_S = 4;
 
 	// size of things in world unit
 	public static final int CAM_WIDTH = 40;
