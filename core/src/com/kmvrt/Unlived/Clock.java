@@ -4,12 +4,15 @@ package com.kmvrt.Unlived;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.Gdx;
 import java.util.Iterator;
 
 public class Clock {
 	// update the time of the game
 	// every actual movements are updated here
 		
+	private static final String TAG = Clock.class.getName();
+	
 	private StateData data;
 
 	// rectangles for collision detection
@@ -32,12 +35,28 @@ public class Clock {
 
 // update the game ----------------------------------------------------------------------------------------------
 	public void update() {
-		// update the current state of the game
+		// update the current state of the game		float delta = Gdx.graphics.getDeltaTime();
 
-		// move the chars
-		for(GameChar c : data.chars) {
-			c.x += c.getNextX() + c.atts.getAccel();			
-			c.y += c.getNextY() + c.atts.getAccel();
+		float delta = Gdx.graphics.getDeltaTime();
+		for(Iterator<GameChar> iter = data.chars.iterator(); iter.hasNext();) {
+			GameChar c = iter.next();
+			
+			if(c.atts.getMana() < 0) {
+				if(c.getID() == Constants.CHAR_MAIN) {
+					// if the mainChar's mana is 0
+					data.die();
+					data.gameOver = true;
+					return;
+
+				} else {
+					data.kill();
+					iter.remove();
+				}
+			}
+
+			// move the chars
+			c.x += c.getNextX() + c.atts.getAccel() * delta;			
+			c.y += c.getNextY() + c.atts.getAccel() * delta;
 			c.moved();
 		}	// chars iterator's
 
@@ -87,9 +106,12 @@ public class Clock {
 			for(GameChar c : data.chars) {
 				if(areClose(m, c)) {
 					// set rec2 as c's rectangle
+					Gdx.app.log(TAG, "m and c are close");
 					rec2.setPosition(c.x, c.y);
 					rec2.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 					if(Intersector.intersectRectangles(rec1, rec2, inter)) {
+						if(c.getID() != Constants.CHAR_MAIN)
+							Gdx.app.log(TAG, "c is hit and is a creep");
 						c.affectedBy(m);
 					}
 				}

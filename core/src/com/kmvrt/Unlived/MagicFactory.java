@@ -56,6 +56,7 @@ public class MagicFactory {
 				boolean initMagic = false;
 				boolean attStated = false;
 				int attStatedID = 0;
+				Spell nSpell = null;
 
 				reader = new BufferedReader(new InputStreamReader(file.read()));
 				String line;
@@ -85,10 +86,10 @@ public class MagicFactory {
 									attStatedID = ATT_FORCE;
 									attStated = true;
 									
-								} else if(arg.equals("end")) {
+								} else if(arg.equals(ARG_INIT_MAGIC_END)) {
 									// end initialisation
 									initMagic = false;
-									Spell nSpell = new Spell(atts);
+									nSpell.initAtts(atts);
 										// initialise a spell based on the file reading result
 									spellBook.put(file.nameWithoutExtension(), nSpell);
 										// and save it
@@ -130,7 +131,8 @@ public class MagicFactory {
 							// start initialisation
 							Gdx.app.log(TAG, "Initialising spell: " + file.nameWithoutExtension());
 							initMagic = true;
-							atts = new GameChar.Attributes();
+							nSpell = new Spell();
+							atts = new GameChar.Attributes(nSpell);
 								
 						} else {
 							Gdx.app.error(TAG, "Invalid argument in the file " 

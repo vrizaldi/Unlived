@@ -84,13 +84,9 @@ public class Painter {
 		Assets.font.draw(batch, texts, ui.viewportWidth - texts.width,
 			ui.viewportHeight - texts.height);
 
-		// ammo on top-left screen
-		// set text to be ammo
-		String ammo = "";
-		for(int i = 0; i < data.getAmmoLeft(); i++) {
-			ammo += 'I';
-		}
-		texts.setText(Assets.font, ammo);
+		// mainChar mana on top left screen
+		texts.setText(Assets.font, "Mana: " 
+				+ String.format("%.2f", data.getMainChar().atts.getMana()));
 		Assets.font.draw(batch, texts, 0,
 				ui.viewportHeight - texts.height - 0.5f);
 

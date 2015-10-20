@@ -24,6 +24,7 @@ public class Magic {
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
+		this.spell = spell;
 	}	// new(int, int, int)'s end
 
 

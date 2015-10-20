@@ -16,8 +16,6 @@ public class Council {
 	
 	private StateData data; // the game state data
 
-	private GameChar mainChar;
-
 	// rectangles for collision detection
 	private Rectangle rec1;
 	private Rectangle rec2;
@@ -56,7 +54,7 @@ public class Council {
 	public void initNewGame() {
 		// create objects for a new game
 		
-		mainChar = new GameChar(Constants.CHAR_MAIN);
+		GameChar mainChar = new GameChar();
 		if(data.getStateID() == Constants.STATE_ARENA) {
 			// put it in the middle of the room
 			mainChar.x = (data.cRoom.getMiddleX() - Constants.CHAR_WIDTH) / 2; 
@@ -64,13 +62,12 @@ public class Council {
 			mainChar.updateSafePos();
 		}
 		
-		data.chars.add(mainChar);  
+		data.chars.add(mainChar); 
+		data.setMainChar(mainChar);
 	}	// initNewGame()'s end
 
 	public void disposeGame() {
 		// dispose current game's object
-
-		mainChar = null;
 
 		// clear char and magic collection
 		data.chars.clear();
@@ -91,6 +88,8 @@ public class Council {
 
 	private void updateMainChar(float delta) {
 		// update the main character
+
+		GameChar mainChar = data.getMainChar();
 		
 		// horizontal movements
 		if(Gdx.input.isKeyPressed(Keys.LEFT)) {
@@ -115,10 +114,6 @@ public class Council {
 		// attacking
 		if(Gdx.input.isKeyJustPressed(Keys.D)) {
 			// attack
-			if(!data.isThereAmmo()) {
-				// if there's no ammo
-				return;
-			}
 			shoot(mainChar.x, mainChar.y, mainChar.getDir());
 		}
 	} // updateMainChar()'s end
@@ -174,7 +169,7 @@ public class Council {
 		for(int i = 0; i < num; i++) {
 			// create <num> creeps
 
-			GameChar creep = new GameChar(Constants.CHAR_CREEP_FOLLOW);
+			GameChar creep = new GameChar();
 			creep.x = 
 				(float)(Math.random() * (Constants.ROOM_WIDTH - Constants.CHAR_WIDTH));
 			creep.y =
@@ -224,6 +219,8 @@ public class Council {
 	private void moveCreeps(float delta) {
 		// move the creep
 		// do some AI programming
+		
+		GameChar mainChar = data.getMainChar();
 		
 		for(Iterator<GameChar> i = data.chars.iterator(); i.hasNext();) {
 			GameChar creep = i.next();
@@ -379,6 +376,8 @@ public class Council {
 		
 	private void creepsAttack() {
 		// use the creeps to attack mainChar if it sees it
+		
+		GameChar mainChar = data.getMainChar();
 		
 		if(!creepsAttack) {
 			return;

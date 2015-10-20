@@ -8,6 +8,8 @@ import com.badlogic.gdx.Gdx;
 
 public class Chemist {
 	// update the magics and chars that got hit by magic
+	
+	private static final String TAG = Chemist.class.getName();
 
 	private StateData data;
 
@@ -54,9 +56,10 @@ public class Chemist {
 			if(c.isAffected()) {
 				// apply the spell to c ********************************************
 				Spell spell = c.getSpellAffecting();
-				c.atts.applyMana(spell.atts.getMana());
-				c.atts.applyAccel(spell.atts.getAccel());
-				c.atts.applyForce(spell.atts.getForce());
+				if(spell == null) Gdx.app.log(TAG, "spell = null");
+				c.atts.applyMana(spell.atts.getMana() * 10 * delta);
+				c.atts.applyAccel(spell.atts.getAccel() * 10 * delta);
+				c.atts.applyForce(spell.atts.getForce() * 10 * delta);
 			}
 		}	
 	} // update's end

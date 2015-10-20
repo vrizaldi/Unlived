@@ -38,7 +38,7 @@ public class Constants {
 	public static final int PORTAL_WIDTH = 5;
 	public static final int PORTAL_HEIGHT = 5;
 	public static final int CHARS_MIN = 5;
-	public static final int CHARS_MAX = 8;
+	public static final int CHARS_MAX = 5;
 		// total of the normal room types
 		// will be changed as types added
 
@@ -58,5 +58,4 @@ public class Constants {
 	// intervals between things happening
 	public static final float CREEPS_ATK_INTERVAL = 1f;		// in second
 	public static final float CREEPS_CHANGE_INTERVAL = 0.5f;	// in second
-
 }	// public class' end

@@ -8,13 +8,21 @@ public class Spell {
 
 	public GameChar.Attributes atts;
 		// attributes to be applied to characters affected
+	private boolean attsInitialised;
 	
 
 // constructor ------------------------------------------------------------------------------------------------
-	public Spell(GameChar.Attributes atts) {
+	public Spell() {
 
-		this.atts = atts;
+		atts = null;
+		attsInitialised = false;
 	} // new's end
 
 
+	
+	public void initAtts(GameChar.Attributes atts) {
+		if(!attsInitialised) {
+			this.atts = atts;
+		}
+	}
 }

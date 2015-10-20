@@ -74,7 +74,6 @@ public class Navigator {
 						data.switchLevel = true;
 						Gdx.app.log(TAG, "Deploying new room...");
 						data.cRoom = deployRoom(false);
-						data.initAmmo();	// reinit the ammo
 					}
 				}
 			}

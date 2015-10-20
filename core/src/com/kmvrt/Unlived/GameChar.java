@@ -1,6 +1,7 @@
 package com.kmvrt.Unlived;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Timer;
 
 public class GameChar {
 	// represent a character in-game
@@ -31,9 +32,9 @@ public class GameChar {
 
 
 // constructor ------------------------------------------------------------------------------------------------
-	public GameChar(int ID) {
+	public GameChar() {
 	
-		this.ID = ID;
+		this.ID = Constants.CHAR_CREEP_FOLLOW;
 
 		x = 0;
 		y = 0;
@@ -46,7 +47,8 @@ public class GameChar {
 
 		dir = Constants.DIR_E;
 
-		atts = new Attributes();
+		atts = new Attributes(this);
+		spell = null;
 	}	// new()'s end
 
 
@@ -84,7 +86,6 @@ public class GameChar {
 	
 		return nY;
 	}	// getNY()'s end
-
 
 	// safe position
 	public float getSafeX() {
@@ -139,6 +140,12 @@ public class GameChar {
 			}
 		}
 	} // changeCreep(int)'s
+
+	public void switchTo(int type) {
+		// change from one type to another
+
+		ID = type;
+	}
 	
 	public int getID() {
 		// return the type id
@@ -154,7 +161,6 @@ public class GameChar {
 
 		if(spell == null) {
 			return false;
-
 		} else {
 			return true;
 		}
@@ -164,6 +170,14 @@ public class GameChar {
 		// flag that this char is affected by the given spell
 
 		spell = m.getSpell();
+		Timer.schedule(
+			new Timer.Task() {
+				
+				@Override
+				public void run() {
+					spell = null;
+				}
+			}, 0.1f);
 	}	// affectedBy(Spell)'s end
 
 	public Spell getSpellAffecting() {
@@ -184,8 +198,13 @@ public class GameChar {
 		
 
 	// constructor --------------------------------------------------------------------
-		public Attributes() {
+		public Attributes(Object holder) {
+
 			mana = 0;
+			if(holder instanceof GameChar) {
+				// mana is inialised as 100 % if it's a character
+				mana = 100;
+			}
 			accel = 0;
 			force = 0;
 		}

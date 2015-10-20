@@ -16,8 +16,7 @@ public class StateData {
 	
 	private int stateID;
 
-	private int mainCharAmmo;
-
+	private GameChar mainChar;
 	public ArrayList<GameChar> chars;
 	public GameMap cRoom;
 	public ArrayList<Magic> magics;
@@ -37,6 +36,7 @@ public class StateData {
 			this.stateID = stateID;
 		}
 		
+		mainChar = null;
 		chars = new ArrayList<GameChar>();
 		magics = new ArrayList<Magic>();
 		switchLevel = false;
@@ -47,6 +47,22 @@ public class StateData {
 
 
 // getter and setter -----------------------------------------------------------------------------------------
+	public void setMainChar(GameChar c) {
+		// set the current mainChar
+		
+		if(mainChar != null) {
+			mainChar.switchTo(Constants.CHAR_CREEP_FOLLOW);
+		}
+		c.switchTo(Constants.CHAR_MAIN);
+		mainChar = c;
+	}
+
+	public GameChar getMainChar() {
+		// return the current mainChar
+
+		return mainChar;
+	}
+
 	public int getStateID() {
 	
 		return stateID;
@@ -63,31 +79,6 @@ public class StateData {
 		} else {
 			return false;	
 		}
-	}
-
-	public void shoot() {
-		// decrease the ammo
-	
-		// ammo can't be less than 0 
-		mainCharAmmo = mainCharAmmo - 1 < 0 ? 0 : mainCharAmmo - 1; 
-	}
-
-	public void initAmmo() {
-		// initialise the ammo
-		
-		mainCharAmmo = Constants.INIT_AMMO;
-	}
-
-	public boolean isThereAmmo() {
-		// return whether there is ammo left
-		
-		return mainCharAmmo == 0 ? false : true;
-	}
-
-	public int getAmmoLeft() {
-		// return the ammo left
-		
-		return mainCharAmmo;
 	}
 
 	public void initDeath() {

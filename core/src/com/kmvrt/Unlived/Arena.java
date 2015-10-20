@@ -63,7 +63,6 @@ public class Arena implements Screen {
 		navigator.initNewGame();
 		council.initNewGame();
 		chemist.initNewGame();
-		data.initAmmo();
 		if(initProps) {
 			data.initKill();
 			data.initDeath();
