@@ -35,7 +35,13 @@ public class MagicFactory {
 		final String ARG_ATT_ACCEL = "accel";
 		final String ARG_ATT_FORCE = "force";
 		final String ARG_INIT_MAGIC = "spell";
-		final String ARG_INIT_MAGIC_END = "end";
+		final String ARG_INIT_MAGIC_END = "spellend";
+		final String ARG_INIT_HIT = "hit";
+		final String ARG_INIT_HIT_END = "hitend";
+		final String ARG_INIT_CAST = "cast";
+		final String ARG_INIT_CAST_END = "castend";
+		
+		// attribute IDs
 		final int ATT_MANA = 205;
 		final int ATT_ACCEL = 206;
 		final int ATT_FORCE = 207;
@@ -51,9 +57,11 @@ public class MagicFactory {
 				// a (reader to a) file
 			for(FileHandle file : files) {
 				// read every ".spell" files
-
-				GameChar.Attributes atts = null;
+				GameChar.Attributes hit = null;
+				GameChar.Attributes cast = null;
 				boolean initMagic = false;
+				boolean initHit = false;
+				boolean initCast = false;
 				boolean attStated = false;
 				int attStatedID = 0;
 				Spell nSpell = null;
@@ -71,68 +79,87 @@ public class MagicFactory {
 
 					String[] args = line.split("\\s");
 					for(String arg : args) {
-						 if(initMagic) {
+						if(initMagic) {
 							// initialise a magic
-							if(!attStated) {
-								if(arg.equals(ARG_ATT_MANA)) {
-									attStatedID = ATT_MANA;
-									attStated = true;
+							if(initHit ^ initCast) {
+								if(!attStated) {
+									if(arg.equals(ARG_ATT_MANA)) {
+										attStatedID = ATT_MANA;
+										attStated = true;
 
-								} else if(arg.equals(ARG_ATT_ACCEL)) {
-									attStatedID = ATT_ACCEL;
-									attStated = true;
+									} else if(arg.equals(ARG_ATT_ACCEL)) {
+										attStatedID = ATT_ACCEL;
+										attStated = true;
 
-								} else if(arg.equals(ARG_ATT_FORCE)) {
-									attStatedID = ATT_FORCE;
-									attStated = true;
-									
-								} else if(arg.equals(ARG_INIT_MAGIC_END)) {
-									// end initialisation
-									initMagic = false;
-									nSpell.initAtts(atts);
-										// initialise a spell based on the file reading result
-									spellBook.put(file.nameWithoutExtension(), nSpell);
-										// and save it
-									Gdx.app.log(TAG, "Spell added: " + file.nameWithoutExtension());
-									
-								} 
-							// if actStated == false's end
+									} else if(arg.equals(ARG_ATT_FORCE)) {
+										attStatedID = ATT_FORCE;
+										attStated = true;
+										
+									// finish init hit/cast
+									} else if(arg.equals(ARG_INIT_HIT_END)
+											&& !initCast) {
+										initHit = false;
+										
+									} else if(arg.equals(ARG_INIT_CAST_END)
+											&& !initHit) {
+										initCast = false;
+									} 
+								// if actStated == false's end
 
-							} else if(isNumeric(arg) && attStated) {
-								attStated = false;
-								switch(attStatedID) {
+								} else if(isNumeric(arg) && attStated) {
+									attStated = false;
+									GameChar.Attributes cCond = initHit ? hit : cast;
+									switch(attStatedID) {
+									case ATT_MANA:
+										cCond.applyMana(Float.parseFloat(arg));
+										Gdx.app.log(TAG, arg + " mana applied");
+										break;
 
-								case ATT_MANA:
-									atts.applyMana(Float.parseFloat(arg));
-									Gdx.app.log(TAG, arg + " mana applied");
-									break;
+									case ATT_ACCEL:
+										cCond.applyAccel(Float.parseFloat(arg));
+										Gdx.app.log(TAG, arg + " accel applied");
+										break;
 
-								case ATT_ACCEL:
-									atts.applyAccel(Float.parseFloat(arg));
-									Gdx.app.log(TAG, arg + " accel applied");
-									break;
-
-								case ATT_FORCE:
-									atts.applyForce(Float.parseFloat(arg));
-									Gdx.app.log(TAG, arg + " force applied");
-									break;
-								}
-							// if(arg is numeric)'s
+									case ATT_FORCE:
+										cCond.applyForce(Float.parseFloat(arg));
+										Gdx.app.log(TAG, arg + " force applied");
+										break;
+									}
+								// if(arg is numeric)'s
 								
-							} else {
-								Gdx.app.error(TAG, "Invalid argument in the file " 
+								} else {
+									Gdx.app.error(TAG, "Invalid argument in the file " 
 										+ file.path() + ": " + arg);
-								Gdx.app.exit();
+									Gdx.app.exit();
+								}
+							// if init hit/cast's
+							
+							} else if(arg.equals(ARG_INIT_HIT)
+									&& !initHit && !initCast) {
+								initHit = true;
+								
+							} else if(arg.equals(ARG_INIT_CAST)
+									&& !initHit && !initCast) {
+								initCast = true;
+							
+							} else if(arg.equals(ARG_INIT_MAGIC_END)) {
+								// end initialisation
+								initMagic = false;
+								nSpell.initAtts(hit, cast);
+									// initialise a spell based on the file reading result
+								spellBook.put(file.nameWithoutExtension(), nSpell);
+									// and save it
+								Gdx.app.log(TAG, "Spell added: " + file.nameWithoutExtension());
 							}
-						// if init magic's end
+						// if init magic's
 
-						} else if(arg.equals(ARG_INIT_MAGIC)
-								&& !initMagic) {
+						} else if(arg.equals(ARG_INIT_MAGIC)) {
 							// start initialisation
 							Gdx.app.log(TAG, "Initialising spell: " + file.nameWithoutExtension());
 							initMagic = true;
 							nSpell = new Spell();
-							atts = new GameChar.Attributes(nSpell);
+							hit = new GameChar.Attributes();
+							cast = new GameChar.Attributes();
 								
 						} else {
 							Gdx.app.error(TAG, "Invalid argument in the file " 
@@ -165,7 +192,7 @@ public class MagicFactory {
 		// and all have the extension .spell
 		
 		ArrayList<FileHandle> files = new ArrayList<FileHandle>();
-		String[] spellList = {"Attack", "Pusher", "Accellerator"};
+		String[] spellList = {"Attack"};
 		for(String spellName : spellList) {
 			files.add(Gdx.files.internal(
 					"magic/data/" + spellName + ".spell"));

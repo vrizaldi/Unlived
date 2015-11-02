@@ -35,10 +35,10 @@ public class Constants {
 	public static final int ROOM_BOSS = 147;
 	public static final int ROOM_NORMAL = 148;
 	public static final int ROOM_NORMAL_TOTAL = 1;
-	public static final int PORTAL_WIDTH = 5;
-	public static final int PORTAL_HEIGHT = 5;
-	public static final int CHARS_MIN = 5;
-	public static final int CHARS_MAX = 5;
+	public static final int PORTAL_WIDTH = 2;
+	public static final int PORTAL_HEIGHT = 2;
+	public static final int CHARS_MIN = 2;
+	public static final int CHARS_MAX = 3;
 		// total of the normal room types
 		// will be changed as types added
 

@@ -57,9 +57,9 @@ public class Chemist {
 				// apply the spell to c ********************************************
 				Spell spell = c.getSpellAffecting();
 				if(spell == null) Gdx.app.log(TAG, "spell = null");
-				c.atts.applyMana(spell.atts.getMana() * 10 * delta);
-				c.atts.applyAccel(spell.atts.getAccel() * 10 * delta);
-				c.atts.applyForce(spell.atts.getForce() * 10 * delta);
+				c.atts.applyMana(spell.hit.getMana() * 10 *delta);
+				c.atts.applyAccel(spell.hit.getAccel() * 10 * delta);
+				c.atts.applyForce(spell.hit.getForce() * 10 * delta);
 			}
 		}	
 	} // update's end

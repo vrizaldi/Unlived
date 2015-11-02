@@ -197,13 +197,20 @@ public class GameChar {
 		private float force;
 		
 
-	// constructor --------------------------------------------------------------------
+	// constructors --------------------------------------------------------------------
+		public Attributes() {
+			
+			mana = 0;
+			accel = 0;
+			force = 0;
+		}
+		
 		public Attributes(Object holder) {
 
 			mana = 0;
 			if(holder instanceof GameChar) {
 				// mana is inialised as 100 % if it's a character
-				mana = 100;
+				mana = 99;
 			}
 			accel = 0;
 			force = 0;

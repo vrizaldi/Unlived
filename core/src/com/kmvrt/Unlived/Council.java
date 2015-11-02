@@ -114,24 +114,36 @@ public class Council {
 		// attacking
 		if(Gdx.input.isKeyJustPressed(Keys.D)) {
 			// attack
-			shoot(mainChar.x, mainChar.y, mainChar.getDir());
+			shoot(mainChar, mainChar.getDir());
 		}
 	} // updateMainChar()'s end
 
-	private void shoot(float charX, float charY, int dir) {
+	private void shoot(GameChar c, int dir) {
 		// deploy a magic in front of the deployer
+		
+		float charX = c.x + c.getNextX();
+		float charY = c.y + c.getNextY();
 
+		Magic magic = null;
 		if(dir == Constants.DIR_E) {
 			// deploy it in the east of the mainChar
-			Magic magic = MagicFactory.cast("Attack", charX + Constants.CHAR_WIDTH, 
+			magic = MagicFactory.cast("Attack", charX + Constants.CHAR_WIDTH, 
 				charY, Constants.DIR_E);
 			data.magics.add(magic);
 	
 		} else if(dir == Constants.DIR_W) {
 			// deploy it in the west of the mainChar
-			Magic magic = MagicFactory.cast("Attack", charX - Constants.CHAR_WIDTH, 
+			magic = MagicFactory.cast("Attack", charX - Constants.CHAR_WIDTH, 
 				charY, Constants.DIR_W);
 			data.magics.add(magic);
+		}
+		
+		// decrease the mana if c is mainChar
+		if(c == data.getMainChar()) {
+			GameChar.Attributes cast = magic.getSpell().cast;
+			c.atts.applyMana(cast.getMana());
+			c.atts.applyAccel(cast.getAccel());
+			c.atts.applyForce(cast.getForce());
 		}
 	}
 
@@ -407,7 +419,7 @@ public class Council {
 					&& Math.abs(
 					mainChar.x - creep.x) <= Constants.MAGIC_MAX_DISTANCE + 10) {
 					// if the mainChar is within the range of the creep shoot
-					shoot(creep.x, creep.y, creep.getDir());
+					shoot(creep, creep.getDir());
 				}
 			}
 		}	// for's end

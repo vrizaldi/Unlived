@@ -1,3 +1,9 @@
 spell
-	mana -10
-end
+	cast
+		mana -10
+	castend
+	
+	hit
+		mana -33
+	hitend
+spellend
