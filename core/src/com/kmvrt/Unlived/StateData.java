@@ -28,8 +28,7 @@ public class StateData {
 // constructor ----------------------------------------------------------------------------------------------
 	public StateData(int stateID) {
 		
-		if(stateID != Constants.STATE_HUB
-			&& stateID != Constants.STATE_ARENA) {
+		if(stateID != Constants.STATE_ARENA) {
 			Gdx.app.log(TAG, "Wrong input on StateData class: " + stateID);
 
 		} else {

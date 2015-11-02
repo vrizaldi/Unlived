@@ -11,7 +11,7 @@ public class Clock {
 	// update the time of the game
 	// every actual movements are updated here
 		
-	private static final String TAG = Clock.class.getName();
+//	private static final String TAG = Clock.class.getName();
 	
 	private StateData data;
 
@@ -106,12 +106,12 @@ public class Clock {
 			for(GameChar c : data.chars) {
 				if(areClose(m, c)) {
 					// set rec2 as c's rectangle
-					Gdx.app.log(TAG, "m and c are close");
+//					Gdx.app.log(TAG, "m and c are close");
 					rec2.setPosition(c.x, c.y);
 					rec2.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 					if(Intersector.intersectRectangles(rec1, rec2, inter)) {
-						if(c.getID() != Constants.CHAR_MAIN)
-							Gdx.app.log(TAG, "c is hit and is a creep");
+//						if(c.getID() != Constants.CHAR_MAIN)
+//							Gdx.app.log(TAG, "c is hit and is a creep");
 						c.affectedBy(m);
 					}
 				}

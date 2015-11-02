@@ -4,7 +4,6 @@ public class Constants {
 	// store all the constants
 	
 	// game state IDs
-	public static final int STATE_HUB = 201;
 	public static final int STATE_ARENA = 202;
 
 	// sprites movement speed
@@ -15,6 +14,7 @@ public class Constants {
 	
 	public static final int MAGIC_SPEED = 100;
 	public static final int MAGIC_MAX_DISTANCE = 10;
+	public static final int SWAP_MAX_DISTANCE = 10;
 	
 	// sprites moving and facing directions
 	public static final int DIR_W = 1;	// west
@@ -38,22 +38,21 @@ public class Constants {
 	public static final int PORTAL_WIDTH = 2;
 	public static final int PORTAL_HEIGHT = 2;
 	public static final int CHARS_MIN = 2;
-	public static final int CHARS_MAX = 3;
+	public static final int CHARS_MAX = 4;
 		// total of the normal room types
 		// will be changed as types added
 
-	// sprite id
+	// char IDs
 	public static final int CHAR_MAIN = 98;
 	public static final int CHAR_CREEP_FOLLOW = 99;
 	public static final int CHAR_CREEP_FOLLOW_N = 100;
 	public static final int CHAR_CREEP_FOLLOW_S = 101;
 	public static final int CHAR_CREEP_AVOID = 102;
+	public static final int CHAR_CREEP_INACTIVE = 103;
 
 	// safe distance between creep and mainChar
 	public static final int SAFE_DIST_X = 10;
 	public static final int SAFE_DIST_Y = 0;
-	
-	public static final int INIT_AMMO = 10;
 
 	// intervals between things happening
 	public static final float CREEPS_ATK_INTERVAL = 1f;		// in second

@@ -61,6 +61,13 @@ public class Chemist {
 				c.atts.applyAccel(spell.hit.getAccel() * 10 * delta);
 				c.atts.applyForce(spell.hit.getForce() * 10 * delta);
 			}
+			
+			if(c.getID() != Constants.CHAR_MAIN
+					&& c.atts.getMana() < 80
+					&& !c.hasFainted()) {
+				Gdx.app.log(TAG, "c is fainted");
+				c.fainted();
+			}
 		}	
 	} // update's end
 

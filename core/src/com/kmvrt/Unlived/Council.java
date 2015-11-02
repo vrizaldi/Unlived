@@ -90,7 +90,20 @@ public class Council {
 		// update the main character
 
 		GameChar mainChar = data.getMainChar();
-		
+
+		// acts
+		if(Gdx.input.isKeyJustPressed(Keys.D)) {
+			// attack
+			shoot(mainChar, mainChar.getDir());
+
+		} else if(Gdx.input.isKeyJustPressed(Keys.S)) {
+			// body switching 
+			GameChar creep = closestInactiveCreep();
+			if(creep != null) {
+				data.setMainChar(creep);
+			}
+		}
+
 		// horizontal movements
 		if(Gdx.input.isKeyPressed(Keys.LEFT)) {
 				// move west
@@ -110,19 +123,13 @@ public class Council {
 			// move south
 			mainChar.move(0, -Constants.NORMAL_SPEED * delta);
 		}
-
-		// attacking
-		if(Gdx.input.isKeyJustPressed(Keys.D)) {
-			// attack
-			shoot(mainChar, mainChar.getDir());
-		}
 	} // updateMainChar()'s end
 
 	private void shoot(GameChar c, int dir) {
 		// deploy a magic in front of the deployer
 		
-		float charX = c.x + c.getNextX();
-		float charY = c.y + c.getNextY();
+		float charX = c.x;
+		float charY = c.y;
 
 		Magic magic = null;
 		if(dir == Constants.DIR_E) {
@@ -145,6 +152,35 @@ public class Council {
 			c.atts.applyAccel(cast.getAccel());
 			c.atts.applyForce(cast.getForce());
 		}
+	}
+
+	private GameChar closestInactiveCreep() {
+		// return the inactive creep closest to the mainChar
+
+		GameChar mainChar = data.getMainChar();
+		GameChar closest = null;
+		float closestX = 100;
+
+		// set rec1 as mainChar's y rectangle
+		rec1.setPosition(0, mainChar.y);
+		rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+		for(GameChar c : data.chars) {
+			if(c.getID() == Constants.CHAR_CREEP_INACTIVE) {
+				// if they're the closest found
+				float distX = Math.abs(mainChar.x - c.x);
+				if(distX < Constants.SWAP_MAX_DISTANCE
+						&& distX < closestX) {
+					// set rec2 as c's y rectangle
+					rec2.setPosition(0, c.y);
+					rec2.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+					if(Intersector.intersectRectangles(rec1, rec2, inter)) {
+						closest = c;
+					}
+				}	// if they're close's
+			}	// if c is inactive's
+		}	// chars iterator's
+
+		return closest;
 	}
 
 	private void updateCreeps(float delta) {
@@ -199,7 +235,8 @@ public class Council {
 		// 1/8 is avoiding it
 		
 		for(GameChar creep : data.chars) {
-			if(creep.getID() != Constants.CHAR_MAIN) {
+			if(creep.getID() != Constants.CHAR_MAIN
+					&& creep.getID() != Constants.CHAR_CREEP_INACTIVE) {
 				int mood = (int)(Math.random() * 8) + 1;
 					// random number 1 - 8
 				switch(mood) {
@@ -410,7 +447,8 @@ public class Council {
 		rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 
 		for(GameChar creep : data.chars) {
-			if(creep.getID() != Constants.CHAR_MAIN) {
+			if(creep.getID() != Constants.CHAR_MAIN
+					&& creep.getID() != Constants.CHAR_CREEP_INACTIVE) {
 				// set rec2 to be current creep's y related rectangle
 				rec2.setPosition(0, creep.y);
 				rec2.setSize(Constants.CHAR_WIDTH, Constants.CAM_HEIGHT);

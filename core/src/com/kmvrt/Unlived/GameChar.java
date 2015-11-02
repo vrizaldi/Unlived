@@ -25,6 +25,9 @@ public class GameChar {
 		// spell that affects the char
 	public Attributes atts;
 		// store the attribute. e.g. mana, accel, force, etc.
+	
+	private boolean fainted;
+		// whether the char has ever fainted
 
 	private int dir;  // the direction the character facing
 	
@@ -44,6 +47,8 @@ public class GameChar {
 
 		nX = 0;
 		nY = 0;
+		
+		fainted = false;
 
 		dir = Constants.DIR_E;
 
@@ -132,12 +137,7 @@ public class GameChar {
 		// change the creep type
 
 		if(ID != Constants.CHAR_MAIN) {
-			if(type == Constants.CHAR_CREEP_AVOID
-				|| type == Constants.CHAR_CREEP_FOLLOW
-				|| type == Constants.CHAR_CREEP_FOLLOW_N
-				|| type == Constants.CHAR_CREEP_FOLLOW_S) {
-				ID = type;
-			}
+			ID = type;
 		}
 	} // changeCreep(int)'s
 
@@ -186,6 +186,29 @@ public class GameChar {
 		return spell;
 	}	// getSpellAffecting()'s end
 
+	public boolean hasFainted() {
+		
+		return fainted;
+	}
+	
+	public void fainted() {
+		
+		fainted = true;
+		changeCreep(Constants.CHAR_CREEP_INACTIVE);
+		// wake up after several seconds
+		Timer.schedule(
+			new Timer.Task() {
+				
+				@Override
+				public void run() {
+	
+					// if still inactive
+					if(ID == Constants.CHAR_CREEP_INACTIVE) {
+						ID = Constants.CHAR_CREEP_FOLLOW;
+					}
+				}
+			}, 3.0f);
+	}
 
 
 // nested class ---------------------------------------------------------------------------------------------
@@ -250,5 +273,5 @@ public class GameChar {
 			return force;
 		}
 	}	// Attribute's end
-
+	
 }	// public class's end
