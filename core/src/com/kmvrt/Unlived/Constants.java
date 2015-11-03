@@ -48,7 +48,7 @@ public class Constants {
 	public static final int CHAR_CREEP_FOLLOW_N = 100;
 	public static final int CHAR_CREEP_FOLLOW_S = 101;
 	public static final int CHAR_CREEP_AVOID = 102;
-	public static final int CHAR_CREEP_INACTIVE = 103;
+//	public static final int CHAR_CREEP_INACTIVE = 103;
 
 	// safe distance between creep and mainChar
 	public static final int SAFE_DIST_X = 10;

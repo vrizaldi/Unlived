@@ -21,17 +21,21 @@ public class GameChar {
 	private float nX;
 	private float nY;
 
-	private Spell spell;
+	private Spell spellAffecting;
 		// spell that affects the char
 	public Attributes atts;
 		// store the attribute. e.g. mana, accel, force, etc.
 	
-	private boolean fainted;
+//	private boolean fainted;
 		// whether the char has ever fainted
 
 	private int dir;  // the direction the character facing
 	
 	private int ID;	// type
+	
+	private Spell spell;
+	private boolean bursting;
+	private boolean ableToShoot;
 
 
 // constructor ------------------------------------------------------------------------------------------------
@@ -48,12 +52,16 @@ public class GameChar {
 		nX = 0;
 		nY = 0;
 		
-		fainted = false;
+//		fainted = false;
 
 		dir = Constants.DIR_E;
+		
+		spell = MagicFactory.getSpell("Attack");
+		bursting = false;
+		ableToShoot = true;
 
 		atts = new Attributes(this);
-		spell = null;
+		spellAffecting = null;
 	}	// new()'s end
 
 
@@ -159,7 +167,7 @@ public class GameChar {
 	public boolean isAffected() {
 		// return whether the char is affected by a spell
 
-		if(spell == null) {
+		if(spellAffecting == null) {
 			return false;
 		} else {
 			return true;
@@ -169,13 +177,13 @@ public class GameChar {
 	public void affectedBy(Magic m) {
 		// flag that this char is affected by the given spell
 
-		spell = m.getSpell();
+		spellAffecting = m.getSpell();
 		Timer.schedule(
 			new Timer.Task() {
 				
 				@Override
 				public void run() {
-					spell = null;
+					spellAffecting = null;
 				}
 			}, 0.1f);
 	}	// affectedBy(Spell)'s end
@@ -183,31 +191,49 @@ public class GameChar {
 	public Spell getSpellAffecting() {
 		// return the spell affecting this char
 
-		return spell;
+		return spellAffecting;
 	}	// getSpellAffecting()'s end
 
-	public boolean hasFainted() {
+	public void shoot(boolean firstShot) {
+		// called when this char is shooting
 		
-		return fainted;
+		if(firstShot) {
+			// disable the char from shooting for awhile
+			ableToShoot = false;
+			Timer.schedule(
+				new Timer.Task() {
+				
+					@Override
+					public void run() {
+						ableToShoot = true;
+					}
+				}, spell.getInterval());
+			
+			if(spell.getBurst() > 1) {
+				Timer.schedule(
+					new Timer.Task() {
+						
+						@Override
+						public void run() {
+							bursting = true;
+						}
+					}, spell.getBurstInterval(),
+					spell.getBurstInterval(), spell.getBurst() - 2);
+			}
+			
+		} else { // not the first shot
+			bursting = false;
+		}
+	}	// shoot(bool)'s end
+	
+	public boolean isBursting() {
+		
+		return bursting;
 	}
 	
-	public void fainted() {
+	public boolean isAbleToShoot() {
 		
-		fainted = true;
-		changeCreep(Constants.CHAR_CREEP_INACTIVE);
-		// wake up after several seconds
-		Timer.schedule(
-			new Timer.Task() {
-				
-				@Override
-				public void run() {
-	
-					// if still inactive
-					if(ID == Constants.CHAR_CREEP_INACTIVE) {
-						ID = Constants.CHAR_CREEP_FOLLOW;
-					}
-				}
-			}, 3.0f);
+		return ableToShoot;
 	}
 
 

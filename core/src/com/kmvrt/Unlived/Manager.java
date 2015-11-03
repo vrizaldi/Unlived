@@ -4,7 +4,7 @@ package com.kmvrt.Unlived;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Graphics.DisplayMode;
+//import com.badlogic.gdx.Graphics.DisplayMode;
 //import com.badlogic.gdx.Screen;
 
 public class Manager extends Game {
@@ -28,13 +28,13 @@ public class Manager extends Game {
 		Assets.init();
 		MagicFactory.init();
 
-		DisplayMode[] displayMode = Gdx.graphics.getDisplayModes();
+/*		DisplayMode[] displayMode = Gdx.graphics.getDisplayModes();
 		Gdx.app.log(TAG, "Display Modes available:");
 		for(int i = 0; i < displayMode.length; i++) {
 			Gdx.app.log(TAG, "" + i + ": " + displayMode[i].width 
 				+ "x" + displayMode[i].height + ", " + displayMode[i].bitsPerPixel
-				+ " bit/p, " + displayMode[i].refreshRate + "Hz");
-		}
+				+ " bit/p, " + displayMode[i].refreshRate + "Hz"); 
+		} */
 
 		this.setScreen(arena);
 		Gdx.app.log(TAG, "Game initiated");

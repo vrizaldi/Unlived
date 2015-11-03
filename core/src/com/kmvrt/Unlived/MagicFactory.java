@@ -30,22 +30,31 @@ public class MagicFactory {
 		
 		spellBook = new HashMap<String, Spell>();
 		
-		// constants for reading file
+		// constants for reading file ------------------
+		// attributes
+		final String ARG_ATT_BURST = "burst";
+		final String ARG_ATT_BURST_INTERVAL = "burstinterval";
+		final String ARG_ATT_INTERVAL = "interval";
 		final String ARG_ATT_MANA = "mana";
 		final String ARG_ATT_ACCEL = "accel";
 		final String ARG_ATT_FORCE = "force";
+
+		// attribute IDs
+		final int ATT_BURST = 202;
+		final int ATT_BURST_INTERVAL = 203;
+		final int ATT_INTERVAL = 204;
+		final int ATT_MANA = 205;
+		final int ATT_ACCEL = 206;
+		final int ATT_FORCE = 207;
+	
+		// opening and closing a statement
 		final String ARG_INIT_MAGIC = "spell";
 		final String ARG_INIT_MAGIC_END = "spellend";
 		final String ARG_INIT_HIT = "hit";
 		final String ARG_INIT_HIT_END = "hitend";
 		final String ARG_INIT_CAST = "cast";
 		final String ARG_INIT_CAST_END = "castend";
-		
-		// attribute IDs
-		final int ATT_MANA = 205;
-		final int ATT_ACCEL = 206;
-		final int ATT_FORCE = 207;
-	
+
 		if(!initialised) {
 			initialised = true;
 
@@ -57,14 +66,21 @@ public class MagicFactory {
 				// a (reader to a) file
 			for(FileHandle file : files) {
 				// read every ".spell" files
-				GameChar.Attributes hit = null;
-				GameChar.Attributes cast = null;
+				
+				// flags
 				boolean initMagic = false;
 				boolean initHit = false;
 				boolean initCast = false;
 				boolean attStated = false;
 				int attStatedID = 0;
+				
+				// the spell initialised and its attributes
 				Spell nSpell = null;
+				GameChar.Attributes hit = null;
+				GameChar.Attributes cast = null;
+				int burst = 1;
+				float burstInterval = 0;
+				float interval = 0.5f;
 
 				reader = new BufferedReader(new InputStreamReader(file.read()));
 				String line;
@@ -82,7 +98,9 @@ public class MagicFactory {
 						if(initMagic) {
 							// initialise a magic
 							if(initHit ^ initCast) {
+								// looking for attribute/closing statement
 								if(!attStated) {
+									// declare an attribute
 									if(arg.equals(ARG_ATT_MANA)) {
 										attStatedID = ATT_MANA;
 										attStated = true;
@@ -95,7 +113,7 @@ public class MagicFactory {
 										attStatedID = ATT_FORCE;
 										attStated = true;
 										
-									// finish init hit/cast
+									// close hit/cast init
 									} else if(arg.equals(ARG_INIT_HIT_END)
 											&& !initCast) {
 										initHit = false;
@@ -104,9 +122,10 @@ public class MagicFactory {
 											&& !initHit) {
 										initCast = false;
 									} 
-								// if actStated == false's end
+								// if attStated == false's end
 
-								} else if(isNumeric(arg) && attStated) {
+								// initialise the attribute
+								} else if(isNumeric(arg)) {
 									attStated = false;
 									GameChar.Attributes cCond = initHit ? hit : cast;
 									switch(attStatedID) {
@@ -124,6 +143,11 @@ public class MagicFactory {
 										cCond.applyForce(Float.parseFloat(arg));
 										Gdx.app.log(TAG, arg + " force applied");
 										break;
+
+									default:
+										Gdx.app.error(TAG, "Invalid attribute ID declared in the file "
+												+ file.path() + ": " + attStatedID);
+										Gdx.app.exit();
 									}
 								// if(arg is numeric)'s
 								
@@ -134,6 +158,7 @@ public class MagicFactory {
 								}
 							// if init hit/cast's
 							
+							// open hit/init initialisation
 							} else if(arg.equals(ARG_INIT_HIT)
 									&& !initHit && !initCast) {
 								initHit = true;
@@ -141,16 +166,60 @@ public class MagicFactory {
 							} else if(arg.equals(ARG_INIT_CAST)
 									&& !initHit && !initCast) {
 								initCast = true;
-							
-							} else if(arg.equals(ARG_INIT_MAGIC_END)) {
-								// end initialisation
-								initMagic = false;
-								nSpell.initAtts(hit, cast);
-									// initialise a spell based on the file reading result
-								spellBook.put(file.nameWithoutExtension(), nSpell);
-									// and save it
-								Gdx.app.log(TAG, "Spell added: " + file.nameWithoutExtension());
-							}
+
+							} else if(!attStated) {
+								// initialise props
+								if(arg.equals(ARG_ATT_BURST)) {
+									attStatedID = ATT_BURST;
+									attStated = true;
+
+								} else if(arg.equals(ARG_ATT_BURST_INTERVAL)) {
+									attStatedID = ATT_BURST_INTERVAL;
+									attStated = true;
+									
+								} else if(arg.equals(ARG_ATT_INTERVAL)) {
+									attStatedID = ATT_INTERVAL;
+									attStated = true;
+									
+								// end init
+								} else if(arg.equals(ARG_INIT_MAGIC_END)) {
+									// end initialisation
+									initMagic = false;
+									nSpell.initAtts(hit, cast);
+									nSpell.initProps(burst, burstInterval, interval);
+										// initialise a spell based on the file reading result
+									spellBook.put(file.nameWithoutExtension(), nSpell);
+										// and save it
+									Gdx.app.log(TAG, "Spell added: " + file.nameWithoutExtension());
+								}
+							// if !attStated's
+
+							} else if(isNumeric(arg)) {
+								// init properties
+								attStated = false;
+
+								switch(attStatedID) {
+								case ATT_BURST:
+									burst = Integer.parseInt(arg);
+									Gdx.app.log(TAG, arg + " shots/cast");
+									break;
+
+								case ATT_BURST_INTERVAL:
+									burstInterval = Float.parseFloat(arg);
+									Gdx.app.log(TAG, "" + Float.parseFloat(arg) + "s between each shots");
+									break;
+									
+								case ATT_INTERVAL:
+									interval = Float.parseFloat(arg);
+									Gdx.app.log(TAG, "" + Float.parseFloat(arg) + " s between each cast");
+									break;
+
+								default:
+									Gdx.app.error(TAG, "Invalid attribute ID declared in file "
+											+ file.path() + ": " + attStatedID);
+									Gdx.app.exit();
+								}		
+							} 
 						// if init magic's
 
 						} else if(arg.equals(ARG_INIT_MAGIC)) {
@@ -237,5 +306,10 @@ public class MagicFactory {
 		return new Magic(spellBook.get(spellName), x, y, dir);
 
 	}	// cast(String)'s end
+	
+	public static Spell getSpell(String name) {
+
+		return spellBook.get(name);
+	}
 
 }

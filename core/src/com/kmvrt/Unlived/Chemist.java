@@ -62,13 +62,30 @@ public class Chemist {
 				c.atts.applyForce(spell.hit.getForce() * 10 * delta);
 			}
 			
-			if(c.getID() != Constants.CHAR_MAIN
-					&& c.atts.getMana() < 80
-					&& !c.hasFainted()) {
-				Gdx.app.log(TAG, "c is fainted");
-				c.fainted();
+			// bursting shots
+			if(c.isBursting()) {
+				// shoot
+				float charX = c.x;
+				float charY = c.y;
+				int dir = c.getDir();
+
+				Magic magic = null;
+				if(dir == Constants.DIR_E) {
+					// deploy it in the east of the mainChar
+					magic = MagicFactory.cast("Attack", charX + Constants.CHAR_WIDTH, 
+						charY, Constants.DIR_E);
+					data.magics.add(magic);
+			
+				} else if(dir == Constants.DIR_W) {
+					// deploy it in the west of the mainChar
+					magic = MagicFactory.cast("Attack", charX - Constants.CHAR_WIDTH, 
+						charY, Constants.DIR_W);
+					data.magics.add(magic);
+				}
+				
+				c.shoot(false);
 			}
-		}	
+		}	// c's iterator	
 	} // update's end
 
 }	// public class's end
