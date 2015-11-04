@@ -70,12 +70,6 @@ public class GameChar {
 	// next move
 	public void move(float x, float y) {
 		// move the char by the specified distance
-	
-		if(x < 0) {
-			dir = Constants.DIR_W;
-		} else if(x > 0) {
-			dir = Constants.DIR_E;
-		}
 		
 		nX += x;
 		nY += y;
@@ -137,7 +131,7 @@ public class GameChar {
 			Gdx.app.log(TAG, "ERROR: being set to invalid direction");
 			Gdx.app.exit();
 		}
-	}
+	} 
 
 
 	// type id

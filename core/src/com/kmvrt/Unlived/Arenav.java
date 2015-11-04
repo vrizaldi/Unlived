@@ -109,7 +109,7 @@ public class Arena implements Screen {
 		// debug only
 		if(Gdx.input.isKeyPressed(Keys.R)) {
 			disposeGame();
-			initNewGame(false);
+			initNewGame(true);
 		}
 		
 		// the order is important: council before navigator

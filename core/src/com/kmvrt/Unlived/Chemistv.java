@@ -73,13 +73,13 @@ public class Chemist {
 				if(dir == Constants.DIR_E) {
 					// deploy it in the east of the mainChar
 					magic = MagicFactory.cast("Attack", charX + Constants.CHAR_WIDTH, 
-						charY, Constants.DIR_E);
+						charY, Constants.DIR_E, c);
 					data.magics.add(magic);
 			
 				} else if(dir == Constants.DIR_W) {
 					// deploy it in the west of the mainChar
 					magic = MagicFactory.cast("Attack", charX - Constants.CHAR_WIDTH, 
-						charY, Constants.DIR_W);
+						charY, Constants.DIR_W, c);
 					data.magics.add(magic);
 				}
 				

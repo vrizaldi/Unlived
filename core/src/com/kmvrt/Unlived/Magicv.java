@@ -16,15 +16,18 @@ public class Magic {
 	private Spell spell;	// the magic's properties
 
 	private float totalMove; // total distance it has moved
+	
+	private GameChar src; // the magic caster
 
 
 // constructor -----------------------------------------------------------------------------------------------
-	public Magic(Spell spell, float x, float y, int dir) {
+	public Magic(Spell spell, float x, float y, int dir, GameChar src) {
 	
 		this.x = x;
 		this.y = y;
 		this.dir = dir;
 		this.spell = spell;
+		this.src = src;
 	}	// new(int, int, int)'s end
 
 
@@ -66,6 +69,11 @@ public class Magic {
 		// return the total distance the magic has moved
 	
 		return totalMove;
+	}
+	
+	public GameChar getSrc() {
+		
+		return src;
 	}
 
 }

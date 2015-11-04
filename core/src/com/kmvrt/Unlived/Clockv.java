@@ -107,12 +107,15 @@ public class Clock {
 				if(areClose(m, c)) {
 					// set rec2 as c's rectangle
 //					Gdx.app.log(TAG, "m and c are close");
-					rec2.setPosition(c.x, c.y);
-					rec2.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
-					if(Intersector.intersectRectangles(rec1, rec2, inter)) {
+					if(m.getSrc() != c) {
+						// can't hit its own caster
+						rec2.setPosition(c.x, c.y);
+						rec2.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+						if(Intersector.intersectRectangles(rec1, rec2, inter)) {
 //						if(c.getID() != Constants.CHAR_MAIN)
 //							Gdx.app.log(TAG, "c is hit and is a creep");
-						c.affectedBy(m);
+							c.affectedBy(m);
+						}
 					}
 				}
 			}

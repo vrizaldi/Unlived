@@ -22,7 +22,6 @@ public class Council {
 	private Rectangle inter;
 
 	// whether the creep ready to attack
-	private boolean creepsAttack;
 	private boolean creepsChange;
 	
 
@@ -34,8 +33,7 @@ public class Council {
 		rec1 = new Rectangle();
 		rec2 = new Rectangle();
 		inter = new Rectangle();
-		
-		creepsAttack = true;
+	
 		creepsChange = true;
 		Timer.schedule(
 			new Timer.Task() {
@@ -93,10 +91,16 @@ public class Council {
 
 		// acts
 		if(Gdx.input.isKeyJustPressed(Keys.D)) {
-			// attack
-			shoot(mainChar, mainChar.getDir());
-
+			// cast in the east
+			mainChar.setDir(Constants.DIR_E);
+			shoot(mainChar, Constants.DIR_E);
+		
 		} else if(Gdx.input.isKeyJustPressed(Keys.S)) {
+			// cast in the west
+			mainChar.setDir(Constants.DIR_W);
+			shoot(mainChar, Constants.DIR_W);
+
+		} else if(Gdx.input.isKeyJustPressed(Keys.SPACE)) {
 			// body switching 
 			GameChar creep = closestCreep();
 			if(creep != null) {
@@ -139,13 +143,13 @@ public class Council {
 		if(dir == Constants.DIR_E) {
 			// deploy it in the east of the mainChar
 			magic = MagicFactory.cast("Attack", charX + Constants.CHAR_WIDTH, 
-				charY, Constants.DIR_E);
+				charY, Constants.DIR_E, c);
 			data.magics.add(magic);
 	
 		} else if(dir == Constants.DIR_W) {
 			// deploy it in the west of the mainChar
 			magic = MagicFactory.cast("Attack", charX - Constants.CHAR_WIDTH, 
-				charY, Constants.DIR_W);
+				charY, Constants.DIR_W, c);
 			data.magics.add(magic);
 		}
 		
@@ -433,20 +437,6 @@ public class Council {
 		// use the creeps to attack mainChar if it sees it
 		
 		GameChar mainChar = data.getMainChar();
-		
-		if(!creepsAttack) {
-			return;
-		}
-		creepsAttack = false;
-		Timer.schedule(
-			new Timer.Task() {
-				
-				@Override
-				public void run() {
-					
-					creepsAttack = true;
-				}
-			}, Constants.CREEPS_ATK_INTERVAL);
 		
 		// set rec1 to be the mainChar's y related rectangle
 		rec1.setPosition(0, mainChar.y);

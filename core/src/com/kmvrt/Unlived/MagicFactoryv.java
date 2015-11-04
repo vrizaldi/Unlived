@@ -131,17 +131,18 @@ public class MagicFactory {
 									switch(attStatedID) {
 									case ATT_MANA:
 										cCond.applyMana(Float.parseFloat(arg));
-										Gdx.app.log(TAG, arg + " mana applied");
+										Gdx.app.log(TAG, "\t" + arg + " mana applied");
 										break;
 
 									case ATT_ACCEL:
 										cCond.applyAccel(Float.parseFloat(arg));
-										Gdx.app.log(TAG, arg + " accel applied");
+										Gdx.app.log(TAG, "\t" + arg + " accel applied");
+										
 										break;
 
 									case ATT_FORCE:
 										cCond.applyForce(Float.parseFloat(arg));
-										Gdx.app.log(TAG, arg + " force applied");
+										Gdx.app.log(TAG, "\t" + arg + " force applied");
 										break;
 
 									default:
@@ -201,17 +202,17 @@ public class MagicFactory {
 								switch(attStatedID) {
 								case ATT_BURST:
 									burst = Integer.parseInt(arg);
-									Gdx.app.log(TAG, arg + " shots/cast");
+									Gdx.app.log(TAG, "\t" + Integer.parseInt(arg) + " shots/cast");
 									break;
 
 								case ATT_BURST_INTERVAL:
 									burstInterval = Float.parseFloat(arg);
-									Gdx.app.log(TAG, "" + Float.parseFloat(arg) + "s between each shots");
+									Gdx.app.log(TAG, "\t" + Float.parseFloat(arg) + "s between each shots");
 									break;
 									
 								case ATT_INTERVAL:
 									interval = Float.parseFloat(arg);
-									Gdx.app.log(TAG, "" + Float.parseFloat(arg) + " s between each cast");
+									Gdx.app.log(TAG, "\t" + Float.parseFloat(arg) + " s between each cast");
 									break;
 
 								default:
@@ -294,7 +295,7 @@ public class MagicFactory {
 
 
 // magic casting --------------------------------------------------------------------------------------------
-	public static Magic cast(String spellName, float x, float y, int dir) {
+	public static Magic cast(String spellName, float x, float y, int dir, GameChar src) {
 		// return the magic with properties of the specified spell
 	
 		if(!initialised) {
@@ -303,7 +304,7 @@ public class MagicFactory {
 		}
 	
 		// initialise a magic based on the properties
-		return new Magic(spellBook.get(spellName), x, y, dir);
+		return new Magic(spellBook.get(spellName), x, y, dir, src);
 
 	}	// cast(String)'s end
 	
