@@ -14,7 +14,8 @@ public class Constants {
 	
 	public static final int MAGIC_SPEED = 100;
 	public static final int MAGIC_MAX_DISTANCE = 10;
-	public static final int SWAP_MAX_DISTANCE = 10;
+
+	public static final float ANIMATION_FRAME_DURATION = 0.5f;	// per sec
 	
 	// sprites moving and facing directions
 	public static final int DIR_W = 1;	// west
@@ -25,18 +26,19 @@ public class Constants {
 	// size of things in world unit
 	public static final int CAM_WIDTH = 40;
 	public static final int CAM_HEIGHT = 30;
-	public static final int ROOM_WIDTH = 80;
+	public static final int ROOM_WIDTH = 40;
 	public static final int ROOM_HEIGHT = 40;
 	public static final int CHAR_WIDTH = 2;
 	public static final int CHAR_HEIGHT = 3;
-
-	// map 
-	public static final int ROOM_HUB = 146;
-	public static final int ROOM_BOSS = 147;
-	public static final int ROOM_NORMAL = 148;
-	public static final int ROOM_NORMAL_TOTAL = 1;
+	public static final int SHADOW_WIDTH = 2;
+	public static final int SHADOW_HEIGHT = 1;
+	public static final int SHADOW_OFFSET_Y = -1;
 	public static final int PORTAL_WIDTH = 2;
 	public static final int PORTAL_HEIGHT = 2;
+
+	// map 
+	public static final int ROOM_NORMAL = 148;
+	public static final int ROOM_NORMAL_TOTAL = 1;
 	public static final int CHARS_MIN = 2;
 	public static final int CHARS_MAX = 4;
 		// total of the normal room types
@@ -52,9 +54,9 @@ public class Constants {
 
 	// safe distance between creep and mainChar
 	public static final int SAFE_DIST_X = 10;
-	public static final int SAFE_DIST_Y = 0;
+	public static final int SAFE_DIST_Y = 10;
 
 	// intervals between things happening
-	public static final float CREEPS_ATK_INTERVAL = 1f;		// in second
 	public static final float CREEPS_CHANGE_INTERVAL = 0.5f;	// in second
+
 }	// public class' end

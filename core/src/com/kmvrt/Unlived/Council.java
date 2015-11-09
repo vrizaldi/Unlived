@@ -52,7 +52,7 @@ public class Council {
 	public void initNewGame() {
 		// create objects for a new game
 		
-		GameChar mainChar = new GameChar();
+		GameChar mainChar = new GameChar("tiny");
 		if(data.getStateID() == Constants.STATE_ARENA) {
 			// put it in the middle of the room
 			mainChar.x = (data.cRoom.getMiddleX() - Constants.CHAR_WIDTH) / 2; 
@@ -142,13 +142,13 @@ public class Council {
 		Magic magic = null;
 		if(dir == Constants.DIR_E) {
 			// deploy it in the east of the mainChar
-			magic = MagicFactory.cast("Attack", charX + Constants.CHAR_WIDTH, 
+			magic = MagicFactory.cast(c.getName(), charX + Constants.CHAR_WIDTH, 
 				charY, Constants.DIR_E, c);
 			data.magics.add(magic);
 	
 		} else if(dir == Constants.DIR_W) {
 			// deploy it in the west of the mainChar
-			magic = MagicFactory.cast("Attack", charX - Constants.CHAR_WIDTH, 
+			magic = MagicFactory.cast(c.getName(), charX - Constants.CHAR_WIDTH, 
 				charY, Constants.DIR_W, c);
 			data.magics.add(magic);
 		}
@@ -175,19 +175,21 @@ public class Council {
 		rec1.setPosition(0, mainChar.y);
 		rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 		for(GameChar c : data.chars) {
-			// if they're the closest found
 			float distX = Math.abs(mainChar.x - c.x);
-			if(distX < Constants.SWAP_MAX_DISTANCE
+			float distY = Math.abs(mainChar.y - c.y);
+			if(distX < Constants.SAFE_DIST_X
+					&& distY < Constants.SAFE_DIST_Y
 					&& distX < closestX
 					&& c != mainChar) {
+				// if they're the closest found
 				closestX = distX;
-				
+				closest = c;
 				// set rec2 as c's y rectangle
-				rec2.setPosition(0, c.y);
+/*				rec2.setPosition(0, c.y);
 				rec2.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 				if(Intersector.intersectRectangles(rec1, rec2, inter)) {
 					closest = c;
-				}
+				} */
 			}	// if they're close's
 		}	// chars iterator's
 
@@ -228,7 +230,8 @@ public class Council {
 		for(int i = 0; i < num; i++) {
 			// create <num> creeps
 
-			GameChar creep = new GameChar();
+			int r = (int)(Math.random() * MagicFactory.totalSpells());
+			GameChar creep = new GameChar(MagicFactory.getSpellName(r));
 			creep.x = 
 				(float)(Math.random() * (Constants.ROOM_WIDTH - Constants.CHAR_WIDTH));
 			creep.y =
@@ -300,8 +303,7 @@ public class Council {
 				// keep it in safe distance
 				distX = Math.abs(distX) < Constants.SAFE_DIST_X + 1 ?
 					0 : distX;
-				distY = Math.abs(distY) < Constants.SAFE_DIST_Y + 1?
-					0 : distY;
+				distY = Math.abs(distY) < 1 ? 0 : distY;
 				
 				// move the creep based on its type
 				if(creep.getID() == Constants.CHAR_CREEP_FOLLOW) {

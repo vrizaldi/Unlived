@@ -6,6 +6,8 @@ public class Spell {
 	// represents a spell in a game
 	// store properties of magic to be used in magic factories
 
+	private String name;
+	
 	// properties
 	private int burst;
 		// the number of shots once casted
@@ -24,8 +26,10 @@ public class Spell {
 	
 
 // constructor ------------------------------------------------------------------------------------------------
-	public Spell() {
+	public Spell(String name) {
 
+		this.name = name;
+		
 		hit = null;
 		cast = null;
 		attsInitialised = false;
@@ -62,6 +66,11 @@ public class Spell {
 	
 	
 // getters ---------------------------------------------------------------------------------------------
+	public String getName() {
+		
+		return name;
+	}
+	
 	public int getBurst() {
 		
 		return burst;

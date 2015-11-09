@@ -89,9 +89,6 @@ public class Navigator {
 			// normal room
 			nRoom = new GameMap(Constants.ROOM_NORMAL);
 
-		} else {
-			// boss room
-			nRoom = new GameMap(Constants.ROOM_BOSS);
 		}
 
 		return nRoom;

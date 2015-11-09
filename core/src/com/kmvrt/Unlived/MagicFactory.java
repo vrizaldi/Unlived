@@ -19,6 +19,7 @@ public class MagicFactory {
 
 	private static HashMap<String, Spell> spellBook;
 		// store the spells
+	private static ArrayList<String> keys;
 
 // constructor -----------------------------------------------------------------------------------------------
 	private MagicFactory() {
@@ -29,6 +30,7 @@ public class MagicFactory {
 		// initialise the spell book
 		
 		spellBook = new HashMap<String, Spell>();
+		keys = new ArrayList<String>();
 		
 		// constants for reading file ------------------
 		// attributes
@@ -191,6 +193,7 @@ public class MagicFactory {
 										// initialise a spell based on the file reading result
 									spellBook.put(file.nameWithoutExtension(), nSpell);
 										// and save it
+									keys.add(file.nameWithoutExtension());
 									Gdx.app.log(TAG, "Spell added: " + file.nameWithoutExtension());
 								}
 							// if !attStated's
@@ -227,7 +230,7 @@ public class MagicFactory {
 							// start initialisation
 							Gdx.app.log(TAG, "Initialising spell: " + file.nameWithoutExtension());
 							initMagic = true;
-							nSpell = new Spell();
+							nSpell = new Spell(file.nameWithoutExtension());
 							hit = new GameChar.Attributes();
 							cast = new GameChar.Attributes();
 								
@@ -262,7 +265,7 @@ public class MagicFactory {
 		// and all have the extension .spell
 		
 		ArrayList<FileHandle> files = new ArrayList<FileHandle>();
-		String[] spellList = {"Attack"};
+		String[] spellList = {"tiny", "med", "heavy"};
 		for(String spellName : spellList) {
 			files.add(Gdx.files.internal(
 					"magic/data/" + spellName + ".spell"));
@@ -311,6 +314,16 @@ public class MagicFactory {
 	public static Spell getSpell(String name) {
 
 		return spellBook.get(name);
+	}
+	
+	public static String getSpellName(int index) {
+		
+		return keys.get(index);
+	}
+	
+	public static int totalSpells() {
+		
+		return spellBook.size();
 	}
 
 }

@@ -1,0 +1,61 @@
+
+heavy.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+heavyW4
+  rotate: false
+  xy: 1, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+heavyE4
+  rotate: false
+  xy: 35, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+heavyW3
+  rotate: false
+  xy: 69, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+heavyW1
+  rotate: false
+  xy: 103, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+heavyE3
+  rotate: false
+  xy: 137, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+heavyW2
+  rotate: false
+  xy: 171, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+heavyE1
+  rotate: false
+  xy: 205, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+heavyE2
+  rotate: false
+  xy: 239, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1

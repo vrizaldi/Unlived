@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Assets {
 	// store all the assets to be used in game
@@ -14,11 +17,18 @@ public class Assets {
 	
 	private static boolean initialised = false; // flag
 
-	public static TextureAtlas spriteImgs;
-	public static Sprite roomImg; // room image
-	public static Sprite portalImg;	// portal
-	public static Sprite charImg;	// character
-	public static Sprite magicImg;	// magic
+	public static TextureAtlas mapImgs;
+	public static Sprite roomSprite; // room image
+	public static Sprite portalSprite;	// portal
+	public static Sprite magicSprite;	// magic
+
+	public static Sprite shadowSprite;	// shadow
+	public static Animation shadowAnim;
+
+	public static ArrayList<TextureAtlas> charImgs;	// characters
+	public static HashMap<String, Sprite> charSprites;
+	public static HashMap<String, Animation> charAnims;
+
 
 	public static BitmapFont font; // default font
 
@@ -31,20 +41,25 @@ public class Assets {
 	public static void init() {
 		// initialise all the assets
 	
-		spriteImgs = new TextureAtlas("spriteImgs.pack");
+		mapImgs = new TextureAtlas("map/map.pack");
 
-		roomImg = new Sprite(spriteImgs.findRegion("roomImg"));
-		roomImg.setSize(Constants.ROOM_WIDTH, Constants.ROOM_HEIGHT);
-		roomImg.setPosition(0, 0);
+		roomSprite = new Sprite(mapImgs.findRegion("map"));
+		roomSprite.setSize(Constants.ROOM_WIDTH, Constants.ROOM_HEIGHT);
+		roomSprite.setPosition(0, 0);
 		
-		portalImg = new Sprite(spriteImgs.findRegion("portalImg"));
-		portalImg.setSize(Constants.PORTAL_WIDTH, Constants.PORTAL_HEIGHT);
+		charImgs = new ArrayList<TextureAtlas>();
+		charSprites = new HashMap<String, Sprite>();
+		charAnims = new HashMap<String, Animation>();
 
-		charImg = new Sprite(spriteImgs.findRegion("charImg"));
-		charImg.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+		portalSprite = new Sprite(mapImgs.findRegion("portalImg"));
+		portalSprite.setSize(Constants.PORTAL_WIDTH, Constants.PORTAL_HEIGHT);
 
-		magicImg = new Sprite(spriteImgs.findRegion("magicImg"));
-		magicImg.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+		magicSprite = new Sprite(mapImgs.findRegion("magicImg"));
+		magicSprite.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+
+		shadowAnim = new Animation(Constants.ANIMATION_FRAME_DURATION,
+				mapImgs.findRegion("shadow1"), mapImgs.findRegion("shadow2"));
+		shadowSprite = new Sprite(shadowAnim.getKeyFrame(0));
 
 		FreeTypeFontParameter param = new FreeTypeFontParameter();
 		param.size = 10;
@@ -55,14 +70,73 @@ public class Assets {
 		initialised = true;	// flag it
 	} // init()'s end
 
+	public static void initChars(ArrayList<GameChar> chars) {
+		// initialise the chars
+		
+		for(TextureAtlas atlas : charImgs) {
+			// dispose all images
+			atlas.dispose();
+		}
+		charImgs.clear();		// clear the collections
+		charSprites.clear();
+		charAnims.clear();
+
+		for(GameChar c : chars) {
+			if(charSprites.containsKey(c.getName())) {
+				// don't initialise the on that already been initialised
+				continue;
+			}
+			
+			// atlas
+			TextureAtlas cImgs = new TextureAtlas("/chars/" + c.getName() + ".pack");
+
+			// animation (west facing)
+			Animation wAnim = new Animation(Constants.ANIMATION_FRAME_DURATION,
+					cImgs.findRegion(c.getName() + "W1"),
+					cImgs.findRegion(c.getName() + "W2"), 
+					cImgs.findRegion(c.getName() + "W3"),
+					cImgs.findRegion(c.getName() + "W4"));
+
+			// (east facing)
+			Animation eAnim = new Animation(Constants.ANIMATION_FRAME_DURATION,
+					cImgs.findRegion(c.getName() + "E1"),
+					cImgs.findRegion(c.getName() + "E2"), 
+					cImgs.findRegion(c.getName() + "E3"),
+					cImgs.findRegion(c.getName() + "E4"));
+
+			// sprites
+			Sprite wSp = new Sprite(wAnim.getKeyFrame(0));
+			Sprite eSp = new Sprite(eAnim.getKeyFrame(0));
+
+			// put them into the collections
+			charImgs.add(cImgs);
+			charSprites.put(c.getName() + "W", wSp);
+			charSprites.put(c.getName() + "E", eSp);
+			charAnims.put(c.getName() + "W", wAnim);
+			charAnims.put(c.getName() + "E", eAnim);
+
+			Gdx.app.log(TAG, "Character " + c.getName() + " initialised");
+		}
+	}	// initChars(ArrayList<GameChar>)'s
+
+	public static void update(float stateTime) {
+		// update the animations
+
+		// shadow
+		shadowSprite.setRegion(shadowAnim.getKeyFrame(stateTime));
+
+		// chars
+		for(String key : charSprites.keySet()) {
+			charSprites.get(key).setRegion(
+					charAnims.get(key).getKeyFrame(stateTime));
+		}
+	}
+
 	public static void dispose() {
 		// dispose all the resources 	
 
 		if(initialised) {
-			spriteImgs.dispose();
-			spriteImgs = null;
-			roomImg = null;
-			charImg = null;
+			mapImgs.dispose();
 
 			initialised = false;	// unflag it
 		} else {

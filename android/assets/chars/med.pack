@@ -1,0 +1,61 @@
+
+med.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+medW1
+  rotate: false
+  xy: 1, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+medW4
+  rotate: false
+  xy: 35, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+medE2
+  rotate: false
+  xy: 69, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+medE4
+  rotate: false
+  xy: 103, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+medE1
+  rotate: false
+  xy: 137, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+medE3
+  rotate: false
+  xy: 171, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+medW2
+  rotate: false
+  xy: 205, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+medW3
+  rotate: false
+  xy: 239, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1

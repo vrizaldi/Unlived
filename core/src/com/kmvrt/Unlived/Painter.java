@@ -1,10 +1,12 @@
 package com.kmvrt.Unlived;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Painter {
 	// render in-game sprites on-screen
@@ -12,10 +14,16 @@ public class Painter {
 	private StateData data;
 
 	private SpriteBatch batch;	// rendering batch
+
+	private SpriteCache cacheBatch;
+	private int roomCache;
+
 	private OrthographicCamera cam;	// viewport
 	private OrthographicCamera ui; // ui
 
 	private GlyphLayout texts;	// text bounds, etc.
+	
+	private float stateTime;
 
 
 // constructor ------------------------------------------------------------------------------------------------
@@ -24,6 +32,12 @@ public class Painter {
 		this.data = data;
 
 		batch = new SpriteBatch();
+
+		cacheBatch = new SpriteCache();
+		cacheBatch.beginCache();
+		cacheBatch.add(Assets.roomSprite);
+		roomCache = cacheBatch.endCache();
+
 		cam = new OrthographicCamera(Constants.CAM_WIDTH, 
 			Constants.CAM_HEIGHT);
 		ui = new OrthographicCamera(Gdx.graphics.getWidth(),
@@ -32,6 +46,8 @@ public class Painter {
 		ui.update();
 
 		texts = new GlyphLayout();
+		
+		stateTime = 0;
 	}
 
 
@@ -40,37 +56,49 @@ public class Painter {
 	public void render() {
 		// render the objects to the screen, based on the data
 		
+		stateTime += Gdx.graphics.getDeltaTime();
+		Assets.update(stateTime);
 		updateCam();
 
 		// clear the canvas
 		Gdx.gl.glClearColor(0, 0, 0, 1); // black
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		cacheBatch.setProjectionMatrix(cam.combined);
+		cacheBatch.begin();
+		// draw map ****************
+		cacheBatch.draw(roomCache);
+		cacheBatch.end();
+		
 		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
 
-		// draw map ****************
-		Assets.roomImg.draw(batch);
 		if(data.isLevelFinished()) {
 			// draw the portal
-			Assets.portalImg.setPosition(
+			Assets.portalSprite.setPosition(
 				data.cRoom.getPortalX(), data.cRoom.getPortalY());
-			Assets.portalImg.draw(batch);
+			Assets.portalSprite.draw(batch);
 		}
 
 		// draw chars **************
 		for(GameChar c : data.chars) {
 		
-			Assets.charImg.setPosition(c.x, c.y);
-			Assets.charImg.draw(batch);
+			char dir = c.getDir() == Constants.DIR_E ? 'E' : 'W';
+			Sprite cSprite = Assets.charSprites.get(c.getName() + dir);
+			cSprite.setPosition(c.x, c.y);
+			cSprite.draw(batch);
+
+			// draw the shadow
+			Assets.shadowSprite.setPosition(c.x, c.y + Constants.SHADOW_OFFSET_Y);
+			Assets.shadowSprite.draw(batch);
 		}
 
 		// draw magics *************
 		if(data.magics.size() != 0) {
 			for(Magic  m : data.magics) {
 			
-				Assets.magicImg.setPosition(m.x, m.y);
-				Assets.magicImg.draw(batch);
+				Assets.magicSprite.setPosition(m.x, m.y);
+				Assets.magicSprite.draw(batch);
 			}
 		}
 

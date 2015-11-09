@@ -39,7 +39,7 @@ public class GameChar {
 
 
 // constructor ------------------------------------------------------------------------------------------------
-	public GameChar() {
+	public GameChar(String spellName) {
 	
 		this.ID = Constants.CHAR_CREEP_FOLLOW;
 
@@ -56,7 +56,7 @@ public class GameChar {
 
 		dir = Constants.DIR_E;
 		
-		spell = MagicFactory.getSpell("Attack");
+		spell = MagicFactory.getSpell(spellName);
 		bursting = false;
 		ableToShoot = true;
 
@@ -230,6 +230,10 @@ public class GameChar {
 		return ableToShoot;
 	}
 
+	public String getName() {
+		
+		return spell.getName();
+	}
 
 // nested class ---------------------------------------------------------------------------------------------
 	public static class Attributes {

@@ -6,8 +6,8 @@ spell
 	cast
 		mana -5
 	castend
-	
+
 	hit
-		mana -16
+		mana -12
 	hitend
 spellend

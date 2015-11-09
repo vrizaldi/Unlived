@@ -1,0 +1,61 @@
+
+tiny.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+tinyE2
+  rotate: false
+  xy: 1, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+tinyW4
+  rotate: false
+  xy: 35, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+tinyW2
+  rotate: false
+  xy: 69, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+tinyE3
+  rotate: false
+  xy: 103, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+tinyW1
+  rotate: false
+  xy: 137, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+tinyW3
+  rotate: false
+  xy: 171, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+tinyE4
+  rotate: false
+  xy: 205, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
+tinyE1
+  rotate: false
+  xy: 239, 1
+  size: 32, 48
+  orig: 32, 48
+  offset: 0, 0
+  index: -1
