@@ -1,6 +1,8 @@
 package com.kmvrt.Unlived;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -29,7 +31,6 @@ public class Assets {
 	public static HashMap<String, Sprite> charSprites;
 	public static HashMap<String, Animation> charAnims;
 
-
 	public static BitmapFont font; // default font
 
 
@@ -41,6 +42,8 @@ public class Assets {
 	public static void init() {
 		// initialise all the assets
 	
+		Gdx.app.log(TAG, "Initialising assets...");
+		
 		mapImgs = new TextureAtlas("map/map.pack");
 
 		roomSprite = new Sprite(mapImgs.findRegion("map"));
@@ -59,15 +62,20 @@ public class Assets {
 
 		shadowAnim = new Animation(Constants.ANIMATION_FRAME_DURATION,
 				mapImgs.findRegion("shadow1"), mapImgs.findRegion("shadow2"));
+		shadowAnim.setPlayMode(PlayMode.LOOP_PINGPONG);
 		shadowSprite = new Sprite(shadowAnim.getKeyFrame(0));
+		shadowSprite.setSize(Constants.SHADOW_WIDTH, Constants.SHADOW_HEIGHT);
 
 		FreeTypeFontParameter param = new FreeTypeFontParameter();
 		param.size = 10;
+		param.color = Color.BLACK;
 		
 		font = new FreeTypeFontGenerator(Gdx.files.internal("PressStart2P.ttf")) 
 			.generateFont(param);
 
 		initialised = true;	// flag it
+		
+		Gdx.app.log(TAG, "Assets initialised");
 	} // init()'s end
 
 	public static void initChars(ArrayList<GameChar> chars) {
@@ -88,7 +96,7 @@ public class Assets {
 			}
 			
 			// atlas
-			TextureAtlas cImgs = new TextureAtlas("/chars/" + c.getName() + ".pack");
+			TextureAtlas cImgs = new TextureAtlas("chars/" + c.getName() + ".pack");
 
 			// animation (west facing)
 			Animation wAnim = new Animation(Constants.ANIMATION_FRAME_DURATION,
@@ -96,6 +104,7 @@ public class Assets {
 					cImgs.findRegion(c.getName() + "W2"), 
 					cImgs.findRegion(c.getName() + "W3"),
 					cImgs.findRegion(c.getName() + "W4"));
+			wAnim.setPlayMode(PlayMode.LOOP_PINGPONG);
 
 			// (east facing)
 			Animation eAnim = new Animation(Constants.ANIMATION_FRAME_DURATION,
@@ -103,10 +112,13 @@ public class Assets {
 					cImgs.findRegion(c.getName() + "E2"), 
 					cImgs.findRegion(c.getName() + "E3"),
 					cImgs.findRegion(c.getName() + "E4"));
+			eAnim.setPlayMode(PlayMode.LOOP_PINGPONG);
 
 			// sprites
 			Sprite wSp = new Sprite(wAnim.getKeyFrame(0));
+			wSp.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 			Sprite eSp = new Sprite(eAnim.getKeyFrame(0));
+			eSp.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 
 			// put them into the collections
 			charImgs.add(cImgs);

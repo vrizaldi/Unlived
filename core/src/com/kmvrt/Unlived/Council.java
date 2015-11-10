@@ -7,7 +7,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.Timer;
+
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.Comparator;
 
 public class Council {
 	// update the characters in-game without moving it
@@ -24,6 +27,8 @@ public class Council {
 	// whether the creep ready to attack
 	private boolean creepsChange;
 	
+	private CharsComparator charsComp;
+	
 
 // constructor ----------------------------------------------------------------------------------------------
 	public Council(StateData data) {
@@ -34,6 +39,8 @@ public class Council {
 		rec2 = new Rectangle();
 		inter = new Rectangle();
 	
+		charsComp = new CharsComparator();
+		
 		creepsChange = true;
 		Timer.schedule(
 			new Timer.Task() {
@@ -62,6 +69,7 @@ public class Council {
 		
 		data.chars.add(mainChar); 
 		data.setMainChar(mainChar);
+		Assets.initChars(data.chars);
 	}	// initNewGame()'s end
 
 	public void disposeGame() {
@@ -82,6 +90,7 @@ public class Council {
 		
 		updateMainChar(delta);
 		updateCreeps(delta);
+		sortChars();
 	}	
 
 	private void updateMainChar(float delta) {
@@ -224,7 +233,7 @@ public class Council {
 
 	private void deployCreeps(int num) {
 		// deploy creeps to the room
-	
+
 		num = Math.max(num, Constants.CHARS_MIN - 1);
 			// creeps deployed can't be less than <CHAR_MIN> - 1
 		for(int i = 0; i < num; i++) {
@@ -241,6 +250,8 @@ public class Council {
 			data.chars.add(creep);
 				// add it to the collection
 		}
+		
+		Assets.initChars(data.chars);
 	}
 	
 	private void changeCreeps() {
@@ -460,4 +471,32 @@ public class Council {
 		}	// for's end
 	}
 	
+	private void sortChars() {
+		
+		Collections.sort(data.chars, charsComp);
+	}
+	
+	
+// inner class ------------------------------------------------------------------------
+	private class CharsComparator implements Comparator<GameChar> {
+		// compare the chars based on their y coordinate
+		
+		@Override
+		public int compare(GameChar o1, GameChar o2) {
+			// sort the chars based on their y coor (high -> low)
+			if(o1.y > o2.y) {
+				// o1 is higher
+				return -1;
+				
+			} else if(o1. y < o2.y) {
+				// o2 is higher
+				return 1;
+				
+			} else {
+				// they're equal
+				return 0;
+			}
+		}
+	}
+
 } // class' end

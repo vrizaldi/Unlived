@@ -61,7 +61,7 @@ public class Painter {
 		updateCam();
 
 		// clear the canvas
-		Gdx.gl.glClearColor(0, 0, 0, 1); // black
+		Gdx.gl.glClearColor(1, 1, 1, 1); // black
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		cacheBatch.setProjectionMatrix(cam.combined);
@@ -82,15 +82,14 @@ public class Painter {
 
 		// draw chars **************
 		for(GameChar c : data.chars) {
-		
+			// draw the shadow
+			Assets.shadowSprite.setPosition(c.x, c.y + Constants.SHADOW_OFFSET_Y);
+			Assets.shadowSprite.draw(batch);
+			
 			char dir = c.getDir() == Constants.DIR_E ? 'E' : 'W';
 			Sprite cSprite = Assets.charSprites.get(c.getName() + dir);
 			cSprite.setPosition(c.x, c.y);
 			cSprite.draw(batch);
-
-			// draw the shadow
-			Assets.shadowSprite.setPosition(c.x, c.y + Constants.SHADOW_OFFSET_Y);
-			Assets.shadowSprite.draw(batch);
 		}
 
 		// draw magics *************

@@ -21,12 +21,12 @@ public class Manager extends Game {
 	@Override
 	public void create() {
 
-		Gdx.app.log(TAG, "Initiating the game...");
-		arena = new Arena(this);
-
-		Gdx.app.log(TAG, "Initiating the assets...");
 		Assets.init();
 		MagicFactory.init();
+		
+		Gdx.app.log(TAG, "Initialising the game...");
+		arena = new Arena(this);
+
 
 /*		DisplayMode[] displayMode = Gdx.graphics.getDisplayModes();
 		Gdx.app.log(TAG, "Display Modes available:");
@@ -37,7 +37,7 @@ public class Manager extends Game {
 		} */
 
 		this.setScreen(arena);
-		Gdx.app.log(TAG, "Game initiated");
+		Gdx.app.log(TAG, "Game initialised");
 	}
 
 
