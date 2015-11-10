@@ -60,7 +60,7 @@ public class Assets {
 		magicSprite = new Sprite(mapImgs.findRegion("magicImg"));
 		magicSprite.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 
-		shadowAnim = new Animation(Constants.ANIMATION_FRAME_DURATION,
+		shadowAnim = new Animation(Constants.ANIMATION_SHADOW_DURATION,
 				mapImgs.findRegion("shadow1"), mapImgs.findRegion("shadow2"));
 		shadowAnim.setPlayMode(PlayMode.LOOP_PINGPONG);
 		shadowSprite = new Sprite(shadowAnim.getKeyFrame(0));
@@ -99,7 +99,7 @@ public class Assets {
 			TextureAtlas cImgs = new TextureAtlas("chars/" + c.getName() + ".pack");
 
 			// animation (west facing)
-			Animation wAnim = new Animation(Constants.ANIMATION_FRAME_DURATION,
+			Animation wAnim = new Animation(Constants.ANIMATION_CHAR_DURATION,
 					cImgs.findRegion(c.getName() + "W1"),
 					cImgs.findRegion(c.getName() + "W2"), 
 					cImgs.findRegion(c.getName() + "W3"),
@@ -107,7 +107,7 @@ public class Assets {
 			wAnim.setPlayMode(PlayMode.LOOP_PINGPONG);
 
 			// (east facing)
-			Animation eAnim = new Animation(Constants.ANIMATION_FRAME_DURATION,
+			Animation eAnim = new Animation(Constants.ANIMATION_CHAR_DURATION,
 					cImgs.findRegion(c.getName() + "E1"),
 					cImgs.findRegion(c.getName() + "E2"), 
 					cImgs.findRegion(c.getName() + "E3"),

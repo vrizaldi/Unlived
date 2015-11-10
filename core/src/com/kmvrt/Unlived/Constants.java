@@ -15,12 +15,13 @@ public class Constants {
 	public static final int MAGIC_SPEED = 100;
 	public static final int MAGIC_MAX_DISTANCE = 10;
 
-	public static final float ANIMATION_FRAME_DURATION = 0.5f;	// per sec
+	public static final float ANIMATION_CHAR_DURATION = 0.1f;	// in sec
+	public static final float ANIMATION_SHADOW_DURATION = 0.5f;
 	
 	// sprites moving and facing directions
 	public static final int DIR_W = 1;	// west
 	public static final int DIR_E = 2;	// east
-	public static final int DIR_N = 3;
+	public statper ic final int DIR_N = 3;
 	public static final int DIR_S = 4;
 
 	// size of things in world unit
