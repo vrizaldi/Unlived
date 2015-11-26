@@ -23,7 +23,7 @@ public class GameMap {
 
 		for(int y = 0; y < Constants.ROOMS_NUM_Y; y++) {
 			for(int x = 0; x < Constants.ROOMS_NUM_X; x++) {
-/*				if(rooms[x][y].getTypeID() == Constants.ROOM_SPAWN) {
+				if(rooms[x][y].getTypeID() == Constants.ROOM_SPAWN) {
 					spawnPosX = getMiddle(x, Constants.ROOM_WIDTH);
 					spawnPosY = getMiddle(y, Constants.ROOM_HEIGHT);
 
@@ -32,12 +32,12 @@ public class GameMap {
 						- (Constants.PORTAL_WIDTH / 2);
 					portalPosY = getMiddle(y, Constants.ROOM_HEIGHT) 
 						- (Constants.PORTAL_HEIGHT / 2);
-				} */
+				} 
 			}
 		}
 	}	// new(int)'s end
 
-	private float getMiddle(int coor, int length) {
+	private float getMiddle(int coor, float length) {
 		// return the middle of a line 
 
 		return (coor * length) + (length / 2);

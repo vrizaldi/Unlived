@@ -27,8 +27,8 @@ public class Constants {
 	// size of things in world unit
 	public static final int CAM_WIDTH = 40;
 	public static final int CAM_HEIGHT = 30;
-	public static final int ROOM_WIDTH = 25;
-	public static final int ROOM_HEIGHT = 25;
+	public static final int ROOM_WIDTH = 20;
+	public static final int ROOM_HEIGHT = 20;
 	public static final int CHAR_WIDTH = 2;
 	public static final int CHAR_HEIGHT = 3;
 	public static final int SHADOW_WIDTH = 2;

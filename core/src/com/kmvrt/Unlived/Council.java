@@ -62,8 +62,8 @@ public class Council {
 		GameChar mainChar = new GameChar("tiny");
 		if(data.getStateID() == Constants.STATE_ARENA) {
 			// put it in the middle of the room
-			mainChar.x = (data.map.getSpawnPosX() - Constants.CHAR_WIDTH) / 2; 
-			mainChar.y = (data.map.getSpawnPosY() - Constants.CHAR_HEIGHT) / 2;
+			mainChar.x = data.map.getSpawnPosX() - (Constants.CHAR_WIDTH / 2); 
+			mainChar.y = data.map.getSpawnPosY() - (Constants.CHAR_HEIGHT / 2);
 			mainChar.updateSafePos();
 		}
 		

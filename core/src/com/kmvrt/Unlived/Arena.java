@@ -107,7 +107,7 @@ public class Arena implements Screen {
 			initNewGame(false);
 		}
 		// debug only
-		if(Gdx.input.isKeyPressed(Keys.R)) {
+		if(Gdx.input.isKeyJustPressed(Keys.R)) {
 			disposeGame();
 			initNewGame(true);
 		}
