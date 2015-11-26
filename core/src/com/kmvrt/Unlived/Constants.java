@@ -21,14 +21,14 @@ public class Constants {
 	// sprites moving and facing directions
 	public static final int DIR_W = 1;	// west
 	public static final int DIR_E = 2;	// east
-	public statper ic final int DIR_N = 3;
+	public static final int DIR_N = 3;
 	public static final int DIR_S = 4;
 
 	// size of things in world unit
 	public static final int CAM_WIDTH = 40;
 	public static final int CAM_HEIGHT = 30;
-	public static final int ROOM_WIDTH = 40;
-	public static final int ROOM_HEIGHT = 40;
+	public static final int ROOM_WIDTH = 25;
+	public static final int ROOM_HEIGHT = 25;
 	public static final int CHAR_WIDTH = 2;
 	public static final int CHAR_HEIGHT = 3;
 	public static final int SHADOW_WIDTH = 2;
@@ -38,8 +38,7 @@ public class Constants {
 	public static final int PORTAL_HEIGHT = 2;
 
 	// map 
-	public static final int ROOM_NORMAL = 148;
-	public static final int ROOM_NORMAL_TOTAL = 1;
+	public static final int MAP_NORMAL = 148;
 	public static final int CHARS_MIN = 2;
 	public static final int CHARS_MAX = 4;
 		// total of the normal room types
@@ -59,5 +58,16 @@ public class Constants {
 
 	// intervals between things happening
 	public static final float CREEPS_CHANGE_INTERVAL = 0.5f;	// in second
+
+	// number of rooms in a map
+	public static final int ROOMS_NUM_X = 5;
+	public static final int ROOMS_NUM_Y = 4;
+	public static final int ROOMS_NUM_MIN = 6;
+
+	// room type id
+	public static final int ROOM_NORMAL = 430;
+	public static final int ROOM_SPAWN = 431;
+	public static final int ROOM_PORTAL = 432;
+	public static final int ROOM_BLANK = 433;
 
 }	// public class' end

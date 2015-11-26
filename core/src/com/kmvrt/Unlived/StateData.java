@@ -18,7 +18,8 @@ public class StateData {
 
 	private GameChar mainChar;
 	public ArrayList<GameChar> chars;
-	public GameMap cRoom;
+	public GameMap map;
+	public boolean newMap;
 	public ArrayList<Magic> magics;
 
 	// kill and death count
@@ -34,6 +35,8 @@ public class StateData {
 		} else {
 			this.stateID = stateID;
 		}
+		
+		newMap = false;
 		
 		mainChar = null;
 		chars = new ArrayList<GameChar>();

@@ -3,6 +3,7 @@
 package com.kmvrt.Unlived;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 //import com.badlogic.gdx.Graphics.DisplayMode;
 //import com.badlogic.gdx.Screen;
@@ -25,6 +26,7 @@ public class Manager extends Game {
 		MagicFactory.init();
 		
 		Gdx.app.log(TAG, "Initialising the game...");
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		arena = new Arena(this);
 
 

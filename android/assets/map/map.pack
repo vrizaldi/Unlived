@@ -38,3 +38,10 @@ magicImg
   orig: 2, 3
   offset: 0, 0
   index: -1
+door
+  rotate: false
+  xy: 643, 648
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1

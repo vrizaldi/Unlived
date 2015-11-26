@@ -114,7 +114,6 @@ public class Arena implements Screen {
 		
 		// the order is important: council before navigator
 		council.update();
-		Gdx.app.log(TAG, "council is updated");
 		navigator.update();
 		chemist.update();
 		clock.update();

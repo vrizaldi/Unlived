@@ -77,7 +77,7 @@ public class Clock {
 		// char to char
 		for(GameChar c1 : data.chars) {
 			// check if the char is out of the room
-			if(c1.x < 0) {
+/*			if(c1.x < 0) {
 				// over to the west
 				c1.x = 0;
 			} else if(c1.x + Constants.CHAR_WIDTH > Constants.ROOM_WIDTH) {
@@ -93,7 +93,7 @@ public class Clock {
 				// over to the north
 				c1.y = Constants.ROOM_HEIGHT - Constants.CHAR_HEIGHT;
 						
-			}
+			}*/
 			
 			c1.updateSafePos();
 		}	// c1 iterator's

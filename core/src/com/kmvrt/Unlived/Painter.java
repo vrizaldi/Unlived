@@ -16,7 +16,7 @@ public class Painter {
 	private SpriteBatch batch;	// rendering batch
 
 	private SpriteCache cacheBatch;
-	private int roomCache;
+	private int mapCache;
 
 	private OrthographicCamera cam;	// viewport
 	private OrthographicCamera ui; // ui
@@ -32,11 +32,7 @@ public class Painter {
 		this.data = data;
 
 		batch = new SpriteBatch();
-
 		cacheBatch = new SpriteCache();
-		cacheBatch.beginCache();
-		cacheBatch.add(Assets.roomSprite);
-		roomCache = cacheBatch.endCache();
 
 		cam = new OrthographicCamera(Constants.CAM_WIDTH, 
 			Constants.CAM_HEIGHT);
@@ -57,6 +53,11 @@ public class Painter {
 		// render the objects to the screen, based on the data
 		
 		stateTime += Gdx.graphics.getDeltaTime();
+		if(data.newMap) {
+			data.newMap = false;
+			updateMap();
+			
+		}
 		Assets.update(stateTime);
 		updateCam();
 
@@ -67,7 +68,7 @@ public class Painter {
 		cacheBatch.setProjectionMatrix(cam.combined);
 		cacheBatch.begin();
 		// draw map ****************
-		cacheBatch.draw(roomCache);
+		cacheBatch.draw(mapCache);
 		cacheBatch.end();
 		
 		batch.setProjectionMatrix(cam.combined);
@@ -76,7 +77,7 @@ public class Painter {
 		if(data.isLevelFinished()) {
 			// draw the portal
 			Assets.portalSprite.setPosition(
-				data.cRoom.getPortalX(), data.cRoom.getPortalY());
+				data.map.getPortalPosX(), data.map.getPortalPosY());
 			Assets.portalSprite.draw(batch);
 		}
 
@@ -136,5 +137,52 @@ public class Painter {
 		}
 		
 	}	// updateCam()'s end
+	
+	private void updateMap() {
+		
+		cacheBatch.clear();
+		cacheBatch.beginCache();
+		
+		for(int y = 0; y < Constants.ROOMS_NUM_Y; y++) {
+			for(int x = 0; x < Constants.ROOMS_NUM_X; x++) {
+				float roomX = x * Constants.ROOM_WIDTH;
+				float roomY = y * Constants.ROOM_HEIGHT;
+				Assets.roomSprite.setPosition(roomX, roomY);
+				cacheBatch.add(Assets.roomSprite);
+				
+				GameMap.Room cRoom = data.map.getRoom(x, y);
+				if(cRoom.east) {
+					// create door in the east wall
+					Assets.doorVSprite.setPosition(
+						roomX + Constants.ROOM_WIDTH - Assets.doorVSprite.getWidth(), 
+						roomY + ((Constants.ROOM_HEIGHT - Assets.doorVSprite.getHeight()) / 2));
+					cacheBatch.add(Assets.doorVSprite);
+				}
+				if(cRoom.west) {
+					// west wall
+					Assets.doorVSprite.setPosition(roomX, 
+						roomY + ((Constants.ROOM_HEIGHT - Assets.doorVSprite.getHeight()) / 2));
+					cacheBatch.add(Assets.doorVSprite);
+				}
+				if(cRoom.north) {
+					// north wall
+					Assets.doorHSprite.setPosition(
+							roomX + ((Constants.ROOM_WIDTH - Assets.doorHSprite.getWidth()) / 2),
+							roomY + Constants.ROOM_HEIGHT - Assets.doorHSprite.getHeight());
+					cacheBatch.add(Assets.doorHSprite);
+				}
+				if(cRoom.south) {
+					// south wall
+					Assets.doorHSprite.setPosition(
+							roomX + ((Constants.ROOM_WIDTH - Assets.doorHSprite.getWidth()) / 2),
+							roomY);
+					cacheBatch.add(Assets.doorHSprite);
+
+				}
+			}
+		}
+		
+		mapCache = cacheBatch.endCache();
+	}
 
 }

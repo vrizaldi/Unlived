@@ -62,8 +62,8 @@ public class Council {
 		GameChar mainChar = new GameChar("tiny");
 		if(data.getStateID() == Constants.STATE_ARENA) {
 			// put it in the middle of the room
-			mainChar.x = (data.cRoom.getMiddleX() - Constants.CHAR_WIDTH) / 2; 
-			mainChar.y = (data.cRoom.getMiddleY() - Constants.CHAR_HEIGHT) / 2;
+			mainChar.x = (data.map.getSpawnPosX() - Constants.CHAR_WIDTH) / 2; 
+			mainChar.y = (data.map.getSpawnPosY() - Constants.CHAR_HEIGHT) / 2;
 			mainChar.updateSafePos();
 		}
 		
@@ -193,12 +193,6 @@ public class Council {
 				// if they're the closest found
 				closestX = distX;
 				closest = c;
-				// set rec2 as c's y rectangle
-/*				rec2.setPosition(0, c.y);
-				rec2.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
-				if(Intersector.intersectRectangles(rec1, rec2, inter)) {
-					closest = c;
-				} */
 			}	// if they're close's
 		}	// chars iterator's
 
@@ -250,7 +244,7 @@ public class Council {
 			data.chars.add(creep);
 				// add it to the collection
 		}
-		
+
 		Assets.initChars(data.chars);
 	}
 	

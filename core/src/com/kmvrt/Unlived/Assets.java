@@ -21,6 +21,8 @@ public class Assets {
 
 	public static TextureAtlas mapImgs;
 	public static Sprite roomSprite; // room image
+	public static Sprite doorVSprite;	// vertical door
+	public static Sprite doorHSprite;	// horizontal
 	public static Sprite portalSprite;	// portal
 	public static Sprite magicSprite;	// magic
 
@@ -48,7 +50,12 @@ public class Assets {
 
 		roomSprite = new Sprite(mapImgs.findRegion("map"));
 		roomSprite.setSize(Constants.ROOM_WIDTH, Constants.ROOM_HEIGHT);
-		roomSprite.setPosition(0, 0);
+		
+		doorVSprite = new Sprite(mapImgs.findRegion("door"));
+		doorVSprite.setSize(2, Constants.CHAR_HEIGHT + 1);
+		
+		doorHSprite = new Sprite(mapImgs.findRegion("door"));
+		doorHSprite.setSize(Constants.CHAR_WIDTH + 1, 2);
 		
 		charImgs = new ArrayList<TextureAtlas>();
 		charSprites = new HashMap<String, Sprite>();

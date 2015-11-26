@@ -133,18 +133,18 @@ public class MagicFactory {
 									switch(attStatedID) {
 									case ATT_MANA:
 										cCond.applyMana(Float.parseFloat(arg));
-										Gdx.app.log(TAG, "\t" + arg + " mana applied");
+										Gdx.app.debug(TAG, "\t" + arg + " mana applied");
 										break;
 
 									case ATT_ACCEL:
 										cCond.applyAccel(Float.parseFloat(arg));
-										Gdx.app.log(TAG, "\t" + arg + " accel applied");
+										Gdx.app.debug(TAG, "\t" + arg + " accel applied");
 										
 										break;
 
 									case ATT_FORCE:
 										cCond.applyForce(Float.parseFloat(arg));
-										Gdx.app.log(TAG, "\t" + arg + " force applied");
+										Gdx.app.debug(TAG, "\t" + arg + " force applied");
 										break;
 
 									default:
@@ -194,7 +194,7 @@ public class MagicFactory {
 									spellBook.put(file.nameWithoutExtension(), nSpell);
 										// and save it
 									keys.add(file.nameWithoutExtension());
-									Gdx.app.log(TAG, "Spell added: " + file.nameWithoutExtension());
+									Gdx.app.debug(TAG, "Spell added: " + file.nameWithoutExtension());
 								}
 							// if !attStated's
 
@@ -205,17 +205,17 @@ public class MagicFactory {
 								switch(attStatedID) {
 								case ATT_BURST:
 									burst = Integer.parseInt(arg);
-									Gdx.app.log(TAG, "\t" + Integer.parseInt(arg) + " shots/cast");
+									Gdx.app.debug(TAG, "\t" + Integer.parseInt(arg) + " shots/cast");
 									break;
 
 								case ATT_BURST_INTERVAL:
 									burstInterval = Float.parseFloat(arg);
-									Gdx.app.log(TAG, "\t" + Float.parseFloat(arg) + "s between each shots");
+									Gdx.app.debug(TAG, "\t" + Float.parseFloat(arg) + "s between each shots");
 									break;
 									
 								case ATT_INTERVAL:
 									interval = Float.parseFloat(arg);
-									Gdx.app.log(TAG, "\t" + Float.parseFloat(arg) + " s between each cast");
+									Gdx.app.debug(TAG, "\t" + Float.parseFloat(arg) + " s between each cast");
 									break;
 
 								default:
@@ -228,7 +228,7 @@ public class MagicFactory {
 
 						} else if(arg.equals(ARG_INIT_MAGIC)) {
 							// start initialisation
-							Gdx.app.log(TAG, "Initialising spell: " + file.nameWithoutExtension());
+							Gdx.app.debug(TAG, "Initialising spell: " + file.nameWithoutExtension());
 							initMagic = true;
 							nSpell = new Spell(file.nameWithoutExtension());
 							hit = new GameChar.Attributes();
