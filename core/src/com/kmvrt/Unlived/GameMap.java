@@ -6,6 +6,8 @@ public class GameMap {
 	private int typeID;
 
 	private Room[][] rooms;
+	public Room cRoom;
+	public Room semiCRoom;
 	
 	// spawn position
 	private float spawnPosX;
@@ -24,10 +26,10 @@ public class GameMap {
 		for(int y = 0; y < Constants.ROOMS_NUM_Y; y++) {
 			for(int x = 0; x < Constants.ROOMS_NUM_X; x++) {
 				if(rooms[x][y].getTypeID() == Constants.ROOM_SPAWN) {
+					cRoom = rooms[x][y];
 					spawnPosX = getMiddle(x, Constants.ROOM_WIDTH);
 					spawnPosY = getMiddle(y, Constants.ROOM_HEIGHT);
 
-				} else if(rooms[x][y].getTypeID() == Constants.ROOM_PORTAL) {
 					portalPosX = getMiddle(x, Constants.ROOM_WIDTH) 
 						- (Constants.PORTAL_WIDTH / 2);
 					portalPosY = getMiddle(y, Constants.ROOM_HEIGHT) 
@@ -75,6 +77,38 @@ public class GameMap {
 		
 		return rooms[x][y];
 	}
+	
+	public static float getDoorPosX(float roomX, int dir) {
+		
+		if(dir == Constants.DIR_N || dir == Constants.DIR_S) {
+			return roomX + ((Constants.ROOM_WIDTH - Assets.doorHSprite.getWidth()) / 2);
+			
+		} else if(dir == Constants.DIR_E) {
+			return roomX + Constants.ROOM_WIDTH - Assets.doorVSprite.getWidth();
+	
+		} else if(dir == Constants.DIR_W) {
+			return roomX;
+			
+		} else {
+			return 0;
+		}
+	}
+	
+	public static float getDoorPosY(float roomY, int dir) {
+				
+		if(dir == Constants.DIR_N) {
+			return roomY + Constants.ROOM_HEIGHT - Assets.doorHSprite.getHeight();
+			
+		} else if(dir == Constants.DIR_S) {
+			return roomY;
+			
+		} else if(dir == Constants.DIR_E || dir == Constants.DIR_W) {
+			return roomY + ((Constants.ROOM_HEIGHT - Assets.doorVSprite.getHeight()) / 2);
+			
+		} else {
+			return 0;
+		}
+	}
 
 	
 
@@ -82,19 +116,45 @@ public class GameMap {
 	static class Room {
 		
 		private int typeID;
+		private int x;
+		private int y;
 		public boolean north, south, east, west;
 			// door location
+		private boolean visited;
 
-		public Room(int typeID) {
+		public Room(int typeID, int x, int y) {
 
 			this.typeID = typeID;
 			
 			north = south = east = west = false;
+			this.x = x;
+			this.y = y;
+			visited = false;
 		}
 
 		public int getTypeID() {
 		
 			return typeID;
+		}
+		
+		public int getX() {
+			
+			return x;
+		}
+		
+		public int getY() {
+			
+			return y;
+		} 
+
+		public void visit() {
+			
+			visited = true;
+		}
+
+		public boolean isVisited() {
+			
+			return visited;
 		}
 	}
 

@@ -4,6 +4,7 @@ package com.kmvrt.Unlived;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.Gdx;
 import java.util.Iterator;
 
@@ -11,7 +12,7 @@ public class Clock {
 	// update the time of the game
 	// every actual movements are updated here
 		
-//	private static final String TAG = Clock.class.getName();
+	private static final String TAG = Clock.class.getName();
 	
 	private StateData data;
 
@@ -36,6 +37,12 @@ public class Clock {
 // update the game ----------------------------------------------------------------------------------------------
 	public void update() {
 		// update the current state of the game		float delta = Gdx.graphics.getDeltaTime();
+
+		moveParticles();
+		collisionFix();
+	}	// update()'s
+
+	private void moveParticles() {
 
 		float delta = Gdx.graphics.getDeltaTime();
 		for(Iterator<GameChar> iter = data.chars.iterator(); iter.hasNext();) {
@@ -72,28 +79,96 @@ public class Clock {
 				iter.remove();
 			}
 		}	// magic iterator's 
+	}	// moveParticles()'s
 
+	private void collisionFix() {
 		// collision detections
-		// char to char
+
+		// char to char and map
+		float roomX = data.map.cRoom.getX() * Constants.ROOM_WIDTH;
+		float roomY = data.map.cRoom.getY() * Constants.ROOM_HEIGHT;
 		for(GameChar c1 : data.chars) {
 			// check if the char is out of the room
-/*			if(c1.x < 0) {
+			if(c1.x < roomX) {
 				// over to the west
-				c1.x = 0;
-			} else if(c1.x + Constants.CHAR_WIDTH > Constants.ROOM_WIDTH) {
+				if(throughDoor(c1, Constants.DIR_W) && !data.justMoveRoom) {
+					data.justMoveRoom = true;
+					Timer.schedule(
+							new Timer.Task() {
+								@Override
+								public void run() {
+									data.justMoveRoom = false;
+								}
+							}, 0.3f);
+					
+					data.map.cRoom = data.map.getRoom(
+							data.map.cRoom.getX() - 1,
+							data.map.cRoom.getY());
+					
+				} else {
+					c1.x = roomX;
+				}
+				
+			} else if(c1.x + Constants.CHAR_WIDTH > roomX + Constants.ROOM_WIDTH) {
 				// over to the east
-				c1.x = Constants.ROOM_WIDTH - Constants.CHAR_WIDTH;
+				if(throughDoor(c1, Constants.DIR_E) && !data.justMoveRoom) {
+					data.justMoveRoom = true;
+					Timer.schedule(
+							new Timer.Task() {
+								@Override
+								public void run() {
+									data.justMoveRoom = false;
+								}
+							}, 0.3f);
+					data.map.cRoom = data.map.getRoom(
+							data.map.cRoom.getX() + 1,
+							data.map.cRoom.getY());
+					
+				} else {
+					c1.x = roomX + Constants.ROOM_WIDTH - Constants.CHAR_WIDTH;
+					
+				}
 			}
 						
-			if(c1.y < 0) {
+			if(c1.y + Constants.SHADOW_OFFSET_Y < roomY) {
 				// over to the south
-				c1.y = 0;
-						
-			} else if(c1.y + Constants.CHAR_HEIGHT > Constants.ROOM_HEIGHT) {
+				if(throughDoor(c1, Constants.DIR_S) && !data.justMoveRoom) {
+					data.justMoveRoom = true;
+					Timer.schedule(
+							new Timer.Task() {
+								@Override
+								public void run() {
+									data.justMoveRoom = false;
+								}
+							}, 0.3f);
+					data.map.cRoom = data.map.getRoom(
+							data.map.cRoom.getX(),
+							data.map.cRoom.getY() - 1);
+					
+				} else {
+					c1.y = roomY - Constants.SHADOW_OFFSET_Y;
+				} 
+				
+			} else if(c1.y + Constants.CHAR_HEIGHT > roomY + Constants.ROOM_HEIGHT) {
 				// over to the north
-				c1.y = Constants.ROOM_HEIGHT - Constants.CHAR_HEIGHT;
-						
-			}*/
+				if(throughDoor(c1, Constants.DIR_N) && !data.justMoveRoom) {
+					data.justMoveRoom = true;
+					Timer.schedule(
+							new Timer.Task() {
+								@Override
+								public void run() {
+									data.justMoveRoom = false;
+								}
+							}, 0.3f);
+					data.map.cRoom = data.map.getRoom(
+							data.map.cRoom.getX(),
+							data.map.cRoom.getY() + 1);
+					
+				} else {
+					c1.y = roomY + Constants.ROOM_HEIGHT - Constants.CHAR_HEIGHT;
+				} 
+				
+			}
 			
 			c1.updateSafePos();
 		}	// c1 iterator's
@@ -105,23 +180,103 @@ public class Clock {
 			rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 			for(GameChar c : data.chars) {
 				if(areClose(m, c)) {
-					// set rec2 as c's rectangle
-//					Gdx.app.log(TAG, "m and c are close");
 					if(m.getSrc() != c) {
 						// can't hit its own caster
 						rec2.setPosition(c.x, c.y);
 						rec2.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 						if(Intersector.intersectRectangles(rec1, rec2, inter)) {
-//						if(c.getID() != Constants.CHAR_MAIN)
-//							Gdx.app.log(TAG, "c is hit and is a creep");
 							c.affectedBy(m);
 						}
 					}
-				}
+				}	// if m & c are close
+			}	// char iter's
+		}	// magic iter's
+	}
+	
+	private boolean throughDoor(GameChar c, int dir) {
+		
+		float roomX = data.map.cRoom.getX() * Constants.ROOM_WIDTH;
+		float roomY = data.map.cRoom.getY() * Constants.ROOM_HEIGHT;
+		
+		float doorX = 0; float doorY = 0;
+		float doorWidth = 0; float doorHeight = 0;
+		switch(dir) {
+		case Constants.DIR_N:
+			if(data.map.cRoom.north) {
+				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_N);
+				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_N);
+				
+				doorWidth = Assets.doorHSprite.getWidth();
+				doorHeight = Assets.doorHSprite.getHeight();
+				break;
+				
+			} else {
+				return false;
+			}
+		
+		case Constants.DIR_S:
+			if(data.map.cRoom.south) {
+				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_S);
+				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_S);
+				
+				doorWidth = Assets.doorHSprite.getWidth();
+				doorHeight = Assets.doorHSprite.getHeight();
+				break;
+				
+			} else {
+				return false;
+			}
+			
+		case Constants.DIR_E:
+			if(data.map.cRoom.east) {
+				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_E);
+				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_E);
+				
+				doorWidth = Assets.doorVSprite.getWidth();
+				doorHeight = Assets.doorVSprite.getHeight();
+				break;
+				
+			} else {
+				return false;
+			}
+			
+		case Constants.DIR_W:
+			if(data.map.cRoom.west) {
+				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_W);
+				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_W);
+				
+				doorWidth = Assets.doorVSprite.getWidth();
+				doorHeight = Assets.doorVSprite.getHeight();
+				break;
+				
+			} else {
+				return false;
+			}
+		
+		default:
+			Gdx.app.log(TAG, "Invalid direction constant passed");
+			Gdx.app.exit();
+		}
+		
+		// set rec1 as c's rectangle
+		rec1.setPosition(c.x, c.y);
+		rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+		
+		// rec2 as door's rec
+		rec2.setPosition(doorX, doorY);
+		rec2.setSize(doorWidth, doorHeight);
+		
+		if(Intersector.intersectRectangles(rec1, rec2, inter)) {
+			if(doorWidth > doorHeight
+					&& inter.width == Constants.CHAR_WIDTH) {
+				return true;
+				
+			} else if(inter.height == Constants.CHAR_HEIGHT) {
+				return true;
 			}
 		}
-
-	}	// update()'s
+		return false;
+	}
 
 	private boolean areClose(Magic m, GameChar c) {
 		// return whether the magic and the char are close to each other

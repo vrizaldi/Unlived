@@ -154,28 +154,29 @@ public class Painter {
 				if(cRoom.east) {
 					// create door in the east wall
 					Assets.doorVSprite.setPosition(
-						roomX + Constants.ROOM_WIDTH - Assets.doorVSprite.getWidth(), 
-						roomY + ((Constants.ROOM_HEIGHT - Assets.doorVSprite.getHeight()) / 2));
+						GameMap.getDoorPosX(roomX, Constants.DIR_E), 
+						GameMap.getDoorPosY(roomY, Constants.DIR_E));
 					cacheBatch.add(Assets.doorVSprite);
 				}
 				if(cRoom.west) {
 					// west wall
-					Assets.doorVSprite.setPosition(roomX, 
-						roomY + ((Constants.ROOM_HEIGHT - Assets.doorVSprite.getHeight()) / 2));
+					Assets.doorVSprite.setPosition(
+						GameMap.getDoorPosX(roomX, Constants.DIR_W), 
+						GameMap.getDoorPosY(roomY, Constants.DIR_W));
 					cacheBatch.add(Assets.doorVSprite);
 				}
 				if(cRoom.north) {
 					// north wall
 					Assets.doorHSprite.setPosition(
-							roomX + ((Constants.ROOM_WIDTH - Assets.doorHSprite.getWidth()) / 2),
-							roomY + Constants.ROOM_HEIGHT - Assets.doorHSprite.getHeight());
+							GameMap.getDoorPosX(roomX, Constants.DIR_N),
+							GameMap.getDoorPosY(roomY, Constants.DIR_N));
 					cacheBatch.add(Assets.doorHSprite);
 				}
 				if(cRoom.south) {
 					// south wall
 					Assets.doorHSprite.setPosition(
-							roomX + ((Constants.ROOM_WIDTH - Assets.doorHSprite.getWidth()) / 2),
-							roomY);
+							GameMap.getDoorPosX(roomX, Constants.DIR_S),
+							GameMap.getDoorPosY(roomY, Constants.DIR_S));
 					cacheBatch.add(Assets.doorHSprite);
 
 				}

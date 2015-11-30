@@ -52,29 +52,25 @@ public class Navigator {
 		// update the current state
 
 		for(GameChar c : data.chars) {
-
-			// set rec1 to be the rectangle of current char
-			rec1.setPosition(c.x, c.y);
-			rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
-//			Rectangle inter = new Rectangle();	// the intersection
-			
-			// do collision detection to other things here *********************
-
 			// check if need to go to the next map 
 			if(c.getID() == Constants.CHAR_MAIN) {
 				// if the char is the main char
 				if(data.isLevelFinished()) {
 					// if the level is finished
+					// set rec1 to be the rectangle of current char
+					rec1.setPosition(c.x, c.y);
+					rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+					// rec 2 as the portal
 					rec2.setPosition(
 						data.map.getPortalPosX(), data.map.getPortalPosY());
 					rec2.setSize(Constants.PORTAL_WIDTH, Constants.PORTAL_HEIGHT);
 					if(Intersector.intersectRectangles(rec1, rec2, inter)) {
 						// if the char is in the portal
 						// move to the next level
-//						data.switchLevel = true;
-//						Gdx.app.log(TAG, "Deploying new rooms...");
-//						data.map = deployMap();
-//						data.newMap = true;
+						data.switchLevel = true;
+						Gdx.app.log(TAG, "Deploying new rooms...");
+						data.map = deployMap();
+						data.newMap = true;
 					}
 				}
 			}
@@ -99,7 +95,7 @@ public class Navigator {
 		for(int y = 0; y < Constants.ROOMS_NUM_Y; y++) {
 			for(int x = 0; x < Constants.ROOMS_NUM_X; x++) {
 				if(rooms[x][y] == null) {
-					rooms[x][y] = new GameMap.Room(Constants.ROOM_BLANK);
+					rooms[x][y] = new GameMap.Room(Constants.ROOM_BLANK, x ,y);
 				}
 			}
 		}
@@ -114,7 +110,7 @@ public class Navigator {
 
 		if(map[x][y] == null) {	// if haven't inited
 			int typeID = first ? Constants.ROOM_SPAWN : Constants.ROOM_NORMAL;
-			map[x][y] = new GameMap.Room(typeID);
+			map[x][y] = new GameMap.Room(typeID, x, y);
 			
 		} else {
 			Gdx.app.debug(TAG, "Attempted to reinit a room");
