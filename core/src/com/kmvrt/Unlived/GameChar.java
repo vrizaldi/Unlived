@@ -26,9 +26,6 @@ public class GameChar {
 	public Attributes atts;
 		// store the attribute. e.g. mana, accel, force, etc.
 	
-//	private boolean fainted;
-		// whether the char has ever fainted
-
 	private int dir;  // the direction the character facing
 	
 	private int ID;	// type
@@ -36,6 +33,8 @@ public class GameChar {
 	private Spell spell;
 	private boolean bursting;
 	private boolean ableToShoot;
+
+	public GameMap.Room cRoom;
 
 
 // constructor ------------------------------------------------------------------------------------------------
@@ -114,8 +113,6 @@ public class GameChar {
 		sY = y;
 	}	// updateSafePos()'s
 
-
-	// facing direction
 	public int getDir() {
 		// return the direction the char facing
 		

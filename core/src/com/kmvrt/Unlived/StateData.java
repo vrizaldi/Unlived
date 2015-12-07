@@ -13,7 +13,6 @@ public class StateData {
 	public boolean switchScreen;
 	public boolean gameOver;
 	public boolean switchLevel;
-	public boolean justMoveRoom;
 	
 	private int stateID;
 
@@ -43,7 +42,6 @@ public class StateData {
 		chars = new ArrayList<GameChar>();
 		magics = new ArrayList<Magic>();
 		switchLevel = false;
-		justMoveRoom = false;
 		
 		killCt = 0;
 		deathCt = 0;

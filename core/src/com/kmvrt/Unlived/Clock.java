@@ -4,7 +4,7 @@ package com.kmvrt.Unlived;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.utils.Timer;
+//import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.Gdx;
 import java.util.Iterator;
 
@@ -85,90 +85,36 @@ public class Clock {
 		// collision detections
 
 		// char to char and map
-		float roomX = data.map.cRoom.getX() * Constants.ROOM_WIDTH;
-		float roomY = data.map.cRoom.getY() * Constants.ROOM_HEIGHT;
+		
 		for(GameChar c1 : data.chars) {
 			// check if the char is out of the room
-			if(c1.x < roomX) {
-				// over to the west
-				if(throughDoor(c1, Constants.DIR_W) && !data.justMoveRoom) {
-					data.justMoveRoom = true;
-					Timer.schedule(
-							new Timer.Task() {
-								@Override
-								public void run() {
-									data.justMoveRoom = false;
-								}
-							}, 0.3f);
-					
-					data.map.cRoom = data.map.getRoom(
-							data.map.cRoom.getX() - 1,
-							data.map.cRoom.getY());
-					
-				} else {
-					c1.x = roomX;
-				}
-				
-			} else if(c1.x + Constants.CHAR_WIDTH > roomX + Constants.ROOM_WIDTH) {
-				// over to the east
-				if(throughDoor(c1, Constants.DIR_E) && !data.justMoveRoom) {
-					data.justMoveRoom = true;
-					Timer.schedule(
-							new Timer.Task() {
-								@Override
-								public void run() {
-									data.justMoveRoom = false;
-								}
-							}, 0.3f);
-					data.map.cRoom = data.map.getRoom(
-							data.map.cRoom.getX() + 1,
-							data.map.cRoom.getY());
-					
-				} else {
-					c1.x = roomX + Constants.ROOM_WIDTH - Constants.CHAR_WIDTH;
-					
-				}
-			}
-						
-			if(c1.y + Constants.SHADOW_OFFSET_Y < roomY) {
-				// over to the south
-				if(throughDoor(c1, Constants.DIR_S) && !data.justMoveRoom) {
-					data.justMoveRoom = true;
-					Timer.schedule(
-							new Timer.Task() {
-								@Override
-								public void run() {
-									data.justMoveRoom = false;
-								}
-							}, 0.3f);
-					data.map.cRoom = data.map.getRoom(
-							data.map.cRoom.getX(),
-							data.map.cRoom.getY() - 1);
-					
-				} else {
-					c1.y = roomY - Constants.SHADOW_OFFSET_Y;
-				} 
-				
-			} else if(c1.y + Constants.CHAR_HEIGHT > roomY + Constants.ROOM_HEIGHT) {
+			float roomX = c1.cRoom.getX() * Constants.ROOM_WIDTH;
+			float roomY = c1.cRoom.getY() * Constants.ROOM_HEIGHT;
+			
+			if(c1.y + Constants.CHAR_HEIGHT > roomY + Constants.ROOM_HEIGHT) {
 				// over to the north
-				if(throughDoor(c1, Constants.DIR_N) && !data.justMoveRoom) {
-					data.justMoveRoom = true;
-					Timer.schedule(
-							new Timer.Task() {
-								@Override
-								public void run() {
-									data.justMoveRoom = false;
-								}
-							}, 0.3f);
-					data.map.cRoom = data.map.getRoom(
-							data.map.cRoom.getX(),
-							data.map.cRoom.getY() + 1);
-					
-				} else {
+				if(hitWall(c1, Constants.DIR_N)) {
 					c1.y = roomY + Constants.ROOM_HEIGHT - Constants.CHAR_HEIGHT;
 				} 
-				
 			}
+			if(c1.y + Constants.SHADOW_OFFSET_Y < roomY) {
+				// over to the south
+				if(hitWall(c1, Constants.DIR_S)) {
+					c1.y = roomY - Constants.SHADOW_OFFSET_Y;
+				} 
+			} 
+			if(c1.x + Constants.CHAR_WIDTH > roomX + Constants.ROOM_WIDTH) {
+				// over to the east
+				if(hitWall(c1, Constants.DIR_E)) {
+					c1.x = roomX + Constants.ROOM_WIDTH - Constants.CHAR_WIDTH;
+				}
+			}	
+			if(c1.x < roomX) {
+				// over to the west
+				if(hitWall(c1, Constants.DIR_W)) {
+					c1.x = roomX;
+				}
+			} 
 			
 			c1.updateSafePos();
 		}	// c1 iterator's
@@ -193,64 +139,68 @@ public class Clock {
 		}	// magic iter's
 	}
 	
-	private boolean throughDoor(GameChar c, int dir) {
+	private boolean hitWall(GameChar c, int dir) {
 		
-		float roomX = data.map.cRoom.getX() * Constants.ROOM_WIDTH;
-		float roomY = data.map.cRoom.getY() * Constants.ROOM_HEIGHT;
+		float roomX = c.cRoom.getX() * Constants.ROOM_WIDTH;
+		float roomY = c.cRoom.getY() * Constants.ROOM_HEIGHT;
 		
 		float doorX = 0; float doorY = 0;
 		float doorWidth = 0; float doorHeight = 0;
 		switch(dir) {
 		case Constants.DIR_N:
-			if(data.map.cRoom.north) {
+			if(c.cRoom.north) {
 				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_N);
-				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_N);
+				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_N)
+						- Assets.doorHSprite.getHeight();
 				
 				doorWidth = Assets.doorHSprite.getWidth();
-				doorHeight = Assets.doorHSprite.getHeight();
+				doorHeight = Assets.doorHSprite.getHeight() * 2.5f;
 				break;
 				
 			} else {
-				return false;
+				return true;
 			}
 		
 		case Constants.DIR_S:
-			if(data.map.cRoom.south) {
+			if(c.cRoom.south) {
 				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_S);
-				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_S);
+				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_S)
+						- Assets.doorHSprite.getHeight() * 1.5f;
 				
 				doorWidth = Assets.doorHSprite.getWidth();
-				doorHeight = Assets.doorHSprite.getHeight();
+				doorHeight = Assets.doorHSprite.getHeight() * 2.5f;
 				break;
 				
 			} else {
-				return false;
+				return true;
 			}
 			
 		case Constants.DIR_E:
-			if(data.map.cRoom.east) {
-				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_E);
+			if(c.cRoom.east) {
+				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_E)
+						- Assets.doorVSprite.getWidth();
 				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_E);
 				
-				doorWidth = Assets.doorVSprite.getWidth();
+				doorWidth = Assets.doorVSprite.getWidth() * 2.5f;
 				doorHeight = Assets.doorVSprite.getHeight();
 				break;
 				
 			} else {
-				return false;
+				return true;
 			}
 			
 		case Constants.DIR_W:
-			if(data.map.cRoom.west) {
-				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_W);
+			if(c.cRoom.west) {
+				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_W) 
+						- Assets.doorVSprite.getWidth() * 1.5f;
 				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_W);
 				
-				doorWidth = Assets.doorVSprite.getWidth();
+				doorWidth = Assets.doorVSprite.getWidth() * 2.5f;
 				doorHeight = Assets.doorVSprite.getHeight();
 				break;
 				
 			} else {
-				return false;
+				return true;
 			}
 		
 		default:
@@ -267,15 +217,15 @@ public class Clock {
 		rec2.setSize(doorWidth, doorHeight);
 		
 		if(Intersector.intersectRectangles(rec1, rec2, inter)) {
-			if(doorWidth > doorHeight
-					&& inter.width == Constants.CHAR_WIDTH) {
-				return true;
-				
-			} else if(inter.height == Constants.CHAR_HEIGHT) {
-				return true;
+			if((dir == Constants.DIR_N || dir == Constants.DIR_S)
+					&& inter.width >= Constants.CHAR_WIDTH) {
+				return false;
+			} else if((dir == Constants.DIR_E || dir == Constants.DIR_W)
+					&& inter.height >= Constants.CHAR_HEIGHT * 0.9f) {
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	private boolean areClose(Magic m, GameChar c) {

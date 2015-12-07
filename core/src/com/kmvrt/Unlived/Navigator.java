@@ -4,6 +4,7 @@ package com.kmvrt.Unlived;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.utils.Timer;
 
 public class Navigator {
 	// update the map in-game
@@ -18,6 +19,8 @@ public class Navigator {
 	private Rectangle inter;
 //	private int roomPassed;
 
+	private boolean checkRoom;
+
 
 // constructor ----------------------------------------------------------------------------------------------
 	public Navigator(StateData data) {
@@ -27,6 +30,17 @@ public class Navigator {
 		rec1 = new Rectangle();
 		rec2 = new Rectangle();
 		inter = new Rectangle();
+		checkRoom = true;
+		Timer.schedule(
+				new Timer.Task() {
+
+					@Override
+					public void run() {
+						
+						checkRoom = true;
+					}
+				}, 0.2f, 0.2f);
+			// check room every 0.2 sec
 	}
 
 
@@ -53,6 +67,16 @@ public class Navigator {
 
 		for(GameChar c : data.chars) {
 			// check if need to go to the next map 
+
+			// room check 
+			if(checkRoom) {
+				c.cRoom = data.map.getRoom(
+					(int)(c.x / Constants.ROOM_WIDTH), 
+					(int)(c.y / Constants.ROOM_HEIGHT));
+				c.cRoom.visit(c);
+			}
+
+			// collision with portal
 			if(c.getID() == Constants.CHAR_MAIN) {
 				// if the char is the main char
 				if(data.isLevelFinished()) {
@@ -60,10 +84,12 @@ public class Navigator {
 					// set rec1 to be the rectangle of current char
 					rec1.setPosition(c.x, c.y);
 					rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+
 					// rec 2 as the portal
 					rec2.setPosition(
 						data.map.getPortalPosX(), data.map.getPortalPosY());
 					rec2.setSize(Constants.PORTAL_WIDTH, Constants.PORTAL_HEIGHT);
+
 					if(Intersector.intersectRectangles(rec1, rec2, inter)) {
 						// if the char is in the portal
 						// move to the next level
@@ -74,7 +100,7 @@ public class Navigator {
 					}
 				}
 			}
-		}	// for's end
+		}	// char iter's
 	}	// update()'s end
 
 	private GameMap deployMap() {

@@ -6,8 +6,6 @@ public class GameMap {
 	private int typeID;
 
 	private Room[][] rooms;
-	public Room cRoom;
-	public Room semiCRoom;
 	
 	// spawn position
 	private float spawnPosX;
@@ -26,7 +24,6 @@ public class GameMap {
 		for(int y = 0; y < Constants.ROOMS_NUM_Y; y++) {
 			for(int x = 0; x < Constants.ROOMS_NUM_X; x++) {
 				if(rooms[x][y].getTypeID() == Constants.ROOM_SPAWN) {
-					cRoom = rooms[x][y];
 					spawnPosX = getMiddle(x, Constants.ROOM_WIDTH);
 					spawnPosY = getMiddle(y, Constants.ROOM_HEIGHT);
 
@@ -77,7 +74,7 @@ public class GameMap {
 		
 		return rooms[x][y];
 	}
-	
+
 	public static float getDoorPosX(float roomX, int dir) {
 		
 		if(dir == Constants.DIR_N || dir == Constants.DIR_S) {
@@ -147,9 +144,11 @@ public class GameMap {
 			return y;
 		} 
 
-		public void visit() {
+		public void visit(GameChar c) {
 			
-			visited = true;
+			if(!visited && c.getID() == Constants.CHAR_MAIN) {
+				visited = true;
+			}
 		}
 
 		public boolean isVisited() {
