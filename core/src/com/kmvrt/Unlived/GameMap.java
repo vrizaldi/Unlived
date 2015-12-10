@@ -1,5 +1,7 @@
 package com.kmvrt.Unlived;
 
+import com.badlogic.gdx.Gdx;
+
 public class GameMap {
 	// represent a map in-game
 
@@ -14,6 +16,9 @@ public class GameMap {
 	// portal position
 	private float portalPosX;
 	private float portalPosY;
+	
+	public boolean justChanged;
+	
 
 // constructor ----------------------------------------------------------------------------------------------
 	public GameMap(int typeID, Room[][] rooms) {
@@ -21,9 +26,12 @@ public class GameMap {
 		this.typeID = typeID;
 		this.rooms = rooms;
 
+		// flag spawn and portal point
 		for(int y = 0; y < Constants.ROOMS_NUM_Y; y++) {
 			for(int x = 0; x < Constants.ROOMS_NUM_X; x++) {
-				if(rooms[x][y].getTypeID() == Constants.ROOM_SPAWN) {
+				if(rooms[x][y] != null 
+						&& rooms[x][y].getTypeID() == Constants.ROOM_SPAWN) {
+					Gdx.app.debug("GameMap", "Spawn in " + x + ", " + y);
 					spawnPosX = getMiddle(x, Constants.ROOM_WIDTH);
 					spawnPosY = getMiddle(y, Constants.ROOM_HEIGHT);
 
@@ -34,6 +42,7 @@ public class GameMap {
 				} 
 			}
 		}
+		justChanged = false;
 	}	// new(int)'s end
 
 	private float getMiddle(int coor, float length) {
@@ -69,11 +78,6 @@ public class GameMap {
 		
 		return portalPosY;
 	}
-	
-	public Room getRoom(int x, int y) {
-		
-		return rooms[x][y];
-	}
 
 	public static float getDoorPosX(float roomX, int dir) {
 		
@@ -105,6 +109,32 @@ public class GameMap {
 		} else {
 			return 0;
 		}
+	}
+	
+	public Room getRandRoom() {
+		// return a random room
+		
+		do {
+			int x = (int)(Math.random() * Constants.ROOMS_NUM_X);
+			int y = (int)(Math.random() * Constants.ROOMS_NUM_Y);
+			if(rooms[x][y] != null) {
+				return rooms[x][y];
+			}
+		} while(true);
+	}
+	
+	public Room visit(GameChar c, int roomX, int roomY) {
+		// return the specified room
+		
+		justChanged = true;
+		rooms[roomX][roomY].visit(c);
+		
+		return rooms[roomX][roomY];
+	}
+	
+	public Room getRoom(int x, int y) {
+		
+		return rooms[x][y];
 	}
 
 	
@@ -144,7 +174,7 @@ public class GameMap {
 			return y;
 		} 
 
-		public void visit(GameChar c) {
+		protected void visit(GameChar c) {
 			
 			if(!visited && c.getID() == Constants.CHAR_MAIN) {
 				visited = true;

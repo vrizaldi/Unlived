@@ -70,10 +70,12 @@ public class Navigator {
 
 			// room check 
 			if(checkRoom) {
-				c.cRoom = data.map.getRoom(
-					(int)(c.x / Constants.ROOM_WIDTH), 
-					(int)(c.y / Constants.ROOM_HEIGHT));
-				c.cRoom.visit(c);
+				int x = (int)(c.x / Constants.ROOM_WIDTH); 
+				int y = (int)(c.y / Constants.ROOM_HEIGHT);
+				c.cRoom = data.map.visit(c, x, y);
+				if(c.getID() == Constants.CHAR_MAIN) {
+					Gdx.app.debug(TAG, "mainChar is in " + x + ", " + y);
+				}
 			}
 
 			// collision with portal
@@ -96,6 +98,14 @@ public class Navigator {
 						data.switchLevel = true;
 						Gdx.app.log(TAG, "Deploying new rooms...");
 						data.map = deployMap();
+						
+						// remove the mainchar to the spawn point
+						data.getMainChar().x = data.map.getSpawnPosX() - (Constants.CHAR_WIDTH / 2);
+						data.getMainChar().y = data.map.getSpawnPosY() - (Constants.CHAR_HEIGHT / 2);
+						int x = (int)(c.x / Constants.ROOM_WIDTH); 
+						int y = (int)(c.y / Constants.ROOM_HEIGHT);
+						data.getMainChar().cRoom = data.map.visit(c, x, y);
+						
 						data.newMap = true;
 					}
 				}
@@ -117,14 +127,6 @@ public class Navigator {
 			Gdx.app.debug(TAG, rx + ", " + ry);
 			deployRooms(rooms, rx, ry, true);
 		} while(!reachMinimum(rooms));
-		
-		for(int y = 0; y < Constants.ROOMS_NUM_Y; y++) {
-			for(int x = 0; x < Constants.ROOMS_NUM_X; x++) {
-				if(rooms[x][y] == null) {
-					rooms[x][y] = new GameMap.Room(Constants.ROOM_BLANK, x ,y);
-				}
-			}
-		}
 		
 		nRoom = new GameMap(Constants.MAP_NORMAL, rooms);
 
@@ -189,17 +191,15 @@ public class Navigator {
 		
 		int moreDoor = doorCt < 2 ? (int)(Math.random() * (4 - doorCt)) + 1 
 				: (int)(Math.random() * (4 - doorCt));
-		Gdx.app.debug(TAG, "moreDoor = " + moreDoor);
+//		Gdx.app.debug(TAG, "moreDoor = " + moreDoor);
 		while(moreDoor > 0) {
 			int dir = (int)(Math.random() * 4) + 1;
-//			Gdx.app.debug(TAG, "dir = " + dir);
 			switch(dir) {
 			case 1:
 				if(y < Constants.ROOMS_NUM_Y - 1 
 						&& map[x][y + 1] == null && !r.north) {
 					// init north 
 					r.north = true;
-//					Gdx.app.debug(TAG, "" + ++doorCt);
 					
 					crNorth = true;
 					break;
@@ -214,7 +214,6 @@ public class Navigator {
 						&& map[x + 1][y] == null && !r.east) {
 					// init east
 					r.east = true;
-//					Gdx.app.debug(TAG, "" + ++doorCt);
 					
 					crEast = true;
 					break;
@@ -228,7 +227,6 @@ public class Navigator {
 				if(x > 0 && map[x - 1][y] == null && !r.west) {
 					// init west
 					r.west = true;
-//					Gdx.app.debug(TAG, "" + ++doorCt);
 					
 					crWest = true;
 					break;
@@ -240,7 +238,6 @@ public class Navigator {
 			case 4:
 				if(y > 0 && map[x][y - 1] == null && !r.south) {
 					r.south = true;
-//					Gdx.app.debug(TAG, "" + ++doorCt);
 					
 					crSouth = true;		// init south
 					break;
@@ -252,8 +249,14 @@ public class Navigator {
 			moreDoor--;
 		}	// while(times)'s
 		Gdx.app.debug(TAG, "Adding doors finished");
+		
+		if(!r.south && !r.north && !r.east && !r.west
+				/*(crNorth || crSouth || crEast || crWest)*/) {
+			Gdx.app.error(TAG, "Room with no door inited");
+//			Gdx.app.exit();
+		}
 
-		// init other doors
+		// init other rooms
 		while(crNorth || crSouth || crEast || crWest) {
 //			Gdx.app.debug(TAG, "Adding rooms...");
 			int order = (int)(Math.random() * 4); 

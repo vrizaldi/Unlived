@@ -12,7 +12,7 @@ public class Constants {
 	public static final int FRICTION = 10;
 		// force decrease every second
 	
-	public static final int MAGIC_SPEED = 100;
+	public static final int MAGIC_SPEED = 60;
 	public static final int MAGIC_MAX_DISTANCE = 10;
 
 	public static final float ANIMATION_CHAR_DURATION = 0.1f;	// in sec
@@ -49,6 +49,8 @@ public class Constants {
 	public static final int CHAR_CREEP_FOLLOW = 99;
 	public static final int CHAR_CREEP_FOLLOW_N = 100;
 	public static final int CHAR_CREEP_FOLLOW_S = 101;
+	public static final int CHAR_CREEP_FOLLOW_E = 102;
+	public static final int CHAR_CREEP_FOLLOW_W = 103;
 	public static final int CHAR_CREEP_AVOID = 102;
 //	public static final int CHAR_CREEP_INACTIVE = 103;
 

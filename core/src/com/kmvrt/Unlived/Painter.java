@@ -53,16 +53,16 @@ public class Painter {
 		// render the objects to the screen, based on the data
 		
 		stateTime += Gdx.graphics.getDeltaTime();
-		if(data.newMap) {
+		if(data.newMap || data.map.justChanged) {
 			data.newMap = false;
+			data.map.justChanged = false;
 			updateMap();
-			
 		}
 		Assets.update(stateTime);
 		updateCam();
 
 		// clear the canvas
-		Gdx.gl.glClearColor(1, 1, 1, 1); // black
+		Gdx.gl.glClearColor(1, 1, 1, 1); // white
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		cacheBatch.setProjectionMatrix(cam.combined);
@@ -84,6 +84,10 @@ public class Painter {
 		// draw chars **************
 		for(GameChar c : data.chars) {
 			// draw the shadow
+			if(!c.cRoom.isVisited()) {
+				continue;
+			}
+			
 			Assets.shadowSprite.setPosition(c.x, c.y + Constants.SHADOW_OFFSET_Y);
 			Assets.shadowSprite.draw(batch);
 			
@@ -145,12 +149,18 @@ public class Painter {
 		
 		for(int y = 0; y < Constants.ROOMS_NUM_Y; y++) {
 			for(int x = 0; x < Constants.ROOMS_NUM_X; x++) {
+				GameMap.Room cRoom = data.map.getRoom(x, y);
+				
+				if(cRoom == null || !cRoom.isVisited()) {
+					// only show visited room
+					continue;
+				}
+				
 				float roomX = x * Constants.ROOM_WIDTH;
 				float roomY = y * Constants.ROOM_HEIGHT;
 				Assets.roomSprite.setPosition(roomX, roomY);
 				cacheBatch.add(Assets.roomSprite);
 				
-				GameMap.Room cRoom = data.map.getRoom(x, y);
 				if(cRoom.east) {
 					// create door in the east wall
 					Assets.doorVSprite.setPosition(

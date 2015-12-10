@@ -11,6 +11,8 @@ public class Magic {
 	// next movement
 	// magics only move horizontally
 	private float nX;
+	
+	public GameMap.Room cRoom;
 
 	private int dir;	// the direction it's moving
 	private Spell spell;	// the magic's properties
@@ -28,6 +30,7 @@ public class Magic {
 		this.dir = dir;
 		this.spell = spell;
 		this.src = src;
+		cRoom = src.cRoom;
 	}	// new(int, int, int)'s end
 
 

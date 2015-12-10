@@ -49,6 +49,10 @@ public class Chemist {
 				// move west
 				m.move(-Constants.MAGIC_SPEED * delta);
 			}
+			
+			// check its current room
+			int roomX = (int)(m.x / Constants.ROOM_WIDTH);
+			m.cRoom = data.map.visit(m.getSrc(), roomX, m.cRoom.getY());
 		} // magic collection iteration's end
 
 		// update chars affected by magic 

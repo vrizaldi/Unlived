@@ -94,19 +94,34 @@ public class Clock {
 			if(c1.y + Constants.CHAR_HEIGHT > roomY + Constants.ROOM_HEIGHT) {
 				// over to the north
 				if(hitWall(c1, Constants.DIR_N)) {
-					c1.y = roomY + Constants.ROOM_HEIGHT - Constants.CHAR_HEIGHT;
+					float dX = c1.x;
+					c1.x = c1.getSafeX();
+					if(hitWall(c1, Constants.DIR_N)) {
+						c1.x = dX;
+						c1.y = roomY + Constants.ROOM_HEIGHT - Constants.CHAR_HEIGHT;
+					}
 				} 
 			}
 			if(c1.y + Constants.SHADOW_OFFSET_Y < roomY) {
 				// over to the south
 				if(hitWall(c1, Constants.DIR_S)) {
-					c1.y = roomY - Constants.SHADOW_OFFSET_Y;
+					float dX = c1.x;
+					c1.x = c1.getSafeX();
+					if(hitWall(c1, Constants.DIR_S)) {
+						c1.x = dX;
+						c1.y = roomY - Constants.SHADOW_OFFSET_Y;
+					}
 				} 
 			} 
 			if(c1.x + Constants.CHAR_WIDTH > roomX + Constants.ROOM_WIDTH) {
 				// over to the east
 				if(hitWall(c1, Constants.DIR_E)) {
-					c1.x = roomX + Constants.ROOM_WIDTH - Constants.CHAR_WIDTH;
+					float dY = c1.y;
+					c1.y = c1.getSafeY();
+					if(hitWall(c1, Constants.DIR_E)) {
+						c1.y = dY;
+						c1.x = roomX + Constants.ROOM_WIDTH - Constants.CHAR_WIDTH;
+					}
 				}
 			}	
 			if(c1.x < roomX) {
@@ -119,8 +134,25 @@ public class Clock {
 			c1.updateSafePos();
 		}	// c1 iterator's
 		
-		// magic to char
-		for(Magic m : data.magics) {
+		// magic to char/wall
+		for(Iterator<Magic> iter = data.magics.iterator(); iter.hasNext();) {
+			Magic m = iter.next();
+			
+			// check if the magic hit the wall
+			float roomX = m.cRoom.getX() * Constants.ROOM_WIDTH;
+			if(m.x + Constants.CHAR_WIDTH > roomX + Constants.ROOM_WIDTH) {
+				// over to the east
+				if(hitWall(m, true)) {
+					iter.remove();
+				}
+				
+			} else if(m.x < roomX) {
+				// over to the west
+				if(hitWall(m, false)) {
+					iter.remove();
+				}
+			}
+			
 			// set rec1 as m's rectangle
 			rec1.setPosition(m.x, m.y);
 			rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
@@ -150,11 +182,10 @@ public class Clock {
 		case Constants.DIR_N:
 			if(c.cRoom.north) {
 				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_N);
-				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_N)
-						- Assets.doorHSprite.getHeight();
+				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_N);
 				
 				doorWidth = Assets.doorHSprite.getWidth();
-				doorHeight = Assets.doorHSprite.getHeight() * 2.5f;
+				doorHeight = Assets.doorHSprite.getHeight() * 1.5f;
 				break;
 				
 			} else {
@@ -165,10 +196,10 @@ public class Clock {
 			if(c.cRoom.south) {
 				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_S);
 				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_S)
-						- Assets.doorHSprite.getHeight() * 1.5f;
+						- Assets.doorHSprite.getHeight() * 0.5f;
 				
 				doorWidth = Assets.doorHSprite.getWidth();
-				doorHeight = Assets.doorHSprite.getHeight() * 2.5f;
+				doorHeight = Assets.doorHSprite.getHeight() * 1.5f;
 				break;
 				
 			} else {
@@ -177,11 +208,10 @@ public class Clock {
 			
 		case Constants.DIR_E:
 			if(c.cRoom.east) {
-				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_E)
-						- Assets.doorVSprite.getWidth();
+				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_E);
 				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_E);
 				
-				doorWidth = Assets.doorVSprite.getWidth() * 2.5f;
+				doorWidth = Assets.doorVSprite.getWidth() * 1.5f;
 				doorHeight = Assets.doorVSprite.getHeight();
 				break;
 				
@@ -192,10 +222,10 @@ public class Clock {
 		case Constants.DIR_W:
 			if(c.cRoom.west) {
 				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_W) 
-						- Assets.doorVSprite.getWidth() * 1.5f;
+						- Assets.doorVSprite.getWidth() * 0.5f;
 				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_W);
 				
-				doorWidth = Assets.doorVSprite.getWidth() * 2.5f;
+				doorWidth = Assets.doorVSprite.getWidth() * 1.5f;
 				doorHeight = Assets.doorVSprite.getHeight();
 				break;
 				
@@ -217,6 +247,7 @@ public class Clock {
 		rec2.setSize(doorWidth, doorHeight);
 		
 		if(Intersector.intersectRectangles(rec1, rec2, inter)) {
+			// if the char can fit into the door
 			if((dir == Constants.DIR_N || dir == Constants.DIR_S)
 					&& inter.width >= Constants.CHAR_WIDTH) {
 				return false;
@@ -226,7 +257,61 @@ public class Clock {
 			}
 		}
 		return true;
-	}
+	}	// hitWall(GameChar, int)'s
+	
+	private boolean hitWall(Magic m, boolean east) {
+		
+		float roomX = m.cRoom.getX() * Constants.ROOM_WIDTH;
+		float roomY = m.cRoom.getY() * Constants.ROOM_HEIGHT;
+		
+		float doorX = 0; float doorY = 0;
+		float doorWidth = 0; float doorHeight = 0;
+			
+		if(east) {
+			if(m.cRoom.east) {
+				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_E);
+				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_E);
+				
+				doorWidth = Assets.doorVSprite.getWidth() * 1.5f;
+				doorHeight = Assets.doorVSprite.getHeight();
+				
+			} else {
+				// east door doesn't exist
+				return true;
+			}
+			
+		} else {
+			if(m.cRoom.west) {
+				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_W) 
+						- Assets.doorVSprite.getWidth() * 0.5f;
+				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_W);
+				
+				doorWidth = Assets.doorVSprite.getWidth() * 1.5f;
+				doorHeight = Assets.doorVSprite.getHeight();
+				
+			} else {
+				// west door doesn't exist
+				return true;
+			}
+		}
+		
+		// set rec1 as c's rectangle
+		rec1.setPosition(m.x, m.y);
+		rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+		
+		// rec2 as door's rec
+		rec2.setPosition(doorX, doorY);
+		rec2.setSize(doorWidth, doorHeight);
+		
+		if(Intersector.intersectRectangles(rec1, rec2, inter)) {
+			// if the char can fit in the door
+			if(inter.height >= Constants.CHAR_HEIGHT * 0.5f) {
+				return false;
+			}
+		}
+		// if doesn't touch the door
+		return true;
+	}	// hitWall(GameChar, int)'s
 
 	private boolean areClose(Magic m, GameChar c) {
 		// return whether the magic and the char are close to each other
