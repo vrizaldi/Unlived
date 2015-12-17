@@ -39,8 +39,8 @@ public class Constants {
 
 	// map 
 	public static final int MAP_NORMAL = 148;
-	public static final int CHARS_MIN = 2;
-	public static final int CHARS_MAX = 4;
+	public static final int CHARS_MIN = 4;
+	public static final int CHARS_MAX = 7;
 		// total of the normal room types
 		// will be changed as types added
 
@@ -49,9 +49,7 @@ public class Constants {
 	public static final int CHAR_CREEP_FOLLOW = 99;
 	public static final int CHAR_CREEP_FOLLOW_N = 100;
 	public static final int CHAR_CREEP_FOLLOW_S = 101;
-	public static final int CHAR_CREEP_FOLLOW_E = 102;
-	public static final int CHAR_CREEP_FOLLOW_W = 103;
-	public static final int CHAR_CREEP_AVOID = 102;
+	public static final int CHAR_CREEP_AVOID = 103;
 //	public static final int CHAR_CREEP_INACTIVE = 103;
 
 	// safe distance between creep and mainChar
@@ -59,7 +57,7 @@ public class Constants {
 	public static final int SAFE_DIST_Y = 10;
 
 	// intervals between things happening
-	public static final float CREEPS_CHANGE_INTERVAL = 0.5f;	// in second
+	public static final float CREEPS_CHANGE_INTERVAL = 1f;	// in second
 
 	// number of rooms in a map
 	public static final int ROOMS_NUM_X = 5;

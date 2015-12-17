@@ -169,7 +169,7 @@ public class Clock {
 				}	// if m & c are close
 			}	// char iter's
 		}	// magic iter's
-	}
+	} // collisionFix()'s
 	
 	private boolean hitWall(GameChar c, int dir) {
 		
@@ -239,7 +239,7 @@ public class Clock {
 		}
 		
 		// set rec1 as c's rectangle
-		rec1.setPosition(c.x, c.y);
+		rec1.setPosition(c.x, c.y + Constants.SHADOW_OFFSET_Y);
 		rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 		
 		// rec2 as door's rec

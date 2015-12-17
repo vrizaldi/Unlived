@@ -62,7 +62,7 @@ public class Painter {
 		updateCam();
 
 		// clear the canvas
-		Gdx.gl.glClearColor(1, 1, 1, 1); // white
+		Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1); // grey
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		cacheBatch.setProjectionMatrix(cam.combined);
@@ -100,9 +100,10 @@ public class Painter {
 		// draw magics *************
 		if(data.magics.size() != 0) {
 			for(Magic  m : data.magics) {
-			
-				Assets.magicSprite.setPosition(m.x, m.y);
-				Assets.magicSprite.draw(batch);
+				if(m.cRoom.isVisited()) {
+					Assets.magicSprite.setPosition(m.x, m.y);
+					Assets.magicSprite.draw(batch);
+				}
 			}
 		}
 

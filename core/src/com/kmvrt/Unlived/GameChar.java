@@ -27,6 +27,7 @@ public class GameChar {
 		// store the attribute. e.g. mana, accel, force, etc.
 	
 	private int dir;  // the direction the character facing
+	public boolean wandering;
 	
 	private int ID;	// type
 	
@@ -61,6 +62,8 @@ public class GameChar {
 
 		atts = new Attributes(this);
 		spellAffecting = null;
+		
+		wandering = false;
 	}	// new()'s end
 
 

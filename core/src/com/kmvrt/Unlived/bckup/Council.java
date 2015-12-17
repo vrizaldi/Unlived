@@ -226,7 +226,7 @@ public class Council {
 			creepsChange = false;
 		}
 		moveCreeps(delta);
-		creepsAttack();
+//		creepsAttack();
 	} // updateCreeps()'s end
 
 	private void deployCreeps(int num) {
@@ -263,10 +263,10 @@ public class Council {
 					creep.wandering = true;
 
 					boolean finish = false;
-					int mood = 0;
 					while(!finish) {
-						mood = (int)(Math.random() * 4);
+						int mood = (int)(Math.random() * 4);
 							// rand number 0 - 3
+//						Gdx.app.debug(TAG, "mood = " + mood);
 						if(mood == 0 && creep.cRoom.north) {
 							creep.changeCreep(Constants.DIR_N);
 							finish = true;
@@ -284,17 +284,27 @@ public class Council {
 							finish = true;
 						}
 					}
-//					Gdx.app.debug(TAG, "mood = " + mood);
+//					Gdx.app.debug(TAG, "wander inited");
 					
 				} else {
 					creep.wandering = false;
-					int mood = (int)(Math.random() * 8) + 1;
-						// random number 1 - 8
+					int mood = (int)(Math.random() * 12) + 1;
+						// random number 1 - 12
 					switch(mood) {
+					case 12:
+					case 11:
+					case 10:
+						creep.changeCreep(Constants.CHAR_CREEP_FOLLOW);
+						break;
+						
+					case 9:
 					case 8:
+						creep.changeCreep(Constants.CHAR_CREEP_FOLLOW_W);
+						break;
+						
 					case 7:
 					case 6:
-						creep.changeCreep(Constants.CHAR_CREEP_FOLLOW);
+						creep.changeCreep(Constants.CHAR_CREEP_FOLLOW_E);
 						break;
 
 					case 5:
@@ -339,13 +349,14 @@ public class Council {
 				}
 				
 				// keep it in safe distance
-				if(creep.cRoom == data.getMainChar().cRoom
-						&& Math.abs(distX) <= Constants.SAFE_DIST_X) {
-					if(distX >= 0) {
+				if(Math.abs(distX) <= Constants.SAFE_DIST_X
+						&& Math.abs(distY) < 1) {
+/*					if(distX >= 0) {
 						distX -= Constants.SAFE_DIST_X;
-					} else {	// distX < 0
+					} else if(distX < 0) {
 						distX += Constants.SAFE_DIST_X;
-					}
+					}  */
+					distX = 0;
 					distY = 0;
 				} 
 	//			distY = Math.abs(distY) < 1 ? 0 : distY; 
@@ -363,6 +374,12 @@ public class Council {
 				} else if(creep.getID() == Constants.CHAR_CREEP_FOLLOW_S) {
 					followX(creep, distX, Constants.DIR_S, delta); 
 					
+				} else if(creep.getID() == Constants.CHAR_CREEP_FOLLOW_E) {
+					followY(creep, distY, Constants.DIR_E, delta);
+					
+				} else if(creep.getID() == Constants.CHAR_CREEP_FOLLOW_W) {
+					followY(creep, distY, Constants.DIR_W, delta);
+
 				} else if(creep.getID() == Constants.CHAR_CREEP_AVOID) {
 					avoid(creep, distX, distY, delta);
 
@@ -373,71 +390,73 @@ public class Council {
 
 	private void wander(GameChar creep, float delta) {
 		// wander around the map moving through doors
-		
+
 		int dir = creep.getID();
-		int roomX = creep.cRoom.getX(); int roomY = creep.cRoom.getY();
-		if(dir == Constants.DIR_N) {
-			roomY += 1;
-		} else if(dir == Constants.DIR_S) {
-			roomY -= 1;
-		} else if(dir == Constants.DIR_E) {
-			roomX += 1;
-		} else if(dir == Constants.DIR_W) {
-			roomX -= 1;
-		}
-		float nRoomX = 
-				GameMap.getMiddle(roomX, Constants.ROOM_WIDTH) 
-				- Constants.CHAR_WIDTH / 2;
-		float nRoomY = 
-				GameMap.getMiddle(roomY, Constants.ROOM_HEIGHT)
-				- (Constants.CHAR_HEIGHT / 2 + Constants.SHADOW_OFFSET_Y);
+		float doorX = GameMap.getDoorPosX(
+				creep.cRoom.getX() * Constants.ROOM_WIDTH, dir);
+		float doorY = GameMap.getDoorPosY(
+				creep.cRoom.getY() * Constants.ROOM_HEIGHT, dir);
 
 		// aim to make the creep go pass through the door
-		float distX = nRoomX - creep.x;
-/*		if(distX > 0 && dir == Constants.DIR_E) {
-			distX += Constants.CHAR_WIDTH * 5;
+		float distX = doorX - creep.x;
+		if(distX > 0 && dir == Constants.DIR_E) {
+			distX += Constants.CHAR_WIDTH * 2;
 		} else if(distX < 0 && dir == Constants.DIR_W) {
-			distX -= Constants.CHAR_WIDTH * 5;
-		}*/
-		float distY = nRoomY - creep.y;
-/*		if(distY > 0 && dir == Constants.DIR_N) {
-			distY += Constants.CHAR_HEIGHT * 5;
+			distX -= Constants.CHAR_WIDTH * 2;
+		}
+		float distY = doorY - creep.y;
+		if(distY > 0 && dir == Constants.DIR_N) {
+			distY += Constants.CHAR_HEIGHT * 2;
 		} else if(distY < 0 && dir == Constants.DIR_S) {
-			distY -= Constants.CHAR_HEIGHT * 5;
-		}*/
+			distY -= Constants.CHAR_HEIGHT * 2;
+		}
 		follow(creep, distX, distY, delta);
 	}	// wander(GameChar, float)'s
 	
 	private void follow(GameChar creep, float distX, float distY, float delta) {
 		// move the creep toward the mainChar/door
-		
-		if(distX != 0 && distY != 0) {
-			/* move diagonally, by moving vertically & horizontally 
-			 * use trigonometry to calc how far the creep should go
-			 */
-			float a = Math.abs(distX);
-			float o = Math.abs(distY);
-			double angle = Math.atan(o / a);
-			float moveX = (float)(Constants.NORMAL_SPEED * Math.cos(angle));
-			float moveY = (float)(Constants.NORMAL_SPEED * Math.sin(angle));
-			if(distX < 0) {
-				moveX = -moveX;
+
+		if(Math.abs(Math.abs(distX) - Math.abs(distY)) < 10) {
+			// move diagonally by moving horizontally then vertically
+			if(distX > 0) {
+				// move east
+				creep.move(Constants.NORMAL_SPEED * delta, 0);
+
+			} else if(distX < 0) {
+				// move west
+				creep.move(-Constants.NORMAL_SPEED * delta, 0);
 			}
-			if(distY < 0) {
-				moveY = -moveY;
+					
+			if(distY > 0) {
+				// move north
+				creep.move(0, Constants.NORMAL_SPEED * delta);
+						
+			} else if(distY < 0) {
+				// move south
+				creep.move(0, -Constants.NORMAL_SPEED * delta);
 			}
-			creep.move(moveX * delta, moveY * delta);
-			
-		} else if(distX == 0 && distY == 0) {
-			return;
-			
-		} else if(distX == 0) {
-			// just move to vertically
-			creep.move(0, Constants.NORMAL_SPEED * delta);
-			
-		} else if(distY == 0) {
-			// just move horizontally
-			creep.move(Constants.NORMAL_SPEED * delta, 0);
+					
+		} else if(Math.abs(distX) > Math.abs(distY)) {
+			// move horizontally
+			if(distX > 0) {
+				// move east
+				creep.move(Constants.NORMAL_SPEED * delta, 0);
+					
+			} else if(distX < 0) {
+				// move west
+				creep.move(-Constants.NORMAL_SPEED * delta, 0);
+			}
+				
+		} else if(Math.abs(distX) < Math.abs(distY)) {
+			// move vertically
+			if(distY > 0) {
+				// move north
+				creep.move(0, Constants.NORMAL_SPEED * delta);
+					
+			} else if(distY < 0) {
+				// move south
+				creep.move(0, -Constants.NORMAL_SPEED * delta);
+			}
 		}
 	}	// followMainChar(GameChar, float, float)'s end
 
@@ -468,6 +487,34 @@ public class Council {
 			creep.move(0, -Constants.NORMAL_SPEED * delta);			
 		}
 	}	// followMainCharX(GameChar, float, int)'s end
+	
+	private void followY(GameChar creep, float distY, int dirX, float delta) {
+		// follow the mainChar horizontally
+		// and keep moving towards dirY(either N or S)
+	
+		if(dirX != Constants.DIR_E
+			&& dirX != Constants.DIR_W) {
+			Gdx.app.log(TAG, "ERROR: invalid argument in method followMainCharY()");
+			Gdx.app.exit();
+		}
+
+		// move vertically towards the mainChar
+		// and also keep moving east/west
+		if(distY > 0) {
+			// move north
+			creep.move(0, Constants.NORMAL_SPEED * delta);
+
+		} else if(distY < 0) {
+			// move south
+			creep.move(0, -Constants.NORMAL_SPEED * delta);
+		}
+
+		if(dirX == Constants.DIR_E) {
+			creep.move(Constants.NORMAL_SPEED * delta, 0);
+		} else {
+			creep.move(-Constants.NORMAL_SPEED * delta, 0);
+		}
+	}	// followMainCharY(GameChar, float, int)'s end
 
 	private void avoid(GameChar creep, float distX, float distY, float delta) {
 		// move the creep away from mainChar

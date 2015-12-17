@@ -45,7 +45,7 @@ public class GameMap {
 		justChanged = false;
 	}	// new(int)'s end
 
-	private float getMiddle(int coor, float length) {
+	public static float getMiddle(int coor, float length) {
 		// return the middle of a line 
 
 		return (coor * length) + (length / 2);

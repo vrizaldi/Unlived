@@ -73,9 +73,9 @@ public class Navigator {
 				int x = (int)(c.x / Constants.ROOM_WIDTH); 
 				int y = (int)(c.y / Constants.ROOM_HEIGHT);
 				c.cRoom = data.map.visit(c, x, y);
-				if(c.getID() == Constants.CHAR_MAIN) {
+		/*		if(c.getID() == Constants.CHAR_MAIN) {
 					Gdx.app.debug(TAG, "mainChar is in " + x + ", " + y);
-				}
+				} */
 			}
 
 			// collision with portal

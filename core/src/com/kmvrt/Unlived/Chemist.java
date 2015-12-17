@@ -21,12 +21,12 @@ public class Chemist {
 
 
 // create or dispose current game ----------------------------------------------------------------------------
-	public void initNewGame() {}
+	public void initNewGame() {
+		data.magics.clear();
+	}
 	
 	public void disposeGame() {
 		// dispose the current game data
-		
-		data.magics.clear();
 	} // disposeGame()'s end
 	
 	
