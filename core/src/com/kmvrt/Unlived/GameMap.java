@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 
 public class GameMap {
 	// represent a map in-game
+	
+	private static final String TAG = GameMap.class.getName();
 
 	private int typeID;
 
@@ -32,12 +34,16 @@ public class GameMap {
 				if(rooms[x][y] != null 
 						&& rooms[x][y].getTypeID() == Constants.ROOM_SPAWN) {
 					Gdx.app.debug("GameMap", "Spawn in " + x + ", " + y);
-					spawnPosX = getMiddle(x, Constants.ROOM_WIDTH);
-					spawnPosY = getMiddle(y, Constants.ROOM_HEIGHT);
+					spawnPosX = getMiddle(x, Constants.ROOM_WIDTH,
+							Constants.ROOMS_INTERVAL);
+					spawnPosY = getMiddle(y, Constants.ROOM_HEIGHT,
+							Constants.ROOMS_INTERVAL);
 
-					portalPosX = getMiddle(x, Constants.ROOM_WIDTH) 
+					portalPosX = getMiddle(x, Constants.ROOM_WIDTH,
+							Constants.ROOMS_INTERVAL) 
 						- (Constants.PORTAL_WIDTH / 2);
-					portalPosY = getMiddle(y, Constants.ROOM_HEIGHT) 
+					portalPosY = getMiddle(y, Constants.ROOM_HEIGHT,
+							Constants.ROOMS_INTERVAL) 
 						- (Constants.PORTAL_HEIGHT / 2);
 				} 
 			}
@@ -45,10 +51,10 @@ public class GameMap {
 		justChanged = false;
 	}	// new(int)'s end
 
-	public static float getMiddle(int coor, float length) {
+	public static float getMiddle(int coor, float length, float add) {
 		// return the middle of a line 
 
-		return (coor * length) + (length / 2);
+		return (coor * length + (coor * add)) + (length / 2);
 	}
 
 
@@ -82,15 +88,15 @@ public class GameMap {
 	public static float getDoorPosX(float roomX, int dir) {
 		
 		if(dir == Constants.DIR_N || dir == Constants.DIR_S) {
-			return roomX + ((Constants.ROOM_WIDTH - Assets.doorHSprite.getWidth()) / 2);
+			return (roomX + ((Constants.ROOM_WIDTH - Assets.doorHSprite.getWidth()) / 2));
 			
 		} else if(dir == Constants.DIR_E) {
-			return roomX + Constants.ROOM_WIDTH - Assets.doorVSprite.getWidth();
+			return roomX + Constants.ROOM_WIDTH - (float)1/16;
 	
 		} else if(dir == Constants.DIR_W) {
-			return roomX;
+			return roomX - Assets.doorVSprite.getWidth() + (float)1/16;
 			
-		} else {
+		} else {	// invalid
 			return 0;
 		}
 	}
@@ -98,13 +104,14 @@ public class GameMap {
 	public static float getDoorPosY(float roomY, int dir) {
 				
 		if(dir == Constants.DIR_N) {
-			return roomY + Constants.ROOM_HEIGHT - Assets.doorHSprite.getHeight();
+			return roomY + Constants.ROOM_HEIGHT - (float)1/16;
 			
 		} else if(dir == Constants.DIR_S) {
-			return roomY;
+			return roomY - Assets.doorHSprite.getHeight() + (float)1/16;
 			
 		} else if(dir == Constants.DIR_E || dir == Constants.DIR_W) {
-			return roomY + ((Constants.ROOM_HEIGHT - Assets.doorVSprite.getHeight()) / 2);
+			return roomY + ((Constants.ROOM_HEIGHT 
+					- Assets.doorVSprite.getHeight()) / 2);
 			
 		} else {
 			return 0;
@@ -127,7 +134,18 @@ public class GameMap {
 		// return the specified room
 		
 		justChanged = true;
-		rooms[roomX][roomY].visit(c);
+		try {
+			rooms[roomX][roomY].visit(c);
+		} catch(NullPointerException e) {
+			Gdx.app.debug(TAG, "Trying to visit undefined room");
+		}
+/*		if(c.getID() == Constants.CHAR_MAIN) {
+			Gdx.app.debug(TAG, "c = mainchar (" + c.x + ", " + c.y + ") : " +
+					"(" + roomX + ", " + roomY + ")");
+		} else {
+			Gdx.app.debug(TAG, "c = creep (" + c.x + ", " + c.y + ") : " +
+					"(" + roomX + ", " + roomY + ")");
+		}*/
 		
 		return rooms[roomX][roomY];
 	}

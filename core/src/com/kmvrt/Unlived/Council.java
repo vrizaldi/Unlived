@@ -110,7 +110,7 @@ public class Council {
 			shoot(mainChar, Constants.DIR_W);
 
 		} else if(Gdx.input.isKeyJustPressed(Keys.SPACE)) {
-			// body switching 
+			// body switch
 			GameChar creep = closestCreep();
 			if(creep != null) {
 				data.setMainChar(creep);
@@ -240,8 +240,10 @@ public class Council {
 			int r = (int)(Math.random() * MagicFactory.totalSpells());
 			GameChar creep = new GameChar(MagicFactory.getSpellName(r));
 			GameMap.Room room = data.map.getRandRoom();
-			creep.x = room.getX() * Constants.ROOM_WIDTH + 1;
-			creep.y = room.getY() * Constants.ROOM_HEIGHT + 1;
+			creep.x = (room.getX() * Constants.ROOM_WIDTH) 
+					+ (room.getX() * Constants.ROOMS_INTERVAL)+ 1;
+			creep.y = (room.getY() * Constants.ROOM_HEIGHT)
+					+ (room.getY() * Constants.ROOMS_INTERVAL) + 1;
 				// put it anywhere in the room;
 			creep.updateSafePos();
 			data.chars.add(creep);
@@ -386,11 +388,13 @@ public class Council {
 			roomX -= 1;
 		}
 		float nRoomX = 
-				GameMap.getMiddle(roomX, Constants.ROOM_WIDTH) 
+				GameMap.getMiddle(roomX, Constants.ROOM_WIDTH, 
+						Constants.ROOMS_INTERVAL) 
 				- Constants.CHAR_WIDTH / 2;
 		float nRoomY = 
-				GameMap.getMiddle(roomY, Constants.ROOM_HEIGHT)
-				- (Constants.CHAR_HEIGHT / 2 + Constants.SHADOW_OFFSET_Y);
+				GameMap.getMiddle(roomY, Constants.ROOM_HEIGHT,
+						Constants.ROOMS_INTERVAL)
+				- (Constants.CHAR_HEIGHT / 2);
 
 		// aim to make the creep go pass through the door
 		float distX = nRoomX - creep.x;

@@ -6,15 +6,6 @@ public class Constants {
 	// game state IDs
 	public static final int STATE_ARENA = 202;
 
-	// sprites movement speed
-	public static final int NORMAL_SPEED = 20;
-		// default moving speed per second
-	public static final int FRICTION = 10;
-		// force decrease every second
-	
-	public static final int MAGIC_SPEED = 60;
-	public static final int MAGIC_MAX_DISTANCE = 10;
-
 	public static final float ANIMATION_CHAR_DURATION = 0.1f;	// in sec
 	public static final float ANIMATION_SHADOW_DURATION = 0.5f;
 	
@@ -25,18 +16,29 @@ public class Constants {
 	public static final int DIR_S = 4;
 
 	// size of things in world unit
-	public static final int CAM_WIDTH = 40;
-	public static final int CAM_HEIGHT = 30;
-	public static final int ROOM_WIDTH = 20;
-	public static final int ROOM_HEIGHT = 20;
-	public static final int CHAR_WIDTH = 2;
-	public static final int CHAR_HEIGHT = 3;
-	public static final int SHADOW_WIDTH = 2;
-	public static final int SHADOW_HEIGHT = 1;
-	public static final int SHADOW_OFFSET_Y = -1;
-	public static final int PORTAL_WIDTH = 2;
-	public static final int PORTAL_HEIGHT = 2;
-
+	// 1 unit = 16 px
+	public static final int CAM_WIDTH = 800;
+	public static final int CAM_HEIGHT = 600;
+	public static final int ROOM_WIDTH = 400;
+	public static final int ROOM_HEIGHT = 400;
+	public static final int ROOMS_INTERVAL = 60;
+	public static final int CHAR_WIDTH = 40;
+	public static final int CHAR_HEIGHT = 60;
+//	public static final int SHADOW_WIDTH = 2;
+//	public static final int SHADOW_HEIGHT = 1;
+//	public static final int SHADOW_OFFSET_Y = -1;
+	public static final int PORTAL_WIDTH = 40;
+	public static final int PORTAL_HEIGHT = 40;
+	public static final int NORMAL_SPEED = 400;
+		// default moving speed per second
+	public static final int MAGIC_SPEED = 1000;
+	public static final int MAGIC_MAX_DISTANCE = 200;
+	public static final int DOOR_OFFSET = 20;
+	// safe distance between creep and mainChar
+	public static final int SAFE_DIST_X = 200;
+	public static final int SAFE_DIST_Y = 200;
+		
+	
 	// map 
 	public static final int MAP_NORMAL = 148;
 	public static final int CHARS_MIN = 4;
@@ -51,10 +53,6 @@ public class Constants {
 	public static final int CHAR_CREEP_FOLLOW_S = 101;
 	public static final int CHAR_CREEP_AVOID = 103;
 //	public static final int CHAR_CREEP_INACTIVE = 103;
-
-	// safe distance between creep and mainChar
-	public static final int SAFE_DIST_X = 10;
-	public static final int SAFE_DIST_Y = 10;
 
 	// intervals between things happening
 	public static final float CREEPS_CHANGE_INTERVAL = 1f;	// in second

@@ -1,0 +1,13 @@
+spell
+	burst 1
+	burstinterval 0
+	interval 1
+
+	cast
+		mana -5
+	castend
+	
+	hit
+		mana -20
+	hitend
+spellend

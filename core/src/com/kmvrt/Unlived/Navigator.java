@@ -70,12 +70,13 @@ public class Navigator {
 
 			// room check 
 			if(checkRoom) {
-				int x = (int)(c.x / Constants.ROOM_WIDTH); 
-				int y = (int)(c.y / Constants.ROOM_HEIGHT);
+				int x = (int)(c.x / 
+					(Constants.ROOM_WIDTH + 
+					Constants.ROOMS_INTERVAL));	// the gaps between rooms
+				int y = (int)(c.y / 
+					(Constants.ROOM_HEIGHT + 
+					Constants.ROOMS_INTERVAL));
 				c.cRoom = data.map.visit(c, x, y);
-		/*		if(c.getID() == Constants.CHAR_MAIN) {
-					Gdx.app.debug(TAG, "mainChar is in " + x + ", " + y);
-				} */
 			}
 
 			// collision with portal
@@ -99,17 +100,21 @@ public class Navigator {
 						Gdx.app.log(TAG, "Deploying new rooms...");
 						data.map = deployMap();
 						
-						// remove the mainchar to the spawn point
+						// repos. the mainchar to the spawn point
 						data.getMainChar().x = data.map.getSpawnPosX() - (Constants.CHAR_WIDTH / 2);
 						data.getMainChar().y = data.map.getSpawnPosY() - (Constants.CHAR_HEIGHT / 2);
-						int x = (int)(c.x / Constants.ROOM_WIDTH); 
-						int y = (int)(c.y / Constants.ROOM_HEIGHT);
+						int x = (int)(c.x / 
+								(Constants.ROOM_WIDTH + 
+								(Constants.ROOMS_INTERVAL / 2))); 
+						int y = (int)(c.y / 
+								(Constants.ROOM_HEIGHT + 
+								(Constants.ROOMS_INTERVAL / 2)));
 						data.getMainChar().cRoom = data.map.visit(c, x, y);
 						
 						data.newMap = true;
-					}
-				}
-			}
+					}	// if intersect's 
+				} 
+			} 
 		}	// char iter's
 	}	// update()'s end
 
@@ -141,7 +146,7 @@ public class Navigator {
 			map[x][y] = new GameMap.Room(typeID, x, y);
 			
 		} else {
-			Gdx.app.debug(TAG, "Attempted to reinit a room");
+//			Gdx.app.debug(TAG, "Attempted to reinit a room");
 			return;
 		}
 		GameMap.Room r = map[x][y];
@@ -248,7 +253,7 @@ public class Navigator {
 			}	// switch(dir)'s
 			moreDoor--;
 		}	// while(times)'s
-		Gdx.app.debug(TAG, "Adding doors finished");
+//		Gdx.app.debug(TAG, "Adding doors finished");
 		
 		if(!r.south && !r.north && !r.east && !r.west
 				/*(crNorth || crSouth || crEast || crWest)*/) {

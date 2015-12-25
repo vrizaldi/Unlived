@@ -51,8 +51,17 @@ public class Chemist {
 			}
 			
 			// check its current room
-			int roomX = (int)(m.x / Constants.ROOM_WIDTH);
-			m.cRoom = data.map.visit(m.getSrc(), roomX, m.cRoom.getY());
+			try {
+				int roomX = (int)(m.x / 
+						(Constants.ROOM_WIDTH + 
+						Constants.ROOMS_INTERVAL));
+				m.cRoom = data.map.getRoom(roomX, m.cRoom.getY());
+			} catch(ArrayIndexOutOfBoundsException e) {
+				// the magic is out of the room
+				iter.remove();
+			} catch(NullPointerException e) {
+				iter.remove();
+			}
 		} // magic collection iteration's end
 
 		// update chars affected by magic 

@@ -62,7 +62,7 @@ public class Painter {
 		updateCam();
 
 		// clear the canvas
-		Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1); // grey
+		Gdx.gl.glClearColor(0, 0, 0, 1); // black
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		cacheBatch.setProjectionMatrix(cam.combined);
@@ -82,19 +82,27 @@ public class Painter {
 		}
 
 		// draw chars **************
-		for(GameChar c : data.chars) {
-			// draw the shadow
-			if(!c.cRoom.isVisited()) {
-				continue;
+		for(GameChar c : data.chars) {		
+			
+/*			// draw the shadow
+			Assets.shadowSprite.setPosition(c.x, c.y + Constants.SHADOW_OFFSET_Y);
+			Assets.shadowSprite.draw(batch); */
+			
+			Sprite cSprite = Assets.charSprites.get(c.getName());
+			cSprite.setPosition(c.x, c.y);
+			if(c.getDir() == Constants.DIR_W) {
+				cSprite.draw(batch);
+			} else {
+				cSprite.flip(true, false);
+				cSprite.draw(batch);
+				cSprite.flip(true, false);
 			}
 			
-			Assets.shadowSprite.setPosition(c.x, c.y + Constants.SHADOW_OFFSET_Y);
-			Assets.shadowSprite.draw(batch);
-			
-			char dir = c.getDir() == Constants.DIR_E ? 'E' : 'W';
-			Sprite cSprite = Assets.charSprites.get(c.getName() + dir);
-			cSprite.setPosition(c.x, c.y);
-			cSprite.draw(batch);
+			// render the mana percentage
+			texts.setText(Assets.font, String.format("%.2f", c.atts.getMana()));
+			Assets.font.draw(batch, texts, 
+					(c.x + ((Constants.CHAR_WIDTH - texts.width) / 2)),
+					c.y + Constants.CHAR_HEIGHT + 10);
 		}
 
 		// draw magics *************
@@ -121,8 +129,8 @@ public class Painter {
 		texts.setText(Assets.font, "Mana: " 
 				+ String.format("%.2f", data.getMainChar().atts.getMana()));
 		Assets.font.draw(batch, texts, 0,
-				ui.viewportHeight - texts.height - 0.5f);
-
+				ui.viewportHeight - texts.height - 0.5f);		
+		
 		batch.end();
 	}
 
@@ -157,22 +165,24 @@ public class Painter {
 					continue;
 				}
 				
-				float roomX = x * Constants.ROOM_WIDTH;
-				float roomY = y * Constants.ROOM_HEIGHT;
+				float roomX = (x * Constants.ROOM_WIDTH) 
+						+ (x * Constants.ROOMS_INTERVAL);
+				float roomY = (y * Constants.ROOM_HEIGHT) 
+						+ (y * Constants.ROOMS_INTERVAL);
 				Assets.roomSprite.setPosition(roomX, roomY);
 				cacheBatch.add(Assets.roomSprite);
 				
 				if(cRoom.east) {
 					// create door in the east wall
 					Assets.doorVSprite.setPosition(
-						GameMap.getDoorPosX(roomX, Constants.DIR_E), 
+						GameMap.getDoorPosX(roomX, Constants.DIR_E) - 2, 
 						GameMap.getDoorPosY(roomY, Constants.DIR_E));
 					cacheBatch.add(Assets.doorVSprite);
 				}
 				if(cRoom.west) {
 					// west wall
 					Assets.doorVSprite.setPosition(
-						GameMap.getDoorPosX(roomX, Constants.DIR_W), 
+						GameMap.getDoorPosX(roomX, Constants.DIR_W) + 2, 
 						GameMap.getDoorPosY(roomY, Constants.DIR_W));
 					cacheBatch.add(Assets.doorVSprite);
 				}
@@ -180,14 +190,14 @@ public class Painter {
 					// north wall
 					Assets.doorHSprite.setPosition(
 							GameMap.getDoorPosX(roomX, Constants.DIR_N),
-							GameMap.getDoorPosY(roomY, Constants.DIR_N));
+							GameMap.getDoorPosY(roomY, Constants.DIR_N) - 2);
 					cacheBatch.add(Assets.doorHSprite);
 				}
 				if(cRoom.south) {
 					// south wall
 					Assets.doorHSprite.setPosition(
 							GameMap.getDoorPosX(roomX, Constants.DIR_S),
-							GameMap.getDoorPosY(roomY, Constants.DIR_S));
+							GameMap.getDoorPosY(roomY, Constants.DIR_S) + 2);
 					cacheBatch.add(Assets.doorHSprite);
 
 				}

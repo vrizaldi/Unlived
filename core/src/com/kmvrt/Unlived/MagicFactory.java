@@ -268,7 +268,7 @@ public class MagicFactory {
 		String[] spellList = {"tiny", "med", "heavy"};
 		for(String spellName : spellList) {
 			files.add(Gdx.files.internal(
-					"magic/data/" + spellName + ".spell"));
+					"data/magic/data/" + spellName + ".spell"));
 		}
 
 		FileHandle[] spellFiles = new FileHandle[files.size()];
