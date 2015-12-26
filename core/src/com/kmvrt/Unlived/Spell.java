@@ -43,6 +43,7 @@ public class Spell {
 	
 // initialisation --------------------------------------------------------------------------------------------
 	public void initAtts(GameChar.Attributes hit, GameChar.Attributes cast) {
+		// init the attributes of the magic
 		
 		if(!attsInitialised) {
 			attsInitialised = true;
@@ -53,6 +54,7 @@ public class Spell {
 	}
 	
 	public void initProps(int burst, float burstInterval, float interval) {
+		// initiate the properties of the magic
 		
 		if(!propsInitialised) {
 			propsInitialised = true;

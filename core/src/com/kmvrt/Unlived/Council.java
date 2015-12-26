@@ -59,7 +59,7 @@ public class Council {
 	public void initNewGame() {
 		// create objects for a new game
 		
-		GameChar mainChar = new GameChar("tiny");
+		GameChar mainChar = new GameChar("med");
 		if(data.getStateID() == Constants.STATE_ARENA) {
 			// put it in the middle of the room
 			mainChar.x = data.map.getSpawnPosX() - (Constants.CHAR_WIDTH / 2); 
@@ -160,14 +160,6 @@ public class Council {
 			magic = MagicFactory.cast(c.getName(), charX, 
 				charY, Constants.DIR_W, c);
 			data.magics.add(magic);
-		}
-		
-		// decrease the mana if c is mainChar
-		if(c == data.getMainChar()) {
-			GameChar.Attributes cast = magic.getSpell().cast;
-			c.atts.applyMana(cast.getMana());
-			c.atts.applyAccel(cast.getAccel());
-			c.atts.applyForce(cast.getForce());
 		}
 		
 		c.shoot(true);

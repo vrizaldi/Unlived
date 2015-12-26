@@ -1,13 +1,14 @@
 spell
-	burst 2
+	burst 3
 	burstinterval 0.2
 	interval 2
 
 	cast
-		mana -5
+		mana -3.5
+		force -2
 	castend
 
 	hit
-		mana -12
+		mana -15
 	hitend
 spellend

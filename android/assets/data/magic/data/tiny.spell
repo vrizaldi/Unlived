@@ -8,6 +8,6 @@ spell
 	castend
 	
 	hit
-		mana -20
+		mana -10
 	hitend
 spellend

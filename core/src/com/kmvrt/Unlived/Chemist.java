@@ -9,7 +9,7 @@ import com.badlogic.gdx.Gdx;
 public class Chemist {
 	// update the magics and chars that got hit by magic
 	
-	private static final String TAG = Chemist.class.getName();
+//	private static final String TAG = Chemist.class.getName();
 
 	private StateData data;
 
@@ -20,7 +20,7 @@ public class Chemist {
 	}	// new's end
 
 
-// create or dispose current game ----------------------------------------------------------------------------
+// create or dispose current game ------// decrease the mana if c is mainChar----------------------------------------------------------------------
 	public void initNewGame() {
 		data.magics.clear();
 	}
@@ -66,18 +66,11 @@ public class Chemist {
 
 		// update chars affected by magic 
 		for(GameChar c : data.chars) {
-			if(c.isAffected()) {
-				// apply the spell to c ********************************************
-				Spell spell = c.getSpellAffecting();
-				if(spell == null) Gdx.app.log(TAG, "spell = null");
-				c.atts.applyMana(spell.hit.getMana() * 10 *delta);
-				c.atts.applyAccel(spell.hit.getAccel() * 10 * delta);
-				c.atts.applyForce(spell.hit.getForce() * 10 * delta);
-			}
+			// update the attributes
 			
-			// bursting shots
 			if(c.isBursting()) {
 				// shoot
+//				Gdx.app.log(TAG, "Bursting");
 				float charX = c.x;
 				float charY = c.y;
 				int dir = c.getDir();
@@ -85,19 +78,53 @@ public class Chemist {
 				Magic magic = null;
 				if(dir == Constants.DIR_E) {
 					// deploy it in the east of the mainChar
-					magic = MagicFactory.cast("Attack", charX + Constants.CHAR_WIDTH, 
+					magic = MagicFactory.cast(c.getName(), charX + Constants.CHAR_WIDTH, 
 						charY, Constants.DIR_E, c);
 					data.magics.add(magic);
 			
 				} else if(dir == Constants.DIR_W) {
 					// deploy it in the west of the mainChar
-					magic = MagicFactory.cast("Attack", charX - Constants.CHAR_WIDTH, 
+					magic = MagicFactory.cast(c.getName(), charX - Constants.CHAR_WIDTH, 
 						charY, Constants.DIR_W, c);
 					data.magics.add(magic);
 				}
 				
 				c.shoot(false);
 			}
+			
+			// apply the attributes
+			if(c.affectingTime <= 0) {
+				continue;
+			}
+/*			if(c.getID() == Constants.CHAR_MAIN) {
+				Gdx.app.log(TAG, "affectors");
+				Gdx.app.log(TAG, "\tmana = " + c.affectors.getMana());
+				Gdx.app.log(TAG, "\taccel = " + c.affectors.getAccel());
+				Gdx.app.log(TAG, "\tforce = " + c.affectors.getForce());
+				Gdx.app.log(TAG, "atts");
+				Gdx.app.log(TAG, "\tmana = " + c.atts.getMana());
+				Gdx.app.log(TAG, "\taccel = " + c.atts.getAccel());
+				Gdx.app.log(TAG, "\tforce = " + c.atts.getForce() + "\n");
+			}*/
+			
+			float d = delta / c.affectingTime;
+			c.affectingTime -= delta;
+			
+			c.atts.applyMana(c.affectors.getMana() * d);
+			c.affectors.applyMana(-c.affectors.getMana() * d);
+			
+			
+			c.atts.applyForce(c.affectors.getForce() * d);
+			c.affectors.applyForce(-c.affectors.getForce() * d);
+			
+			c.atts.applyAccel(c.affectors.getAccel() * d);
+			c.affectors.applyAccel(-c.affectors.getAccel() * d);
+			
+/*			if(c == data.getMainChar()) {
+				Gdx.app.debug(TAG, "Check if bursting");
+			}*/
+			// bursting shots
+			
 		}	// c's iterator	
 	} // update's end
 

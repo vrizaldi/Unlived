@@ -11,6 +11,8 @@ public class Arena implements Screen {
 
 	// logging tag
 	private static final String TAG = Arena.class.getName();
+	
+	public static final int UNIT_CONV = 20;
 
 	private boolean paused; // wether the game is paused
 	

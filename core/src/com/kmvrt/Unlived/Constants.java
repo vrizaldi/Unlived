@@ -8,6 +8,7 @@ public class Constants {
 
 	public static final float ANIMATION_CHAR_DURATION = 0.1f;	// in sec
 	public static final float ANIMATION_SHADOW_DURATION = 0.5f;
+	public static final float INIT_AFFECTING_TIME = 0.1f;
 	
 	// sprites moving and facing directions
 	public static final int DIR_W = 1;	// west
@@ -17,30 +18,30 @@ public class Constants {
 
 	// size of things in world unit
 	// 1 unit = 16 px
-	public static final int CAM_WIDTH = 800;
-	public static final int CAM_HEIGHT = 600;
-	public static final int ROOM_WIDTH = 400;
-	public static final int ROOM_HEIGHT = 400;
-	public static final int ROOMS_INTERVAL = 60;
-	public static final int CHAR_WIDTH = 40;
-	public static final int CHAR_HEIGHT = 60;
+	public static final int CAM_WIDTH = 40 * Arena.UNIT_CONV;
+	public static final int CAM_HEIGHT = 30 * Arena.UNIT_CONV;
+	public static final int ROOM_WIDTH = 20 * Arena.UNIT_CONV;
+	public static final int ROOM_HEIGHT = 20 * Arena.UNIT_CONV;
+	public static final int ROOMS_INTERVAL = 3 * Arena.UNIT_CONV;
+	public static final int CHAR_WIDTH = 2 * Arena.UNIT_CONV;
+	public static final int CHAR_HEIGHT = 3 * Arena.UNIT_CONV;
 //	public static final int SHADOW_WIDTH = 2;
 //	public static final int SHADOW_HEIGHT = 1;
 //	public static final int SHADOW_OFFSET_Y = -1;
-	public static final int PORTAL_WIDTH = 40;
-	public static final int PORTAL_HEIGHT = 40;
-	public static final int NORMAL_SPEED = 400;
+	public static final int PORTAL_WIDTH = 2 * Arena.UNIT_CONV;
+	public static final int PORTAL_HEIGHT = 2 * Arena.UNIT_CONV;
+	public static final int NORMAL_SPEED = 20 * Arena.UNIT_CONV;
 		// default moving speed per second
-	public static final int MAGIC_SPEED = 1000;
-	public static final int MAGIC_MAX_DISTANCE = 200;
-	public static final int DOOR_OFFSET = 20;
+	public static final int MAGIC_SPEED = 50 * Arena.UNIT_CONV;
+	public static final int MAGIC_MAX_DISTANCE = 10 * Arena.UNIT_CONV;
+	public static final int DOOR_OFFSET = 1 * Arena.UNIT_CONV;
 	// safe distance between creep and mainChar
-	public static final int SAFE_DIST_X = 200;
-	public static final int SAFE_DIST_Y = 200;
-		
+	public static final int SAFE_DIST_X = 10 * Arena.UNIT_CONV;
+	public static final int SAFE_DIST_Y = 10 * Arena.UNIT_CONV;
 	
 	// map 
 	public static final int MAP_NORMAL = 148;
+		// ID
 	public static final int CHARS_MIN = 4;
 	public static final int CHARS_MAX = 7;
 		// total of the normal room types

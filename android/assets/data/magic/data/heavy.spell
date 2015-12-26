@@ -1,10 +1,11 @@
 spell
 	burst 1
 	burstinterval 0
-	interval 6
+	interval 5
 
 	cast
 		mana -10
+		force -5
 	castend
 
 	hit

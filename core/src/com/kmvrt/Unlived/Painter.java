@@ -99,10 +99,12 @@ public class Painter {
 			}
 			
 			// render the mana percentage
-			texts.setText(Assets.font, String.format("%.2f", c.atts.getMana()));
-			Assets.font.draw(batch, texts, 
-					(c.x + ((Constants.CHAR_WIDTH - texts.width) / 2)),
-					c.y + Constants.CHAR_HEIGHT + 10);
+			if(c.cRoom.isVisited()) {
+				texts.setText(Assets.font, String.format("%.2f", c.atts.getMana()));
+				Assets.font.draw(batch, texts, 
+						(c.x + ((Constants.CHAR_WIDTH - texts.width) / 2)),
+						c.y + Constants.CHAR_HEIGHT + 10);
+			}
 		}
 
 		// draw magics *************

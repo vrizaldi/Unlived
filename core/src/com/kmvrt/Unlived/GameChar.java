@@ -21,8 +21,9 @@ public class GameChar {
 	private float nX;
 	private float nY;
 
-	private Spell spellAffecting;
-		// spell that affects the char
+	public Attributes affectors;
+		// applied attributes
+	public float affectingTime;
 	public Attributes atts;
 		// store the attribute. e.g. mana, accel, force, etc.
 	
@@ -34,7 +35,7 @@ public class GameChar {
 	private Spell spell;
 	private boolean bursting;
 	private boolean ableToShoot;
-
+	
 	public GameMap.Room cRoom;
 
 
@@ -53,6 +54,7 @@ public class GameChar {
 		nY = 0;
 		
 //		fainted = false;
+		affectingTime = 0;
 
 		dir = Constants.DIR_E;
 		
@@ -60,8 +62,8 @@ public class GameChar {
 		bursting = false;
 		ableToShoot = true;
 
-		atts = new Attributes(this);
-		spellAffecting = null;
+		atts = new Attributes(true);
+		affectors = new Attributes(false);
 		
 		wandering = false;
 	}	// new()'s end
@@ -82,6 +84,7 @@ public class GameChar {
 
 		nX = 0;
 		nY = 0;
+		atts.resetAtts();
 	}	// moved()'s
 
 	public float getNextX() {
@@ -158,38 +161,32 @@ public class GameChar {
 	
 	
 // interaction with magic --------------------------------------------------------------------------------------------------	
-	public boolean isAffected() {
-		// return whether the char is affected by a spell
-
-		if(spellAffecting == null) {
-			return false;
-		} else {
-			return true;
-		}
-	} // isAffected()'s end
-
 	public void affectedBy(Magic m) {
 		// flag that this char is affected by the given spell
+		
+		if(ID == Constants.CHAR_MAIN) {
+			Gdx.app.debug(TAG, "Has just been shot");
+		}
 
-		spellAffecting = m.getSpell();
-		Timer.schedule(
-			new Timer.Task() {
-				
-				@Override
-				public void run() {
-					spellAffecting = null;
-				}
-			}, 0.1f);
+		affectingTime = Constants.INIT_AFFECTING_TIME;
+		Spell spell = m.getSpell();
+		affectors.applyMana(spell.hit.getMana());
+		if(m.getDir() == Constants.DIR_E) {
+			affectors.applyForce(-spell.hit.getForce());
+		} else {	// m.dir == DIR_W
+			affectors.applyForce(spell.hit.getForce());
+		}
+		affectors.applyAccel(spell.hit.getAccel());
 	}	// affectedBy(Spell)'s end
-
-	public Spell getSpellAffecting() {
-		// return the spell affecting this char
-
-		return spellAffecting;
-	}	// getSpellAffecting()'s end
-
+	
 	public void shoot(boolean firstShot) {
 		// called when this char is shooting
+		
+		if(ID == Constants.CHAR_MAIN
+				&& !firstShot) {
+			Gdx.app.debug(TAG, "Has just shot bursting");
+			Gdx.app.debug(TAG, "burstInterval = " + spell.getBurstInterval());
+		}
 		
 		if(firstShot) {
 			// disable the char from shooting for awhile
@@ -210,6 +207,7 @@ public class GameChar {
 						@Override
 						public void run() {
 							bursting = true;
+							Gdx.app.log(TAG, "burstin = " + String.valueOf(bursting));
 						}
 					}, spell.getBurstInterval(),
 					spell.getBurstInterval(), spell.getBurst() - 2);
@@ -218,10 +216,21 @@ public class GameChar {
 		} else { // not the first shot
 			bursting = false;
 		}
+		
+		affectingTime = Constants.INIT_AFFECTING_TIME;
+		if(ID == Constants.CHAR_MAIN) {
+			affectors.applyMana(spell.cast.getMana());
+		}
+		if(this.getDir() == Constants.DIR_E) {
+			affectors.applyForce(spell.cast.getForce());
+		} else {	// m.dir == DIR_W
+			affectors.applyForce(-spell.cast.getForce());
+		}
+		affectors.applyAccel(spell.cast.getAccel());
 	}	// shoot(bool)'s end
 	
 	public boolean isBursting() {
-		
+
 		return bursting;
 	}
 	
@@ -234,6 +243,13 @@ public class GameChar {
 		
 		return spell.getName();
 	}
+	
+	public Spell getSpell() {
+		
+		return spell;
+	}
+	
+	
 
 // nested class ---------------------------------------------------------------------------------------------
 	public static class Attributes {
@@ -252,10 +268,10 @@ public class GameChar {
 			force = 0;
 		}
 		
-		public Attributes(Object holder) {
+		public Attributes(boolean chara) {
 
 			mana = 0;
-			if(holder instanceof GameChar) {
+			if(chara) {
 				// mana is inialised as 100 % if it's a character
 				mana = 99;
 			}
@@ -278,6 +294,12 @@ public class GameChar {
 		public void applyForce(float force) {
 		
 			this.force += force;
+		}
+		
+		public void resetAtts() {
+			
+			force = 0;
+			accel = 0;
 		}
 
 

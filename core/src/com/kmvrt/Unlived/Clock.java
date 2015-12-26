@@ -44,7 +44,7 @@ public class Clock {
 
 	private void moveParticles() {
 
-		float delta = Gdx.graphics.getDeltaTime();
+//		float delta = Gdx.graphics.getDeltaTime();
 		for(Iterator<GameChar> iter = data.chars.iterator(); iter.hasNext();) {
 			GameChar c = iter.next();
 			
@@ -62,8 +62,13 @@ public class Clock {
 			}
 
 			// move the chars
-			c.x += c.getNextX() + c.atts.getAccel() * delta;			
-			c.y += c.getNextY() + c.atts.getAccel() * delta;
+			if(c.atts.getForce() != 0) {
+				c.x += c.atts.getForce();
+				
+			} else {
+				c.x += c.getNextX() + c.atts.getAccel();
+			}
+			c.y += c.getNextY() + c.atts.getAccel();
 			c.moved();
 		}	// chars iterator's
 
