@@ -5,6 +5,7 @@ spell
 
 	cast
 		mana -5
+		force -1
 	castend
 	
 	hit

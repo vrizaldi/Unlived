@@ -59,7 +59,7 @@ public class Council {
 	public void initNewGame() {
 		// create objects for a new game
 		
-		GameChar mainChar = new GameChar("med");
+		GameChar mainChar = new GameChar("tiny");
 		if(data.getStateID() == Constants.STATE_ARENA) {
 			// put it in the middle of the room
 			mainChar.x = data.map.getSpawnPosX() - (Constants.CHAR_WIDTH / 2); 
