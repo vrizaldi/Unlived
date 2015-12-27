@@ -59,7 +59,7 @@ public class Council {
 	public void initNewGame() {
 		// create objects for a new game
 		
-		GameChar mainChar = new GameChar("tiny");
+		GameChar mainChar = new GameChar("heavy");
 		if(data.getStateID() == Constants.STATE_ARENA) {
 			// put it in the middle of the room
 			mainChar.x = data.map.getSpawnPosX() - (Constants.CHAR_WIDTH / 2); 
@@ -99,17 +99,17 @@ public class Council {
 		GameChar mainChar = data.getMainChar();
 
 		// acts
-		if(Gdx.input.isKeyJustPressed(Keys.D)) {
+		if(Gdx.input.isKeyPressed(Keys.D)) {
 			// cast in the east
 			mainChar.setDir(Constants.DIR_E);
 			shoot(mainChar, Constants.DIR_E);
 		
-		} else if(Gdx.input.isKeyJustPressed(Keys.S)) {
+		} else if(Gdx.input.isKeyPressed(Keys.S)) {
 			// cast in the west
 			mainChar.setDir(Constants.DIR_W);
 			shoot(mainChar, Constants.DIR_W);
 
-		} else if(Gdx.input.isKeyJustPressed(Keys.SPACE)) {
+		} else if(Gdx.input.isKeyJustPressed(Keys.A)) {
 			// body switch
 			GameChar creep = closestCreep();
 			if(creep != null) {
@@ -144,21 +144,22 @@ public class Council {
 		if(!c.isAbleToShoot()) { // still cocking
 			return;
 		}
-		
-		float charX = c.x;
-		float charY = c.y;
 
 		Magic magic = null;
 		if(dir == Constants.DIR_E) {
 			// deploy it in the east of the mainChar
-			magic = MagicFactory.cast(c.getName(), charX, 
-				charY, Constants.DIR_E, c);
+			magic = MagicFactory.cast(c.getName(),
+				c.x + (Constants.CHAR_WIDTH / 2), 
+				c.y + ((Constants.CHAR_HEIGHT - c.getSpell().getHeight()) / 2),
+				Constants.DIR_E, c);
 			data.magics.add(magic);
 	
 		} else if(dir == Constants.DIR_W) {
 			// deploy it in the west of the mainChar
-			magic = MagicFactory.cast(c.getName(), charX, 
-				charY, Constants.DIR_W, c);
+			magic = MagicFactory.cast(c.getName(), 
+					c.x + (Constants.CHAR_WIDTH / 2) - c.getSpell().getWidth() , 
+					c.y + ((Constants.CHAR_HEIGHT - c.getSpell().getHeight()) / 2),
+					Constants.DIR_W, c);
 			data.magics.add(magic);
 		}
 		
@@ -252,7 +253,8 @@ public class Council {
 		
 		for(GameChar creep : data.chars) {
 			if(creep.getID() != Constants.CHAR_MAIN) {
-				if(creep.cRoom != data.getMainChar().cRoom) {
+				if(creep.cRoom != data.getMainChar().cRoom
+						|| !creep.isAbleToShoot()) {
 //					Gdx.app.debug(TAG, "initing wander...");
 					creep.wandering = true;
 
@@ -320,7 +322,7 @@ public class Council {
 			GameChar creep = i.next();
 			
 			if(creep.getID() != Constants.CHAR_MAIN) {
-				// follow the mainChar
+				// locate the mainChar
 				float distX = mainChar.x - creep.x;
 				float distY = mainChar.y - creep.y;
 
@@ -332,13 +334,21 @@ public class Council {
 					creep.setDir(Constants.DIR_E);
 				}
 				
+				distX = mainChar.x - creep.x > 0 ?
+						mainChar.x - (creep.x + (Constants.CHAR_WIDTH / 2))
+							+ creep.getSpell().getWidth() // east
+						: 
+						(creep.x + (Constants.CHAR_WIDTH / 2))
+							- creep.getSpell().getWidth()
+							- mainChar.x + Constants.CHAR_WIDTH;	// west
+							
 				// keep it in safe distance
 				if(creep.cRoom == data.getMainChar().cRoom
-						&& Math.abs(distX) <= Constants.SAFE_DIST_X) {
+						&& Math.abs(distX) <= creep.getSpell().getTravelDist()) {
 					if(distX >= 0) {
-						distX -= Constants.SAFE_DIST_X;
+						distX -= creep.getSpell().getTravelDist();
 					} else {	// distX < 0
-						distX += Constants.SAFE_DIST_X;
+						distX += creep.getSpell().getTravelDist();
 					}
 					distY = 0;
 				} 
@@ -505,9 +515,16 @@ public class Council {
 				rec2.setPosition(0, creep.y);
 				rec2.setSize(Constants.CHAR_WIDTH, Constants.CAM_HEIGHT);
 
+				float distX = mainChar.x - creep.x > 0 ?
+						mainChar.x - (creep.x + (Constants.CHAR_WIDTH / 2))
+							+ creep.getSpell().getWidth() // east
+						: 
+						(creep.x + (Constants.CHAR_WIDTH / 2))
+							- creep.getSpell().getWidth()
+							- mainChar.x + Constants.CHAR_WIDTH;	// west
 				if(Intersector.intersectRectangles(rec1, rec2, inter)
-					&& Math.abs(
-					mainChar.x - creep.x) <= Constants.MAGIC_MAX_DISTANCE + 10) {
+						&& Math.abs(distX) <= creep.getSpell().getTravelDist()
+						&& inter.height > Constants.CHAR_HEIGHT * 0.1f) {
 					// if the mainChar is within the range of the creep shoot
 					shoot(creep, creep.getDir());
 				}

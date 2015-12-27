@@ -48,7 +48,7 @@ public class Clock {
 		for(Iterator<GameChar> iter = data.chars.iterator(); iter.hasNext();) {
 			GameChar c = iter.next();
 			
-			if(c.atts.getMana() < 0) {
+			if(c.atts.getMana() <= 0) {
 				if(c.getID() == Constants.CHAR_MAIN) {
 					// if the mainChar's mana is 0
 					data.die();
@@ -62,11 +62,9 @@ public class Clock {
 			}
 
 			// move the chars
+			c.x += c.getNextX() + c.atts.getAccel();
 			if(c.atts.getForce() != 0) {
-				c.x += c.atts.getForce();
-				
-			} else {
-				c.x += c.getNextX() + c.atts.getAccel();
+				c.x += c.atts.getForce();	
 			}
 			c.y += c.getNextY() + c.atts.getAccel();
 			c.moved();
@@ -75,14 +73,28 @@ public class Clock {
 		// move the magics
 		for(Iterator<Magic> iter = data.magics.iterator(); iter.hasNext();) {
 			Magic m = iter.next();
+			
+			if(m.fading) {
+				iter.remove();
+				continue;
+			}
 
+			float tM = m.totalMove() + Math.abs(m.getNextX());
+			if(tM >= m.getSpell().getTravelDist()) {
+				// if it passes the travel distance
+				if(m.getDir() == Constants.DIR_E) {  // east
+					m.move((m.getSpell().getTravelDist() - m.totalMove())
+						- m.getNextX());
+					
+				} else { // west
+					m.move((-m.getSpell().getTravelDist() + m.totalMove())
+							- m.getNextX()); 
+				}
+				m.fading = true;
+			}
 			m.x += m.getNextX();
 			m.moved();
 
-			if(m.totalMove() > Constants.MAGIC_MAX_DISTANCE) {
-				// if the magic has moved to far
-				iter.remove();
-			}
 		}	// magic iterator's 
 	}	// moveParticles()'s
 
@@ -150,27 +162,29 @@ public class Clock {
 			// magic to char
 			// set rec1 as m's rectangle
 			// take account of the distance travelled
-			float travelDist = Constants.MAGIC_SPEED * Gdx.graphics.getDeltaTime();
+			float travelDist = 
+					m.getSpell().getSpeed() * Gdx.graphics.getDeltaTime();
 			if(m.getDir() == Constants.DIR_E) {
 				rec1.setPosition(m.x - travelDist, m.y);
 			} else {	// m.dir == DIR_W
 				rec1.setPosition(m.x, m.y);
 			}
-			rec1.setSize(Constants.CHAR_WIDTH + travelDist, Constants.CHAR_HEIGHT);
+			rec1.setSize(m.getSpell().getWidth() + travelDist, 
+					m.getSpell().getHeight());
 			
-			// find the closest hit creep
+			// find the hit creep closest to the magic's origin
 			GameChar hitCreep = null;
 			float closestDist = 1000;
 			for(GameChar c : data.chars) {
 				if(areClose(m, c)) {
-					if(m.getSrc() != c) {
-						// can't hit its own caster
+					if(m.getSrc() != c) {	// can't hit its own caster						
 						rec2.setPosition(c.x, c.y);
 						rec2.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 						if(Intersector.intersectRectangles(rec1, rec2, inter)) {
 							float dist = 0;
 							if(m.getDir() == Constants.DIR_W) {
-								dist = (m.x + Constants.CHAR_WIDTH + travelDist) - c.x;
+								dist = 
+									(m.x + m.getSpell().getWidth() + travelDist) - c.x;
 							} else {	// m.getDir() == DIR_E
 								dist = c.x - (m.x - travelDist);
 							}
@@ -189,7 +203,7 @@ public class Clock {
 					+ (m.cRoom.getX() * Constants.ROOMS_INTERVAL);
 			float roomY = (m.cRoom.getY() * Constants.ROOM_HEIGHT)
 					+ (m.cRoom.getY() * Constants.ROOMS_INTERVAL);
-			if(m.x + Constants.CHAR_WIDTH > roomX + Constants.ROOM_WIDTH) {
+			if(m.x + m.getSpell().getWidth() > roomX + Constants.ROOM_WIDTH) {
 				// over to the east
 				if(hitWall(m, Constants.DIR_E)) {
 					iter.remove();
@@ -201,7 +215,7 @@ public class Clock {
 					iter.remove();
 				}
 				
-			} else if(m.y + Constants.CHAR_HEIGHT > roomY + Constants.ROOM_HEIGHT) {
+			} else if(m.y + m.getSpell().getHeight() > roomY + Constants.ROOM_HEIGHT) {
 				// over to the north
 				if(hitWall(m, Constants.DIR_N)) {
 					iter.remove();
@@ -382,13 +396,14 @@ public class Clock {
 		
 		// set rec1 as c's rectangle
 		// take account of the distance travelled
-		float travelDist = Constants.MAGIC_SPEED * Gdx.graphics.getDeltaTime();
+		float travelDist = 
+				m.getSpell().getSpeed() * Gdx.graphics.getDeltaTime();
 		if(m.getDir() == Constants.DIR_E) {
 			rec1.setPosition(m.x - travelDist, m.y);
 		} else { // m.dir == DIR_W
 			rec1.setPosition(m.x, m.y);
 		}
-		rec1.setSize(Constants.CHAR_WIDTH + travelDist, Constants.CHAR_HEIGHT);
+		rec1.setSize(m.getSpell().getWidth() + travelDist, m.getSpell().getHeight());
 		
 		// rec2 as door's rec
 		rec2.setPosition(doorX, doorY);
@@ -397,10 +412,10 @@ public class Clock {
 		if(Intersector.intersectRectangles(rec1, rec2, inter)) {
 			// if the char can fit in the door
 			if((dir == Constants.DIR_N || dir == Constants.DIR_S)
-					&& inter.width > Constants.CHAR_WIDTH) {
+					&& inter.width > m.getSpell().getWidth()) {
 				return false;
 				
-			} else if(inter.height >= Constants.CHAR_HEIGHT * 0.5f) {
+			} else if(inter.height >= m.getSpell().getHeight() * 0.5f) {
 				return false;
 			}
 		}
@@ -411,8 +426,8 @@ public class Clock {
 	private boolean areClose(Magic m, GameChar c) {
 		// return whether the magic and the char are close to each other
 
-		if(Math.abs(m.x - c.x) < Constants.CHAR_WIDTH * 2
-				&& Math.abs(m.y - c.y) < Constants.CHAR_HEIGHT * 2) {
+		if(Math.abs(m.x - c.x) < Constants.CHAR_WIDTH + m.getSpell().getWidth()
+				&& Math.abs(m.y - c.y) < Constants.CHAR_HEIGHT + m.getSpell().getHeight()) {
 			return true;
 
 		} else {

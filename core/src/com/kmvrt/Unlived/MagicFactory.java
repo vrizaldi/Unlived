@@ -33,15 +33,25 @@ public class MagicFactory {
 		keys = new ArrayList<String>();
 		
 		// constants for reading file ------------------
-		// attributes
+		// props
 		final String ARG_ATT_BURST = "burst";
 		final String ARG_ATT_BURST_INTERVAL = "burstinterval";
 		final String ARG_ATT_INTERVAL = "interval";
+		final String ARG_ATT_WIDTH = "width";
+		final String ARG_ATT_HEIGHT = "height";
+		final String ARG_ATT_SPEED = "speed";
+		final String ARG_ATT_TRAVEL_DIST = "traveldist";
+		
+		// atts
 		final String ARG_ATT_MANA = "mana";
 		final String ARG_ATT_ACCEL = "accel";
 		final String ARG_ATT_FORCE = "force";
 
 		// attribute IDs
+		final int ATT_TRAVEL_DIST = 198;
+		final int ATT_SPEED = 199;
+		final int ATT_HEIGHT = 200;
+		final int ATT_WIDTH = 201;
 		final int ATT_BURST = 202;
 		final int ATT_BURST_INTERVAL = 203;
 		final int ATT_INTERVAL = 204;
@@ -83,7 +93,10 @@ public class MagicFactory {
 				int burst = 1;
 				float burstInterval = 0;
 				float interval = 0.5f;
-
+				float width = 1; float height = 1;
+				float speed = 50;
+				float travelDist = 60;
+				
 				reader = new BufferedReader(new InputStreamReader(file.read()));
 				String line;
 				while((line = readNextLine(reader)) != null) {
@@ -184,12 +197,29 @@ public class MagicFactory {
 									attStatedID = ATT_INTERVAL;
 									attStated = true;
 									
-								// end init
+								} else if(arg.equals(ARG_ATT_WIDTH)) {
+									attStatedID = ATT_WIDTH;
+									attStated = true;
+									
+								} else if(arg.equals(ARG_ATT_HEIGHT)) {
+									attStatedID = ATT_HEIGHT;
+									attStated = true;		
+								
+								} else if(arg.equals(ARG_ATT_SPEED)) {
+									attStatedID = ATT_SPEED;
+									attStated = true;
+								
+								} else if(arg.equals(ARG_ATT_TRAVEL_DIST)) {
+									attStatedID = ATT_TRAVEL_DIST;
+									attStated = true;
+									
 								} else if(arg.equals(ARG_INIT_MAGIC_END)) {
 									// end initialisation
 									initMagic = false;
 									nSpell.initAtts(hit, cast);
-									nSpell.initProps(burst, burstInterval, interval);
+									nSpell.initProps(speed, travelDist, 
+											burst, burstInterval, 
+											interval, width, height);
 										// initialise a spell based on the file reading result
 									spellBook.put(file.nameWithoutExtension(), nSpell);
 										// and save it
@@ -217,7 +247,27 @@ public class MagicFactory {
 									interval = Float.parseFloat(arg);
 									Gdx.app.debug(TAG, "\t" + Float.parseFloat(arg) + " s between each cast");
 									break;
-
+									
+								case ATT_WIDTH:
+									width = Float.parseFloat(arg) * Arena.UNIT_CONV;
+									Gdx.app.debug(TAG, "\twidth = " + Float.parseFloat(arg));
+									break;
+									
+								case ATT_HEIGHT:
+									height = Float.parseFloat(arg) * Arena.UNIT_CONV;
+									Gdx.app.debug(TAG, "\theight = " + Float.parseFloat(arg));
+									break;
+									
+								case ATT_SPEED:
+									speed = Float.parseFloat(arg) * Arena.UNIT_CONV;
+									Gdx.app.debug(TAG, "\tspeed = " + Float.parseFloat(arg));
+									break;
+									
+								case ATT_TRAVEL_DIST:
+									travelDist = Float.parseFloat(arg) * Arena.UNIT_CONV;
+									Gdx.app.debug(TAG, "\ttravel distance = " + Float.parseFloat(arg));
+									break;
+									
 								default:
 									Gdx.app.error(TAG, "Invalid attribute ID declared in file "
 											+ file.path() + ": " + attStatedID);
@@ -242,6 +292,12 @@ public class MagicFactory {
 					}	// argument iterator's end
 				}	// line iterator's end
 
+				try {
+					reader.close();
+				} catch(IOException e) {
+					Gdx.app.error(TAG, "Failed to close file");
+					Gdx.app.exit();
+				}
 				if(initMagic) {
 					// if magic initalisation hasn't been ended
 					Gdx.app.error(TAG, "Unfinished chain of arguments in the file: "
@@ -268,7 +324,7 @@ public class MagicFactory {
 		String[] spellList = {"tiny", "med", "heavy"};
 		for(String spellName : spellList) {
 			files.add(Gdx.files.internal(
-					"data/magic/data/" + spellName + ".spell"));
+					"res/magic/data/" + spellName + ".spell"));
 		}
 
 		FileHandle[] spellFiles = new FileHandle[files.size()];
@@ -284,6 +340,11 @@ public class MagicFactory {
 			return line;
 		} catch(IOException e) {
 			Gdx.app.error(TAG, "Failed to read the file", e);
+			try {
+				reader.close();
+			} catch(IOException ex) {
+				Gdx.app.error(TAG, "Failed to close file");
+			}
 			Gdx.app.exit();
 			return null;
 		}

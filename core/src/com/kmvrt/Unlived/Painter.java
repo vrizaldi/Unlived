@@ -99,8 +99,8 @@ public class Painter {
 			}
 			
 			// render the mana percentage
-			if(c.cRoom.isVisited()) {
-				texts.setText(Assets.font, String.format("%.2f", c.atts.getMana()));
+			if(c.cRoom == data.getMainChar().cRoom) {
+				texts.setText(Assets.font, (int)c.atts.getMana() + "%");
 				Assets.font.draw(batch, texts, 
 						(c.x + ((Constants.CHAR_WIDTH - texts.width) / 2)),
 						c.y + Constants.CHAR_HEIGHT + 10);
@@ -111,8 +111,9 @@ public class Painter {
 		if(data.magics.size() != 0) {
 			for(Magic  m : data.magics) {
 				if(m.cRoom.isVisited()) {
-					Assets.magicSprite.setPosition(m.x, m.y);
-					Assets.magicSprite.draw(batch);
+					Sprite mSprite = Assets.magicSprites.get(m.getSpell().getName());
+					mSprite.setPosition(m.x, m.y);
+					mSprite.draw(batch);
 				}
 			}
 		}

@@ -25,15 +25,10 @@ public class Constants {
 	public static final int ROOMS_INTERVAL = 3 * Arena.UNIT_CONV;
 	public static final int CHAR_WIDTH = 2 * Arena.UNIT_CONV;
 	public static final int CHAR_HEIGHT = 3 * Arena.UNIT_CONV;
-//	public static final int SHADOW_WIDTH = 2;
-//	public static final int SHADOW_HEIGHT = 1;
-//	public static final int SHADOW_OFFSET_Y = -1;
 	public static final int PORTAL_WIDTH = 2 * Arena.UNIT_CONV;
 	public static final int PORTAL_HEIGHT = 2 * Arena.UNIT_CONV;
 	public static final int NORMAL_SPEED = 20 * Arena.UNIT_CONV;
 		// default moving speed per second
-	public static final int MAGIC_SPEED = 50 * Arena.UNIT_CONV;
-	public static final int MAGIC_MAX_DISTANCE = 10 * Arena.UNIT_CONV;
 	public static final int DOOR_OFFSET = 1 * Arena.UNIT_CONV;
 	// safe distance between creep and mainChar
 	public static final int SAFE_DIST_X = 10 * Arena.UNIT_CONV;
@@ -59,9 +54,9 @@ public class Constants {
 	public static final float CREEPS_CHANGE_INTERVAL = 1f;	// in second
 
 	// number of rooms in a map
-	public static final int ROOMS_NUM_X = 5;
+	public static final int ROOMS_NUM_X = 4;
 	public static final int ROOMS_NUM_Y = 4;
-	public static final int ROOMS_NUM_MIN = 6;
+	public static final int ROOMS_NUM_MIN = 4;//6;
 
 	// room type id
 	public static final int ROOM_NORMAL = 430;

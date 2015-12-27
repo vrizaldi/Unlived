@@ -9,12 +9,17 @@ public class Spell {
 	private String name;
 	
 	// properties
+	private float speed;
+		// speed of the magic (x / sec)
 	private int burst;
 		// the number of shots once casted
 	private float burstInterval;
 		// the time between each burst shots (in sec)
 	private float interval;
 		// the interval between each cast (in sec)
+	private float width, height;
+	private float travelDist;
+		// distance travelled by the magic casted
 	private boolean propsInitialised;
 
 	// attributes
@@ -37,6 +42,10 @@ public class Spell {
 		burst = 1;
 		burstInterval = 0;
 		interval = 0.5f;
+		width = 0;
+		height = 0;
+		speed = 0;
+		travelDist = 0;
 		propsInitialised = false;
 	} // new's end
 	
@@ -53,15 +62,21 @@ public class Spell {
 		}
 	}
 	
-	public void initProps(int burst, float burstInterval, float interval) {
+	public void initProps(float speed, float travelDist,
+			int burst, float burstInterval, float interval,
+			float width, float height) {
 		// initiate the properties of the magic
 		
 		if(!propsInitialised) {
 			propsInitialised = true;
 			
+			this.speed = speed;
+			this.travelDist = travelDist;
 			this.burst = burst;
 			this.burstInterval = burstInterval;
 			this.interval = interval;
+			this.width = width;
+			this.height = height;
 		}
 	}
 	
@@ -71,6 +86,16 @@ public class Spell {
 	public String getName() {
 		
 		return name;
+	}
+	
+	public float getSpeed() {
+	
+		return speed;
+	}
+	
+	public float getTravelDist() {
+		
+		return travelDist;
 	}
 	
 	public int getBurst() {
@@ -88,4 +113,13 @@ public class Spell {
 		return interval;
 	}
 	
+	public float getWidth() {
+		
+		return width;
+	}
+	
+	public float getHeight() {
+		
+		return height;
+	}
 }

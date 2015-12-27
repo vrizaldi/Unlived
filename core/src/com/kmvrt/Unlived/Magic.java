@@ -19,6 +19,8 @@ public class Magic {
 
 	private float totalMove; // total distance it has moved
 	
+	public boolean fading = false;
+	
 	private GameChar src; // the magic caster
 
 

@@ -26,14 +26,19 @@ public class Assets {
 	public static Sprite doorVSprite;	// vertical door
 	public static Sprite doorHSprite;	// horizontal
 	public static Sprite portalSprite;	// portal
-	public static Sprite magicSprite;	// magic
 
 //	public static Sprite shadowSprite;	// shadow
 //	public static Animation shadowAnim;
 
-	public static ArrayList<TextureAtlas> charImgs;	// characters
+	// characters
+	public static ArrayList<TextureAtlas> charImgs;	
 	public static HashMap<String, Sprite> charSprites;
 	public static HashMap<String, Animation> charAnims;
+	
+	// magics
+	public static ArrayList<TextureAtlas> magicImgs;
+	public static HashMap<String, Sprite> magicSprites;
+	public static HashMap<String, Animation> magicAnims;
 
 	public static BitmapFont font; // default font
 
@@ -48,7 +53,7 @@ public class Assets {
 	
 		Gdx.app.log(TAG, "Initialising assets...");
 		
-		mapImgs = new TextureAtlas("data/map/map.pack");
+		mapImgs = new TextureAtlas("res/map/map.pack");
 
 		roomSprite = new Sprite(mapImgs.findRegion("map"));
 		roomSprite.setSize(Constants.ROOM_WIDTH, Constants.ROOM_HEIGHT);
@@ -64,14 +69,18 @@ public class Assets {
 		charImgs = new ArrayList<TextureAtlas>();
 		charSprites = new HashMap<String, Sprite>();
 		charAnims = new HashMap<String, Animation>();
+		
+		magicImgs = new ArrayList<TextureAtlas>();
+		magicSprites = new HashMap<String, Sprite>();
+		magicAnims = new HashMap<String, Animation>();
 
 		portalSprite = new Sprite(mapImgs.findRegion("portalImg"));
 		portalSprite.setSize(Constants.PORTAL_WIDTH, Constants.PORTAL_HEIGHT);
 
-		magicSprite = new Sprite(mapImgs.findRegion("magicImg"));
+/*		magicSprite = new Sprite(mapImgs.findRegion("magicImg"));
 		magicSprite.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 
-/*		shadowAnim = new Animation(Constants.ANIMATION_SHADOW_DURATION,
+		shadowAnim = new Animation(Constants.ANIMATION_SHADOW_DURATION,
 				mapImgs.findRegion("shadow1"), mapImgs.findRegion("shadow2"));
 		shadowAnim.setPlayMode(PlayMode.LOOP_PINGPONG);
 		shadowSprite = new Sprite(shadowAnim.getKeyFrame(0));
@@ -80,7 +89,7 @@ public class Assets {
 		FreeTypeFontParameter param = new FreeTypeFontParameter();
 		param.size = 10;
 		param.color = Color.RED;
-		font = new FreeTypeFontGenerator(Gdx.files.internal("data/font/PressStart2P.ttf")) 
+		font = new FreeTypeFontGenerator(Gdx.files.internal("res/font/PressStart2P.ttf")) 
 			.generateFont(param);
 		
 		initialised = true;	// flag it
@@ -106,9 +115,9 @@ public class Assets {
 			}
 			
 			// atlas
-			TextureAtlas cImgs = new TextureAtlas("data/chars/" + c.getName() + ".pack");
+			TextureAtlas cImgs = new TextureAtlas("res/chars/" + c.getName() + ".pack");
 			
-			Array<TextureRegion> frames = new Array<TextureRegion>(10);
+			Array<TextureRegion> charFrames = new Array<TextureRegion>(1);
 			for(int i = 1;; i++) {
 				TextureRegion frame = cImgs.findRegion(c.getName() + i);
 				if(frame == null) {
@@ -117,27 +126,56 @@ public class Assets {
 				}
 				
 				try {
-					frames.add(frame);
+					charFrames.add(frame);
 				} catch(Exception e) {
 					// increase the array size
-					frames.ensureCapacity(1);
-					frames.add(frame);
+					charFrames.ensureCapacity(1);
+					charFrames.add(frame);
 				}
 			}
-
+			
 			// animation (west facing)
-			Animation anim = new Animation((float)1 / (frames.size * 3), 
-					frames, Animation.PlayMode.LOOP);
+			Animation cAnim = new Animation((float)1 / (charFrames.size * 3), 
+					charFrames, Animation.PlayMode.LOOP);
 
 			// sprites
-			Sprite wSp = new Sprite(anim.getKeyFrame(0));
-			wSp.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+			Sprite cSp = new Sprite(cAnim.getKeyFrame(0));
+			cSp.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
 
 			// put them into the collections
 			charImgs.add(cImgs);
-			charSprites.put(c.getName(), wSp);
-			charAnims.put(c.getName(), anim);
+			charSprites.put(c.getName(), cSp);
+			charAnims.put(c.getName(), cAnim);
 
+			// magic sprites
+			TextureAtlas mImgs = new TextureAtlas("res/magic/sprites/" + c.getName() + ".pack");
+			Array<TextureRegion> magicFrames = new Array<TextureRegion>(1);
+			for(int i = 1;; i++) {
+				TextureRegion frame = mImgs.findRegion(c.getName() + i);
+				if(frame == null) {
+					// has finished
+					break;
+				}
+				
+				try {
+					magicFrames.add(frame);
+				} catch(Exception e) {
+					// increase the array size
+					magicFrames.ensureCapacity(1);
+					magicFrames.add(frame);
+				}
+			}
+			Animation mAnim = new Animation(1f / magicFrames.size,
+					magicFrames, Animation.PlayMode.LOOP);
+			
+			Sprite mSp = new Sprite(mAnim.getKeyFrame(0));
+			mSp.setSize(MagicFactory.getSpell(c.getName()).getWidth(),
+					MagicFactory.getSpell(c.getName()).getHeight());
+			
+			magicImgs.add(mImgs);
+			magicAnims.put(c.getName(), mAnim);
+			magicSprites.put(c.getName(), mSp);
+			
 			Gdx.app.log(TAG, "Character " + c.getName() + " initialised");
 		}
 	}	// initChars(ArrayList<GameChar>)'s
