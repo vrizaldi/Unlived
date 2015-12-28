@@ -320,8 +320,15 @@ public class MagicFactory {
 		// all the spell files are stored in "internal/magic/data/"
 		// and all have the extension .spell
 		
+		ArrayList<String> spellList = new ArrayList<String>();
+		BufferedReader r = new BufferedReader(
+				Gdx.files.internal("res/magic/data/spells").reader());
+		String line;
+		while((line = readNextLine(r)) != null) {
+			spellList.add(line);
+		}
+
 		ArrayList<FileHandle> files = new ArrayList<FileHandle>();
-		String[] spellList = {"tiny", "med", "heavy"};
 		for(String spellName : spellList) {
 			files.add(Gdx.files.internal(
 					"res/magic/data/" + spellName + ".spell"));
@@ -344,6 +351,7 @@ public class MagicFactory {
 				reader.close();
 			} catch(IOException ex) {
 				Gdx.app.error(TAG, "Failed to close file");
+				Gdx.app.exit();
 			}
 			Gdx.app.exit();
 			return null;

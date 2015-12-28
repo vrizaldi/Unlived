@@ -165,7 +165,7 @@ public class Assets {
 					magicFrames.add(frame);
 				}
 			}
-			Animation mAnim = new Animation(1f / magicFrames.size,
+			Animation mAnim = new Animation(0.1f / magicFrames.size,
 					magicFrames, Animation.PlayMode.LOOP);
 			
 			Sprite mSp = new Sprite(mAnim.getKeyFrame(0));
@@ -190,6 +190,12 @@ public class Assets {
 		for(String key : charSprites.keySet()) {
 			charSprites.get(key).setRegion(
 					charAnims.get(key).getKeyFrame(stateTime));
+		}
+		
+		// magics
+		for(String key : magicSprites.keySet()) {
+			magicSprites.get(key).setRegion(
+					magicAnims.get(key).getKeyFrame(stateTime));
 		}
 	}
 

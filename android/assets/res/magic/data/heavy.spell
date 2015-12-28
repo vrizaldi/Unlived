@@ -1,9 +1,9 @@
 spell
-	speed 70
+	speed 50
 	traveldist 3
 	burst 1
 	burstinterval 0
-	interval 3.5
+	interval 3
 	width 2
 	height 5
 
@@ -13,6 +13,6 @@ spell
 	castend
 
 	hit
-		mana -99
+		mana -55
 	hitend
 spellend

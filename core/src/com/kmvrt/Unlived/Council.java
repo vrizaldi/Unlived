@@ -26,6 +26,7 @@ public class Council {
 
 	// whether the creep ready to attack
 	private boolean creepsChange;
+	private boolean creepsDirChange;
 	
 	private CharsComparator charsComp;
 	
@@ -51,6 +52,16 @@ public class Council {
 				}
 			}, Constants.CREEPS_CHANGE_INTERVAL,
 			Constants.CREEPS_CHANGE_INTERVAL);
+		
+		creepsDirChange = false;
+		Timer.schedule(
+				new Timer.Task() {
+					
+					@Override
+					public void run() {
+						creepsDirChange = true;
+					}
+				}, 0, 0);
 	} 
 
 
@@ -59,7 +70,7 @@ public class Council {
 	public void initNewGame() {
 		// create objects for a new game
 		
-		GameChar mainChar = new GameChar("heavy");
+		GameChar mainChar = new GameChar("pull");
 		if(data.getStateID() == Constants.STATE_ARENA) {
 			// put it in the middle of the room
 			mainChar.x = data.map.getSpawnPosX() - (Constants.CHAR_WIDTH / 2); 
@@ -284,9 +295,10 @@ public class Council {
 					
 				} else {
 					creep.wandering = false;
-					int mood = (int)(Math.random() * 8) + 1;
+					int mood = (int)(Math.random() * 9) + 1;
 						// random number 1 - 8
 					switch(mood) {
+					case 9:
 					case 8:
 					case 7:
 					case 6:
@@ -327,11 +339,13 @@ public class Council {
 				float distY = mainChar.y - creep.y;
 
 				// creep should keep facing in the mainChar dir
-				if(distX < 0) {
-					creep.setDir(Constants.DIR_W);
+				if(creepsDirChange) {
+					if(distX < 0) {
+						creep.setDir(Constants.DIR_W);
 
-				} else if(distX > 0) {
-					creep.setDir(Constants.DIR_E);
+					} else if(distX > 0) {
+						creep.setDir(Constants.DIR_E);
+					}
 				}
 				
 				distX = mainChar.x - creep.x > 0 ?
@@ -373,6 +387,8 @@ public class Council {
 				}
 			}
 		} // for loop's end
+
+		creepsDirChange = false;
 	}	// moveCreeps()'s end
 
 	private void wander(GameChar creep, float delta) {

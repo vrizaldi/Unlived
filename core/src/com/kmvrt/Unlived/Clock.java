@@ -199,33 +199,28 @@ public class Clock {
 			}	// char iter's
 			
 			// check if the magic hit the wall
-			float roomX = (m.cRoom.getX() * Constants.ROOM_WIDTH)
+			float roomX = 0;
+			try {
+				roomX = (m.cRoom.getX() * Constants.ROOM_WIDTH)
 					+ (m.cRoom.getX() * Constants.ROOMS_INTERVAL);
-			float roomY = (m.cRoom.getY() * Constants.ROOM_HEIGHT)
-					+ (m.cRoom.getY() * Constants.ROOMS_INTERVAL);
+			} catch(NullPointerException e) {
+				Gdx.app.error(TAG, "The magic got lost");
+				continue;
+			} 
+			/*float roomY = (m.cRoom.getY() * Constants.ROOM_HEIGHT)
+					+ (m.cRoom.getY() * Constants.ROOMS_INTERVAL);*/
 			if(m.x + m.getSpell().getWidth() > roomX + Constants.ROOM_WIDTH) {
 				// over to the east
-				if(hitWall(m, Constants.DIR_E)) {
+				if(hitWall(m, true)) {
 					iter.remove();
 				}
 				
 			} else if(m.x < roomX) {
 				// over to the west
-				if(hitWall(m, Constants.DIR_W)) {
+				if(hitWall(m, false)) {
 					iter.remove();
 				}
 				
-			} else if(m.y + m.getSpell().getHeight() > roomY + Constants.ROOM_HEIGHT) {
-				// over to the north
-				if(hitWall(m, Constants.DIR_N)) {
-					iter.remove();
-				}
-				
-			} else if(m.y < roomY) {
-				// over to the south
-				if(hitWall(m, Constants.DIR_S)) {
-					iter.remove();
-				}
 			}
 			
 			if(hitCreep != null) {
@@ -333,7 +328,7 @@ public class Clock {
 		return true;
 	}	// hitWall(GameChar, int)'s
 	
-	private boolean hitWall(Magic m, int dir) {
+	private boolean hitWall(Magic m, boolean east) {
 		
 		float roomX = (m.cRoom.getX() * Constants.ROOM_WIDTH)
 				+ (m.cRoom.getX() * Constants.ROOMS_INTERVAL);
@@ -343,7 +338,7 @@ public class Clock {
 		float doorX = 0; float doorY = 0;
 		float doorWidth = 0; float doorHeight = 0;
 			
-		if(dir == Constants.DIR_E) {
+		if(east) {
 			if(m.cRoom.east) {
 				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_E);
 				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_E);
@@ -356,7 +351,7 @@ public class Clock {
 				return true;
 			}
 			
-		} else if(dir == Constants.DIR_W) {
+		} else {
 			if(m.cRoom.west) {
 				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_W);
 				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_W);
@@ -368,31 +363,7 @@ public class Clock {
 				// west door doesn't exist
 				return true;
 			}
-			
-		} else if(dir == Constants.DIR_N) {
-			if(m.cRoom.north) {
-				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_N);
-				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_N);
-				
-				doorWidth = Assets.doorHSprite.getWidth();
-				doorHeight = Assets.doorHSprite.getHeight();
-				
-			} else {
-				return true;
-			}
-			
-		} else if(dir == Constants.DIR_S) {
-			if(m.cRoom.south) {
-				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_S);
-				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_S);
-				
-				doorWidth = Assets.doorHSprite.getWidth();
-				doorHeight = Assets.doorHSprite.getHeight();
-				
-			} else {
-				return true;
-			}
-		}
+		} 
 		
 		// set rec1 as c's rectangle
 		// take account of the distance travelled
@@ -411,11 +382,7 @@ public class Clock {
 		
 		if(Intersector.intersectRectangles(rec1, rec2, inter)) {
 			// if the char can fit in the door
-			if((dir == Constants.DIR_N || dir == Constants.DIR_S)
-					&& inter.width > m.getSpell().getWidth()) {
-				return false;
-				
-			} else if(inter.height >= m.getSpell().getHeight() * 0.5f) {
+			if(inter.height >= m.getSpell().getHeight() * 0.5f) {
 				return false;
 			}
 		}

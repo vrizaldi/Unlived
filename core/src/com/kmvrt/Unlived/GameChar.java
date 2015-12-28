@@ -218,9 +218,10 @@ public class GameChar {
 		}
 		
 		affectingTime = Constants.INIT_AFFECTING_TIME;
-		if(ID == Constants.CHAR_MAIN) {
+		if(ID == Constants.CHAR_MAIN
+				&& atts.getMana() > spell.cast.getMana()) {
 			affectors.applyMana(spell.cast.getMana());
-		}
+		} 
 		if(this.getDir() == Constants.DIR_E) {
 			affectors.applyForce(spell.cast.getForce());
 		} else {	// m.dir == DIR_W

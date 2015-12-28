@@ -1,5 +1,7 @@
 package com.kmvrt.Unlived;
 
+import java.util.Iterator;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -109,8 +111,12 @@ public class Painter {
 
 		// draw magics *************
 		if(data.magics.size() != 0) {
-			for(Magic  m : data.magics) {
-				if(m.cRoom.isVisited()) {
+			for(Iterator<Magic> iter = data.magics.iterator(); iter.hasNext();) {
+				Magic m = iter.next();
+				
+				if(m.cRoom == null) {
+					iter.remove();
+				} else if(m.cRoom.isVisited()) {
 					Sprite mSprite = Assets.magicSprites.get(m.getSpell().getName());
 					mSprite.setPosition(m.x, m.y);
 					mSprite.draw(batch);

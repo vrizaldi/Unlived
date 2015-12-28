@@ -1,0 +1,33 @@
+
+pull.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+pull3
+  rotate: false
+  xy: 1, 1
+  size: 64, 8
+  orig: 64, 8
+  offset: 0, 0
+  index: -1
+pull1
+  rotate: false
+  xy: 67, 1
+  size: 64, 8
+  orig: 64, 8
+  offset: 0, 0
+  index: -1
+pull2
+  rotate: false
+  xy: 133, 1
+  size: 64, 8
+  orig: 64, 8
+  offset: 0, 0
+  index: -1
+pull4
+  rotate: false
+  xy: 199, 1
+  size: 64, 8
+  orig: 64, 8
+  offset: 0, 0
+  index: -1

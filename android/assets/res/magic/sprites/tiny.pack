@@ -6,7 +6,28 @@ repeat: none
 tiny1
   rotate: false
   xy: 1, 1
-  size: 2, 3
-  orig: 2, 3
+  size: 32, 16
+  orig: 32, 16
+  offset: 0, 0
+  index: -1
+tiny4
+  rotate: false
+  xy: 35, 1
+  size: 32, 16
+  orig: 32, 16
+  offset: 0, 0
+  index: -1
+tiny3
+  rotate: false
+  xy: 69, 1
+  size: 32, 16
+  orig: 32, 16
+  offset: 0, 0
+  index: -1
+tiny2
+  rotate: false
+  xy: 103, 1
+  size: 32, 16
+  orig: 32, 16
   offset: 0, 0
   index: -1

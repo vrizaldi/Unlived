@@ -6,7 +6,28 @@ repeat: none
 heavy1
   rotate: false
   xy: 1, 1
-  size: 2, 3
-  orig: 2, 3
+  size: 32, 50
+  orig: 32, 50
+  offset: 0, 0
+  index: -1
+heavy4
+  rotate: false
+  xy: 35, 1
+  size: 32, 50
+  orig: 32, 50
+  offset: 0, 0
+  index: -1
+heavy3
+  rotate: false
+  xy: 69, 1
+  size: 32, 50
+  orig: 32, 50
+  offset: 0, 0
+  index: -1
+heavy2
+  rotate: false
+  xy: 103, 1
+  size: 32, 50
+  orig: 32, 50
   offset: 0, 0
   index: -1
