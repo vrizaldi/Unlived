@@ -85,38 +85,7 @@ public class GameMap {
 		return portalPosY;
 	}
 
-	public static float getDoorPosX(float roomX, int dir) {
-		
-		if(dir == Constants.DIR_N || dir == Constants.DIR_S) {
-			return (roomX + ((Constants.ROOM_WIDTH - Assets.doorHSprite.getWidth()) / 2));
-			
-		} else if(dir == Constants.DIR_E) {
-			return roomX + Constants.ROOM_WIDTH - (float)1/16;
 	
-		} else if(dir == Constants.DIR_W) {
-			return roomX - Assets.doorVSprite.getWidth() + (float)1/16;
-			
-		} else {	// invalid
-			return 0;
-		}
-	}
-	
-	public static float getDoorPosY(float roomY, int dir) {
-				
-		if(dir == Constants.DIR_N) {
-			return roomY + Constants.ROOM_HEIGHT - (float)1/16;
-			
-		} else if(dir == Constants.DIR_S) {
-			return roomY - Assets.doorHSprite.getHeight() + (float)1/16;
-			
-		} else if(dir == Constants.DIR_E || dir == Constants.DIR_W) {
-			return roomY + ((Constants.ROOM_HEIGHT 
-					- Assets.doorVSprite.getHeight()) / 2);
-			
-		} else {
-			return 0;
-		}
-	}
 	
 	public Room getRandRoom() {
 		// return a random room
@@ -155,54 +124,6 @@ public class GameMap {
 		return rooms[x][y];
 	}
 
-	
-
 // room class ---------------------------------------------------------------------------------------------------
-	static class Room {
-		
-		private int typeID;
-		private int x;
-		private int y;
-		public boolean north, south, east, west;
-			// door location
-		private boolean visited;
-
-		public Room(int typeID, int x, int y) {
-
-			this.typeID = typeID;
-			
-			north = south = east = west = false;
-			this.x = x;
-			this.y = y;
-			visited = false;
-		}
-
-		public int getTypeID() {
-		
-			return typeID;
-		}
-		
-		public int getX() {
-			
-			return x;
-		}
-		
-		public int getY() {
-			
-			return y;
-		} 
-
-		protected void visit(GameChar c) {
-			
-			if(!visited && c.getID() == Constants.CHAR_MAIN) {
-				visited = true;
-			}
-		}
-
-		public boolean isVisited() {
-			
-			return visited;
-		}
-	}
 
 }

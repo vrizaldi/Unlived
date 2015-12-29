@@ -2,11 +2,10 @@
 
 package com.kmvrt.Unlived;
 
+import com.kmvrt.Unlived.gameplay.Arena;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
-//import com.badlogic.gdx.Graphics.DisplayMode;
-//import com.badlogic.gdx.Screen;
 
 public class Manager extends Game {
 	// manage everything in the game (game loop, etc.)
@@ -22,7 +21,6 @@ public class Manager extends Game {
 	@Override
 	public void create() {
 
-		Assets.init();
 		MagicFactory.init();
 		
 		Gdx.app.log(TAG, "Initialising the game...");
@@ -65,9 +63,8 @@ public class Manager extends Game {
 	// dispose all the resources after the game
 	@Override
 	public void dispose() {
-	
-		Gdx.app.log(TAG, "Disposing assets...");
-		Assets.dispose();
+		
+		this.getScreen().dispose();
 		Gdx.app.log(TAG, "Quitting game...");
 	}
 

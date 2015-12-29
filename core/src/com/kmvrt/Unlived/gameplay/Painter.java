@@ -1,5 +1,6 @@
-package com.kmvrt.Unlived;
+package com.kmvrt.Unlived.gameplay;
 
+import com.kmvrt.Unlived.*;
 import java.util.Iterator;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -167,7 +168,7 @@ public class Painter {
 		
 		for(int y = 0; y < Constants.ROOMS_NUM_Y; y++) {
 			for(int x = 0; x < Constants.ROOMS_NUM_X; x++) {
-				GameMap.Room cRoom = data.map.getRoom(x, y);
+				Room cRoom = data.map.getRoom(x, y);
 				
 				if(cRoom == null || !cRoom.isVisited()) {
 					// only show visited room
@@ -184,29 +185,29 @@ public class Painter {
 				if(cRoom.east) {
 					// create door in the east wall
 					Assets.doorVSprite.setPosition(
-						GameMap.getDoorPosX(roomX, Constants.DIR_E) - 2, 
-						GameMap.getDoorPosY(roomY, Constants.DIR_E));
+						Navigator.getDoorPosX(roomX, Constants.DIR_E) - 2, 
+						Navigator.getDoorPosY(roomY, Constants.DIR_E));
 					cacheBatch.add(Assets.doorVSprite);
 				}
 				if(cRoom.west) {
 					// west wall
 					Assets.doorVSprite.setPosition(
-						GameMap.getDoorPosX(roomX, Constants.DIR_W) + 2, 
-						GameMap.getDoorPosY(roomY, Constants.DIR_W));
+						Navigator.getDoorPosX(roomX, Constants.DIR_W) + 2, 
+						Navigator.getDoorPosY(roomY, Constants.DIR_W));
 					cacheBatch.add(Assets.doorVSprite);
 				}
 				if(cRoom.north) {
 					// north wall
 					Assets.doorHSprite.setPosition(
-							GameMap.getDoorPosX(roomX, Constants.DIR_N),
-							GameMap.getDoorPosY(roomY, Constants.DIR_N) - 2);
+							Navigator.getDoorPosX(roomX, Constants.DIR_N),
+							Navigator.getDoorPosY(roomY, Constants.DIR_N) - 2);
 					cacheBatch.add(Assets.doorHSprite);
 				}
 				if(cRoom.south) {
 					// south wall
 					Assets.doorHSprite.setPosition(
-							GameMap.getDoorPosX(roomX, Constants.DIR_S),
-							GameMap.getDoorPosY(roomY, Constants.DIR_S) + 2);
+							Navigator.getDoorPosX(roomX, Constants.DIR_S),
+							Navigator.getDoorPosY(roomY, Constants.DIR_S) + 2);
 					cacheBatch.add(Assets.doorHSprite);
 
 				}

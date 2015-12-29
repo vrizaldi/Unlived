@@ -12,7 +12,7 @@ public class Magic {
 	// magics only move horizontally
 	private float nX;
 	
-	public GameMap.Room cRoom;
+	public Room cRoom;
 
 	private int dir;	// the direction it's moving
 	private Spell spell;	// the magic's properties

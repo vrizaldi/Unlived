@@ -1,7 +1,8 @@
 // code by Muhammad Noorghifari
 
-package com.kmvrt.Unlived;
+package com.kmvrt.Unlived.gameplay;
 
+import com.kmvrt.Unlived.*;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -61,6 +62,8 @@ public class Arena implements Screen {
 	private void initNewGame(boolean initProps) {
 		// initialise a new game
 		
+		Assets.init();	// init assets
+			
 		// the order is important: navigator before council
 		navigator.initNewGame();
 		council.initNewGame();
@@ -75,16 +78,17 @@ public class Arena implements Screen {
 	public void hide() {
 
 		Gdx.app.log(TAG, "Unselected as the current screen");
-		disposeGame();
+		dispose();
 		Gdx.app.log(TAG, "Last game data disposed");
 	}
 
-	private void disposeGame() {
-		// dispose the resource used
-		
+	@Override
+	public void dispose() {
+		Gdx.app.log(TAG, "Disposing assets...");
 		navigator.disposeGame();
 		council.disposeGame();
 		chemist.disposeGame();
+		Assets.dispose();
 	}
 
 
@@ -105,12 +109,12 @@ public class Arena implements Screen {
 		// restart
 		if(data.gameOver) {
 			data.gameOver = false;
-			disposeGame();
+			dispose();
 			initNewGame(false);
 		}
 		// debug only
 		if(Gdx.input.isKeyJustPressed(Keys.R)) {
-			disposeGame();
+			dispose();
 			initNewGame(true);
 		}
 		
@@ -149,9 +153,5 @@ public class Arena implements Screen {
 	public void resize(int width, int height) {
 
 	}
-
-	@Override
-	public void dispose() {
-	}
-
+	
 }

@@ -1,7 +1,8 @@
 // code by Muhammad Noorghifari
 
-package com.kmvrt.Unlived;
+package com.kmvrt.Unlived.gameplay;
 
+import com.kmvrt.Unlived.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Rectangle;
@@ -61,7 +62,7 @@ public class Council {
 					public void run() {
 						creepsDirChange = true;
 					}
-				}, 0, 0);
+				}, 0, 0.8f);
 	} 
 
 
@@ -243,7 +244,7 @@ public class Council {
 
 			int r = (int)(Math.random() * MagicFactory.totalSpells());
 			GameChar creep = new GameChar(MagicFactory.getSpellName(r));
-			GameMap.Room room = data.map.getRandRoom();
+			Room room = data.map.getRandRoom();
 			creep.x = (room.getX() * Constants.ROOM_WIDTH) 
 					+ (room.getX() * Constants.ROOMS_INTERVAL)+ 1;
 			creep.y = (room.getY() * Constants.ROOM_HEIGHT)
@@ -302,10 +303,13 @@ public class Council {
 					case 8:
 					case 7:
 					case 6:
+					case 5:
+					case 4:
+					case 3:
 						creep.changeCreep(Constants.CHAR_CREEP_FOLLOW);
 						break;
 
-					case 5:
+/*					case 5:
 					case 4:
 						creep.changeCreep(Constants.CHAR_CREEP_FOLLOW_N);
 						break;
@@ -313,8 +317,9 @@ public class Council {
 					case 3:
 					case 2:
 						creep.changeCreep(Constants.CHAR_CREEP_FOLLOW_S);
-						break;
+						break;*/
 
+					case 2:	
 					case 1:
 						creep.changeCreep(Constants.CHAR_CREEP_AVOID);
 						break;
@@ -348,7 +353,18 @@ public class Council {
 					}
 				}
 				
-				distX = mainChar.x - creep.x > 0 ?
+				float shootRangeX = 0;
+				if(mainChar.x - creep.x >= 0) {
+					// east
+					shootRangeX = mainChar.x 
+							- (creep.getSpell().getWidth());
+				} else {	// west
+					shootRangeX = mainChar.x
+							+ (creep.getSpell().getWidth());
+				}
+				distX = shootRangeX - creep.x;
+					
+			/*	distX = mainChar.x - creep.x > 0 ?
 						mainChar.x - (creep.x + (Constants.CHAR_WIDTH / 2))
 							+ creep.getSpell().getWidth() // east
 						: 
@@ -357,7 +373,7 @@ public class Council {
 							- mainChar.x + Constants.CHAR_WIDTH;	// west
 							
 				// keep it in safe distance
-				if(creep.cRoom == data.getMainChar().cRoom
+/				if(creep.cRoom == data.getMainChar().cRoom
 						&& Math.abs(distX) <= creep.getSpell().getTravelDist()) {
 					if(distX >= 0) {
 						distX -= creep.getSpell().getTravelDist();
@@ -365,7 +381,7 @@ public class Council {
 						distX += creep.getSpell().getTravelDist();
 					}
 					distY = 0;
-				} 
+				} */
 	//			distY = Math.abs(distY) < 1 ? 0 : distY; 
 				
 				// move the creep based on its type
@@ -374,19 +390,13 @@ public class Council {
 					
 				} if(creep.getID() == Constants.CHAR_CREEP_FOLLOW) {
 					follow(creep, distX, distY, delta);
-				
-				} else if(creep.getID() == Constants.CHAR_CREEP_FOLLOW_N) {
-					followX(creep, distX, Constants.DIR_N, delta);
-
-				} else if(creep.getID() == Constants.CHAR_CREEP_FOLLOW_S) {
-					followX(creep, distX, Constants.DIR_S, delta); 
 					
 				} else if(creep.getID() == Constants.CHAR_CREEP_AVOID) {
 					avoid(creep, distX, distY, delta);
 
 				}
 			}
-		} // for loop's end
+		} // char iter's
 
 		creepsDirChange = false;
 	}	// moveCreeps()'s end
@@ -463,7 +473,7 @@ public class Council {
 		}
 	}	// followMainChar(GameChar, float, float)'s end
 
-	private void followX(GameChar creep, float distX, int dirY, float delta) {
+/*	private void followX(GameChar creep, float distX, int dirY, float delta) {
 		// follow the mainChar horizontally
 		// and keep moving towards dirY(either N or S)
 	
@@ -489,7 +499,7 @@ public class Council {
 		} else {
 			creep.move(0, -Constants.NORMAL_SPEED * delta);			
 		}
-	}	// followMainCharX(GameChar, float, int)'s end
+	}	// followMainCharX(GameChar, float, int)'s end*/
 
 	private void avoid(GameChar creep, float distX, float distY, float delta) {
 		// move the creep away from mainChar

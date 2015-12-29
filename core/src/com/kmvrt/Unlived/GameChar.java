@@ -36,7 +36,7 @@ public class GameChar {
 	private boolean bursting;
 	private boolean ableToShoot;
 	
-	public GameMap.Room cRoom;
+	public Room cRoom;
 
 
 // constructor ------------------------------------------------------------------------------------------------

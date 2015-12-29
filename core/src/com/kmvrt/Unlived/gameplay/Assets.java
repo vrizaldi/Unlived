@@ -1,5 +1,6 @@
-package com.kmvrt.Unlived;
+package com.kmvrt.Unlived.gameplay;
 
+import com.kmvrt.Unlived.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 //import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;

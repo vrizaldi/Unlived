@@ -1,7 +1,8 @@
 // code by Muhammad Noorghifari
 
-package com.kmvrt.Unlived;
+package com.kmvrt.Unlived.gameplay;
 
+import com.kmvrt.Unlived.*;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Intersector;
 //import com.badlogic.gdx.utils.Timer;
@@ -250,8 +251,8 @@ public class Clock {
 		switch(dir) {
 		case Constants.DIR_N:
 			if(c.cRoom.north) {
-				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_N);
-				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_N);
+				doorX = Navigator.getDoorPosX(roomX, Constants.DIR_N);
+				doorY = Navigator.getDoorPosY(roomY, Constants.DIR_N);
 				
 				doorWidth = Assets.doorHSprite.getWidth();
 				doorHeight = Assets.doorHSprite.getHeight();
@@ -263,8 +264,8 @@ public class Clock {
 		
 		case Constants.DIR_S:
 			if(c.cRoom.south) {
-				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_S);
-				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_S);
+				doorX = Navigator.getDoorPosX(roomX, Constants.DIR_S);
+				doorY = Navigator.getDoorPosY(roomY, Constants.DIR_S);
 				
 				doorWidth = Assets.doorHSprite.getWidth();
 				doorHeight = Assets.doorHSprite.getHeight();
@@ -276,8 +277,8 @@ public class Clock {
 			
 		case Constants.DIR_E:
 			if(c.cRoom.east) {
-				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_E);
-				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_E);
+				doorX = Navigator.getDoorPosX(roomX, Constants.DIR_E);
+				doorY = Navigator.getDoorPosY(roomY, Constants.DIR_E);
 				
 				doorWidth = Assets.doorVSprite.getWidth();
 				doorHeight = Assets.doorVSprite.getHeight();
@@ -289,8 +290,8 @@ public class Clock {
 			
 		case Constants.DIR_W:
 			if(c.cRoom.west) {
-				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_W);
-				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_W);
+				doorX = Navigator.getDoorPosX(roomX, Constants.DIR_W);
+				doorY = Navigator.getDoorPosY(roomY, Constants.DIR_W);
 				
 				doorWidth = Assets.doorVSprite.getWidth();
 				doorHeight = Assets.doorVSprite.getHeight();
@@ -340,8 +341,8 @@ public class Clock {
 			
 		if(east) {
 			if(m.cRoom.east) {
-				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_E);
-				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_E);
+				doorX = Navigator.getDoorPosX(roomX, Constants.DIR_E);
+				doorY = Navigator.getDoorPosY(roomY, Constants.DIR_E);
 				
 				doorWidth = Assets.doorVSprite.getWidth();
 				doorHeight = Assets.doorVSprite.getHeight();
@@ -353,8 +354,8 @@ public class Clock {
 			
 		} else {
 			if(m.cRoom.west) {
-				doorX = GameMap.getDoorPosX(roomX, Constants.DIR_W);
-				doorY = GameMap.getDoorPosY(roomY, Constants.DIR_W);
+				doorX = Navigator.getDoorPosX(roomX, Constants.DIR_W);
+				doorY = Navigator.getDoorPosY(roomY, Constants.DIR_W);
 				
 				doorWidth = Assets.doorVSprite.getWidth();
 				doorHeight = Assets.doorVSprite.getHeight();

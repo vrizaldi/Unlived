@@ -1,7 +1,8 @@
 // code by Muhammad Noorghifari
 
-package com.kmvrt.Unlived;
+package com.kmvrt.Unlived.gameplay;
 
+import com.kmvrt.Unlived.*;
 import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;

@@ -1,5 +1,7 @@
 package com.kmvrt.Unlived;
 
+import com.kmvrt.Unlived.gameplay.Arena;
+
 public class Constants {
 	// store all the constants
 	
@@ -45,8 +47,8 @@ public class Constants {
 	// char IDs
 	public static final int CHAR_MAIN = 98;
 	public static final int CHAR_CREEP_FOLLOW = 99;
-	public static final int CHAR_CREEP_FOLLOW_N = 100;
-	public static final int CHAR_CREEP_FOLLOW_S = 101;
+//	public static final int CHAR_CREEP_FOLLOW_N = 100;
+//	public static final int CHAR_CREEP_FOLLOW_S = 101;
 	public static final int CHAR_CREEP_AVOID = 103;
 //	public static final int CHAR_CREEP_INACTIVE = 103;
 

@@ -1,6 +1,7 @@
-package com.kmvrt.Unlived;
+package com.kmvrt.Unlived.gameplay;
 
 //import java.util.HashMap;
+import com.kmvrt.Unlived.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Intersector;
@@ -123,10 +124,10 @@ public class Navigator {
 	
 		GameMap nRoom = null;
 
-		GameMap.Room[][] rooms;
+		Room[][] rooms;
 		do {
 			rooms = 
-				new GameMap.Room[Constants.ROOMS_NUM_X][Constants.ROOMS_NUM_Y];
+				new Room[Constants.ROOMS_NUM_X][Constants.ROOMS_NUM_Y];
 			int rx = (int)(Math.random() * Constants.ROOMS_NUM_X);
 			int ry = (int)(Math.random() * Constants.ROOMS_NUM_Y);
 			Gdx.app.debug(TAG, rx + ", " + ry);
@@ -138,18 +139,18 @@ public class Navigator {
 		return nRoom;
 	} // deployMap(bool)'s end
 
-	private void deployRooms(GameMap.Room[][] map, int x, int y, boolean first) {
+	private void deployRooms(Room[][] map, int x, int y, boolean first) {
 		// deploy rooms to the map into the specified x and y by recursing
 
 		if(map[x][y] == null) {	// if haven't inited
 			int typeID = first ? Constants.ROOM_SPAWN : Constants.ROOM_NORMAL;
-			map[x][y] = new GameMap.Room(typeID, x, y);
+			map[x][y] = new Room(typeID, x, y);
 			
 		} else {
 //			Gdx.app.debug(TAG, "Attempted to reinit a room");
 			return;
 		}
-		GameMap.Room r = map[x][y];
+		Room r = map[x][y];
 
 		int doorCt = 0;
 		// check if the close rooms has a door to this room
@@ -288,7 +289,7 @@ public class Navigator {
 		}	// while still creating
 	}	// deployRooms(Room, int, int)'s
 	
-	private boolean reachMinimum(GameMap.Room[][] rooms) {
+	private boolean reachMinimum(Room[][] rooms) {
 		// whether there are enough rooms in the game
 		
 		int roomCt = 0;
@@ -307,4 +308,36 @@ public class Navigator {
 		}
 	}
 	
+public static float getDoorPosX(float roomX, int dir) {
+		
+		if(dir == Constants.DIR_N || dir == Constants.DIR_S) {
+			return (roomX + ((Constants.ROOM_WIDTH - Assets.doorHSprite.getWidth()) / 2));
+			
+		} else if(dir == Constants.DIR_E) {
+			return roomX + Constants.ROOM_WIDTH - (float)1/16;
+	
+		} else if(dir == Constants.DIR_W) {
+			return roomX - Assets.doorVSprite.getWidth() + (float)1/16;
+			
+		} else {	// invalid
+			return 0;
+		}
+	}
+	
+	public static float getDoorPosY(float roomY, int dir) {
+				
+		if(dir == Constants.DIR_N) {
+			return roomY + Constants.ROOM_HEIGHT - (float)1/16;
+			
+		} else if(dir == Constants.DIR_S) {
+			return roomY - Assets.doorHSprite.getHeight() + (float)1/16;
+			
+		} else if(dir == Constants.DIR_E || dir == Constants.DIR_W) {
+			return roomY + ((Constants.ROOM_HEIGHT 
+					- Assets.doorVSprite.getHeight()) / 2);
+			
+		} else {
+			return 0;
+		}
+	}
 }	// class' end
