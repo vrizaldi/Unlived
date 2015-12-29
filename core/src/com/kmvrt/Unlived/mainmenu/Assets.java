@@ -45,11 +45,12 @@ public class Assets {
 			optionsMenu[1] = Constants.OPT_SETTING;
 			optionsMenu[2] = Constants.OPT_QUIT;
 
-			optionsSetting = new int[4];
+			optionsSetting = new int[5];
 			optionsSetting[0] = Constants.OPT_RES;
-			optionsSetting[1] = Constants.OPT_VOL;
-			optionsSetting[2] = Constants.OPT_SND;
-			optionsSetting[3] = Constants.OPT_QUIT;
+			optionsSetting[1] = Constants.OPT_F11;
+			optionsSetting[2] = Constants.OPT_VOL;
+			optionsSetting[3] = Constants.OPT_SND;
+			optionsSetting[4] = Constants.OPT_QUIT;
 			
 			availableRes = Gdx.graphics.getDisplayModes();
 			volMusic = 1f;
@@ -62,6 +63,7 @@ public class Assets {
 			labels.put(Constants.OPT_RES, "RESOLUTION");
 			labels.put(Constants.OPT_VOL, "VOLUME");
 			labels.put(Constants.OPT_SND, "SOUND");
+			labels.put(Constants.OPT_F11, "FULLSCREEN");
 			
 			FreeTypeFontGenerator font = new 
 				FreeTypeFontGenerator(Gdx.files.internal("res/font/PressStart2P.ttf"));

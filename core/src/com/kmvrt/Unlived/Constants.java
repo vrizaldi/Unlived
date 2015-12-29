@@ -73,5 +73,6 @@ public class Constants {
 	public static final int OPT_RES = 625;
 	public static final int OPT_VOL = 626;
 	public static final int OPT_SND = 627;
+	public static final int OPT_F11 = 628;
 
 }	// public class' end

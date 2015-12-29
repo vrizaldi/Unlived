@@ -4,6 +4,7 @@ import com.kmvrt.Unlived.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Graphics.DisplayMode;
+import com.badlogic.gdx.utils.Timer;
 //import com.badlogic.gdx.utils.Timer;
 
 public class HeadClerk {
@@ -15,7 +16,9 @@ public class HeadClerk {
 	private Courier courier;
 	
 	private int cDIndex;
+	private boolean fullscreen;
 	//private boolean procInput;
+	private boolean justChange = false;
 
 
 // constructor ------------------------------------------------------------------------------------------------
@@ -34,7 +37,7 @@ public class HeadClerk {
 				break;
 			}
 		}
-		
+		fullscreen = Gdx.graphics.isFullscreen();
 	} 
 
 
@@ -88,14 +91,28 @@ public class HeadClerk {
 			}	// pointer checker's
 		// if D is pressed's
 			
-		} else if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
+		} else if(Gdx.input.isKeyJustPressed(Keys.RIGHT)) {
 			if(courier.cOptions == Assets.optionsSetting) {
 				if(p == Constants.OPT_RES) {
-					cDIndex = (cDIndex + 1) % Assets.optionsSetting.length;
-					DisplayMode d = Assets.availableRes[cDIndex];
-					Gdx.graphics.setDisplayMode(d.width, d.height, false);
+					if(!justChange) {
+						justChange();
+						cDIndex = (cDIndex + 1) % Assets.availableRes.length;
+						DisplayMode d = Assets.availableRes[cDIndex];
+						Gdx.graphics.setDisplayMode(d.width, d.height, fullscreen);
+					}
 					
-				} else if(p == Constants.OPT_VOL) {
+				} else if(p == Constants.OPT_F11) {
+					fullscreen = !fullscreen;
+					Gdx.graphics.setDisplayMode(
+							Gdx.graphics.getWidth(), 
+							Gdx.graphics.getHeight(), 
+							fullscreen);
+				}
+			} 	// if on setting
+			
+		} else if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
+			if(courier.cOptions == Assets.optionsSetting) {
+				if(p == Constants.OPT_VOL) {
 					Assets.volMusic =
 							Math.min(Assets.volMusic + 0.01f, 1f);
 						// the maximum is 1 (100%)
@@ -103,21 +120,37 @@ public class HeadClerk {
 				} else if(p == Constants.OPT_SND) {
 					Assets.volSound =
 							Math.min(Assets.volSound + 0.01f, 1f);
-				}
+					
+				} 
 			} 	// if on setting
 		// if right is pressed
+		
+		} else if(Gdx.input.isKeyJustPressed(Keys.LEFT)) {
+			if(courier.cOptions == Assets.optionsSetting) {
+				if(p == Constants.OPT_RES) {
+					if(!justChange) {
+						justChange();
+						cDIndex = (cDIndex - 1) % Assets.availableRes.length;
+						if(cDIndex < 0) {
+							cDIndex += Assets.availableRes.length;
+						}
+						DisplayMode d = Assets.availableRes[cDIndex];
+						Gdx.graphics.setDisplayMode(d.width, d.height, fullscreen);
+					}
+					
+				} else if(p == Constants.OPT_F11) {
+					fullscreen = !fullscreen;
+					Gdx.graphics.setDisplayMode(
+							Gdx.graphics.getWidth(), 
+							Gdx.graphics.getHeight(), 
+							fullscreen);
+				}
+			}
+		// if left is just pressed
 			
 		} else if(Gdx.input.isKeyPressed(Keys.LEFT)) {
 			if(courier.cOptions == Assets.optionsSetting) {
-				if(p == Constants.OPT_RES) {
-					cDIndex = (cDIndex - 1) % Assets.optionsSetting.length;
-					if(cDIndex < 0) {
-						cDIndex += Assets.optionsSetting.length;
-					}
-					DisplayMode d = Assets.availableRes[cDIndex];
-					Gdx.graphics.setDisplayMode(d.width, d.height, false);
-					
-				} else if(p == Constants.OPT_VOL) {
+				if(p == Constants.OPT_VOL) {
 					Assets.volMusic =
 							Math.max(Assets.volMusic - 0.01f, 0);
 						// the minimum is 0 (0%)
@@ -125,9 +158,22 @@ public class HeadClerk {
 				} else if(p == Constants.OPT_SND) {
 					Assets.volSound =
 							Math.max(Assets.volSound - 0.01f, 0);
+					
 				}
 			}
 		} // if left is pressed
 	}	// procInput()'s
 
+	private void justChange() {
+		justChange = true;
+		Timer.schedule(
+				new Timer.Task() {
+					
+					@Override
+					public void run() {
+						justChange = false;
+					}
+				}, 0.5f);
+	}
+	
 }	// public class'
