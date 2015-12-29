@@ -138,8 +138,8 @@ public class Painter {
 		// mainChar mana on top left screen
 		texts.setText(Assets.font, "Mana: " 
 				+ String.format("%.2f", data.getMainChar().atts.getMana()));
-		Assets.font.draw(batch, texts, 0,
-				ui.viewportHeight - texts.height - 0.5f);		
+		Assets.font.draw(batch, texts, 10,
+				ui.viewportHeight - texts.height/* - 0.5f*/);		
 		
 		batch.end();
 	}

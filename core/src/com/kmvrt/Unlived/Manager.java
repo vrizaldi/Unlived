@@ -3,6 +3,7 @@
 package com.kmvrt.Unlived;
 
 import com.kmvrt.Unlived.gameplay.Arena;
+import com.kmvrt.Unlived.mainmenu.Menu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
@@ -15,6 +16,7 @@ public class Manager extends Game {
 
 	// game screens
 	private Arena arena;
+	private Menu menu;
 	
 
 // constructor ---------------------------------------------------------------------------------------------
@@ -26,7 +28,7 @@ public class Manager extends Game {
 		Gdx.app.log(TAG, "Initialising the game...");
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		arena = new Arena(this);
-
+		menu = new Menu(this);
 
 /*		DisplayMode[] displayMode = Gdx.graphics.getDisplayModes();
 		Gdx.app.log(TAG, "Display Modes available:");
@@ -36,7 +38,7 @@ public class Manager extends Game {
 				+ " bit/p, " + displayMode[i].refreshRate + "Hz"); 
 		} */
 
-		this.setScreen(arena);
+		this.setScreen(menu);
 		Gdx.app.log(TAG, "Game initialised");
 	}
 
@@ -57,6 +59,10 @@ public class Manager extends Game {
 		// switch screen to hub
 //		Gdx.app.log(TAG, "Switching to Hub...");
 //		this.setScreen(hub);
+	}
+
+	public void backToMainMenu() {
+		
 	}
 
 

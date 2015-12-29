@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 public class Assets {
-	// store all the assets to be used in game
 
 	private static final String TAG = Assets.class.getName();
 	
@@ -205,6 +204,21 @@ public class Assets {
 
 		if(initialised) {
 			mapImgs.dispose();
+			for(TextureAtlas img : charImgs) {
+				img.dispose();
+			}
+			charImgs.clear();
+			charSprites.clear();
+			charAnims.clear();
+			
+			for(TextureAtlas img : magicImgs) {
+				img.dispose();
+			}
+			magicImgs.clear();
+			magicSprites.clear();
+			charAnims.clear();
+			
+			font.dispose();
 
 			initialised = false;	// unflag it
 		} else {

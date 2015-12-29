@@ -65,5 +65,13 @@ public class Constants {
 	public static final int ROOM_SPAWN = 431;
 	public static final int ROOM_PORTAL = 432;
 	public static final int ROOM_BLANK = 433;
+	
+	// option ids
+	public static final int OPT_START = 622;
+	public static final int OPT_QUIT = 623;
+	public static final int OPT_SETTING = 624;
+	public static final int OPT_RES = 625;
+	public static final int OPT_VOL = 626;
+	public static final int OPT_SND = 627;
 
 }	// public class' end

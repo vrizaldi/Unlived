@@ -30,7 +30,8 @@ public class StateData {
 	public StateData(int stateID) {
 		
 		if(stateID != Constants.STATE_ARENA) {
-			Gdx.app.log(TAG, "Wrong input on StateData class: " + stateID);
+			Gdx.app.error(TAG, "Wrong input on StateData class: " + stateID);
+			Gdx.app.exit();
 
 		} else {
 			this.stateID = stateID;
