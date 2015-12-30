@@ -131,7 +131,7 @@ public class GameChar {
 			|| dir == Constants.DIR_W) {
 			this.dir = dir;
 		} else {
-			Gdx.app.log(TAG, "ERROR: being set to invalid direction");
+			Gdx.app.error(TAG, "Being set to invalid direction");
 			Gdx.app.exit();
 		}
 	} 

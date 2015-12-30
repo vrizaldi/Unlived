@@ -3,8 +3,8 @@ package com.kmvrt.Unlived.gameplay;
 //import java.util.HashMap;
 import com.kmvrt.Unlived.*;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Intersector;
+//import com.badlogic.gdx.math.Rectangle;
+//import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.Timer;
 
 public class Navigator {
@@ -15,9 +15,9 @@ public class Navigator {
 	private StateData data;		// the current game state data
 
 	// for collision detection
-	private Rectangle rec1;
-	private Rectangle rec2;
-	private Rectangle inter;
+//	private Rectangle rec1;
+//	private Rectangle rec2;
+//	private Rectangle inter;
 //	private int roomPassed;
 
 	private boolean checkRoom;
@@ -28,9 +28,20 @@ public class Navigator {
 	
 		this.data = data;
 		
-		rec1 = new Rectangle();
-		rec2 = new Rectangle();
-		inter = new Rectangle();
+//		rec1 = new Rectangle();
+//		rec2 = new Rectangle();
+//		inter = new Rectangle();
+		checkRoom = true;
+	}
+
+
+// create and dispose current game ---------------------------------------------------------------------------
+	public void initNewGame() {
+		// create objects for new game
+	
+		data.map = deployMap();
+		data.newMap = true;
+
 		checkRoom = true;
 		Timer.schedule(
 				new Timer.Task() {
@@ -42,23 +53,8 @@ public class Navigator {
 					}
 				}, 0.2f, 0.2f);
 			// check room every 0.2 sec
-	}
-
-
-// create and dispose current game ---------------------------------------------------------------------------
-	public void initNewGame() {
-		// create objects for new game
-	
-		data.map = deployMap();
-		data.newMap = true;
 //		roomPassed = 0;
 	} // initNewGame()'s end
-
-	public void disposeGame() {
-		// dispose the current game objects
-	
-		data.map = null;
-	} // disposeGame()'s end
 
 
 
@@ -85,35 +81,10 @@ public class Navigator {
 				// if the char is the main char
 				if(data.isLevelFinished()) {
 					// if the level is finished
-					// set rec1 to be the rectangle of current char
-					rec1.setPosition(c.x, c.y);
-					rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
-
-					// rec 2 as the portal
-					rec2.setPosition(
-						data.map.getPortalPosX(), data.map.getPortalPosY());
-					rec2.setSize(Constants.PORTAL_WIDTH, Constants.PORTAL_HEIGHT);
-
-					if(Intersector.intersectRectangles(rec1, rec2, inter)) {
-						// if the char is in the portal
-						// move to the next level
-						data.switchLevel = true;
-						Gdx.app.log(TAG, "Deploying new rooms...");
-						data.map = deployMap();
-						
-						// repos. the mainchar to the spawn point
-						data.getMainChar().x = data.map.getSpawnPosX() - (Constants.CHAR_WIDTH / 2);
-						data.getMainChar().y = data.map.getSpawnPosY() - (Constants.CHAR_HEIGHT / 2);
-						int x = (int)(c.x / 
-								(Constants.ROOM_WIDTH + 
-								(Constants.ROOMS_INTERVAL / 2))); 
-						int y = (int)(c.y / 
-								(Constants.ROOM_HEIGHT + 
-								(Constants.ROOMS_INTERVAL / 2)));
-						data.getMainChar().cRoom = data.map.visit(c, x, y);
-						
-						data.newMap = true;
-					}	// if intersect's 
+					// move to the next level
+					data.switchLevel = true;
+					
+					data.newMap = true;
 				} 
 			} 
 		}	// char iter's
@@ -311,13 +282,13 @@ public class Navigator {
 public static float getDoorPosX(float roomX, int dir) {
 		
 		if(dir == Constants.DIR_N || dir == Constants.DIR_S) {
-			return (roomX + ((Constants.ROOM_WIDTH - Assets.doorHSprite.getWidth()) / 2));
+			return (roomX + ((Constants.ROOM_WIDTH - Assets.ins.doorHSprite.getWidth()) / 2));
 			
 		} else if(dir == Constants.DIR_E) {
 			return roomX + Constants.ROOM_WIDTH - (float)1/16;
 	
 		} else if(dir == Constants.DIR_W) {
-			return roomX - Assets.doorVSprite.getWidth() + (float)1/16;
+			return roomX - Assets.ins.doorVSprite.getWidth() + (float)1/16;
 			
 		} else {	// invalid
 			return 0;
@@ -330,11 +301,11 @@ public static float getDoorPosX(float roomX, int dir) {
 			return roomY + Constants.ROOM_HEIGHT - (float)1/16;
 			
 		} else if(dir == Constants.DIR_S) {
-			return roomY - Assets.doorHSprite.getHeight() + (float)1/16;
+			return roomY - Assets.ins.doorHSprite.getHeight() + (float)1/16;
 			
 		} else if(dir == Constants.DIR_E || dir == Constants.DIR_W) {
 			return roomY + ((Constants.ROOM_HEIGHT 
-					- Assets.doorVSprite.getHeight()) / 2);
+					- Assets.ins.doorVSprite.getHeight()) / 2);
 			
 		} else {
 			return 0;

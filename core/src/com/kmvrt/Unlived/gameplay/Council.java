@@ -44,6 +44,38 @@ public class Council {
 		charsComp = new CharsComparator();
 		
 		creepsChange = true;
+		creepsDirChange = false;
+	} 
+
+
+
+// create or dispose current game --------------------------------------------------------------------------
+	public void initNewGame(boolean initMainChar) {
+		// clear char and magic collection
+		data.chars.clear();
+		data.magics.clear();
+		GameChar mainChar = null;
+		if(initMainChar) {
+		// create objects for a new game
+			mainChar = new GameChar("pull");
+			
+		} else {
+			mainChar = data.getMainChar();
+			mainChar.cRoom = null;
+		}
+		data.chars.add(mainChar); 
+		data.setMainChar(mainChar);
+		
+		// put it in the middle of the room
+		mainChar.x = data.map.getSpawnPosX() - (Constants.CHAR_WIDTH / 2); 
+		mainChar.y = data.map.getSpawnPosY() - (Constants.CHAR_HEIGHT / 2);
+		mainChar.updateSafePos();		
+		
+		Gdx.app.log(TAG, "Deploying new creeps...");
+		deployCreeps((int)(Math.random() * Constants.CHARS_MAX));
+		Assets.initChars(data.chars);
+		
+		creepsChange = true;
 		Timer.schedule(
 			new Timer.Task() {
 				
@@ -63,34 +95,7 @@ public class Council {
 						creepsDirChange = true;
 					}
 				}, 0, 0.8f);
-	} 
-
-
-
-// create or dispose current game --------------------------------------------------------------------------
-	public void initNewGame() {
-		// create objects for a new game
-		
-		GameChar mainChar = new GameChar("pull");
-		if(data.getStateID() == Constants.STATE_ARENA) {
-			// put it in the middle of the room
-			mainChar.x = data.map.getSpawnPosX() - (Constants.CHAR_WIDTH / 2); 
-			mainChar.y = data.map.getSpawnPosY() - (Constants.CHAR_HEIGHT / 2);
-			mainChar.updateSafePos();
-		}
-		
-		data.chars.add(mainChar); 
-		data.setMainChar(mainChar);
-		Assets.initChars(data.chars);
 	}	// initNewGame()'s end
-
-	public void disposeGame() {
-		// dispose current game's object
-
-		// clear char and magic collection
-		data.chars.clear();
-		data.magics.clear();
-	} // disposeGame()'s end
 
 
 
@@ -211,17 +216,7 @@ public class Council {
 	private void updateCreeps(float delta) {
 		// update the other characters
 
-		// new level initiation
-		// just create new creeps
-		if(data.switchLevel) {
-			data.switchLevel = false;
-			
-			Gdx.app.log(TAG, "Deploying new creeps...");
-			deployCreeps((int)(Math.random() * Constants.CHARS_MAX));
-			return;
-
-		} else if(!data.switchLevel
-			&& data.chars.size() == 1) {
+		if(data.chars.size() == 1) {
 			// there's no creep
 			return;
 		}
@@ -255,7 +250,7 @@ public class Council {
 				// add it to the collection
 		}
 
-		Assets.initChars(data.chars);
+//		Assets.initChars(data.chars);
 	}
 	
 	private void changeCreeps() {
@@ -275,6 +270,9 @@ public class Council {
 					while(!finish) {
 						mood = (int)(Math.random() * 4);
 							// rand number 0 - 3
+						if(creep.cRoom == null) {
+							Gdx.app.debug(TAG, "cRoom is empty");
+						}
 						if(mood == 0 && creep.cRoom.north) {
 							creep.changeCreep(Constants.DIR_N);
 							finish = true;
@@ -306,20 +304,10 @@ public class Council {
 					case 5:
 					case 4:
 					case 3:
+					case 2:
 						creep.changeCreep(Constants.CHAR_CREEP_FOLLOW);
 						break;
-
-/*					case 5:
-					case 4:
-						creep.changeCreep(Constants.CHAR_CREEP_FOLLOW_N);
-						break;
-
-					case 3:
-					case 2:
-						creep.changeCreep(Constants.CHAR_CREEP_FOLLOW_S);
-						break;*/
-
-					case 2:	
+	
 					case 1:
 						creep.changeCreep(Constants.CHAR_CREEP_AVOID);
 						break;
@@ -363,26 +351,6 @@ public class Council {
 							+ (creep.getSpell().getWidth());
 				}
 				distX = shootRangeX - creep.x;
-					
-			/*	distX = mainChar.x - creep.x > 0 ?
-						mainChar.x - (creep.x + (Constants.CHAR_WIDTH / 2))
-							+ creep.getSpell().getWidth() // east
-						: 
-						(creep.x + (Constants.CHAR_WIDTH / 2))
-							- creep.getSpell().getWidth()
-							- mainChar.x + Constants.CHAR_WIDTH;	// west
-							
-				// keep it in safe distance
-/				if(creep.cRoom == data.getMainChar().cRoom
-						&& Math.abs(distX) <= creep.getSpell().getTravelDist()) {
-					if(distX >= 0) {
-						distX -= creep.getSpell().getTravelDist();
-					} else {	// distX < 0
-						distX += creep.getSpell().getTravelDist();
-					}
-					distY = 0;
-				} */
-	//			distY = Math.abs(distY) < 1 ? 0 : distY; 
 				
 				// move the creep based on its type
 				if(creep.wandering) {

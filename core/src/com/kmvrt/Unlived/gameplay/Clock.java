@@ -230,9 +230,9 @@ public class Clock {
 					iter.remove();
 				} catch(IllegalStateException e) {
 					// the magic has probably been destroyed
-					Gdx.app.debug(TAG, "IllegalStateException");
+//					Gdx.app.debug(TAG, "IllegalStateException");
 				}
-				Gdx.app.debug(TAG, "The magic hit a char");
+//				Gdx.app.debug(TAG, "The magic hit a char");
 			}
 		}	// magic iter's
 	} // collisionFix()'s
@@ -254,8 +254,8 @@ public class Clock {
 				doorX = Navigator.getDoorPosX(roomX, Constants.DIR_N);
 				doorY = Navigator.getDoorPosY(roomY, Constants.DIR_N);
 				
-				doorWidth = Assets.doorHSprite.getWidth();
-				doorHeight = Assets.doorHSprite.getHeight();
+				doorWidth = Assets.ins.doorHSprite.getWidth();
+				doorHeight = Assets.ins.doorHSprite.getHeight();
 				break;
 				
 			} else {
@@ -267,8 +267,8 @@ public class Clock {
 				doorX = Navigator.getDoorPosX(roomX, Constants.DIR_S);
 				doorY = Navigator.getDoorPosY(roomY, Constants.DIR_S);
 				
-				doorWidth = Assets.doorHSprite.getWidth();
-				doorHeight = Assets.doorHSprite.getHeight();
+				doorWidth = Assets.ins.doorHSprite.getWidth();
+				doorHeight = Assets.ins.doorHSprite.getHeight();
 				break;
 				
 			} else {
@@ -280,8 +280,8 @@ public class Clock {
 				doorX = Navigator.getDoorPosX(roomX, Constants.DIR_E);
 				doorY = Navigator.getDoorPosY(roomY, Constants.DIR_E);
 				
-				doorWidth = Assets.doorVSprite.getWidth();
-				doorHeight = Assets.doorVSprite.getHeight();
+				doorWidth = Assets.ins.doorVSprite.getWidth();
+				doorHeight = Assets.ins.doorVSprite.getHeight();
 				break;
 				
 			} else {
@@ -293,8 +293,8 @@ public class Clock {
 				doorX = Navigator.getDoorPosX(roomX, Constants.DIR_W);
 				doorY = Navigator.getDoorPosY(roomY, Constants.DIR_W);
 				
-				doorWidth = Assets.doorVSprite.getWidth();
-				doorHeight = Assets.doorVSprite.getHeight();
+				doorWidth = Assets.ins.doorVSprite.getWidth();
+				doorHeight = Assets.ins.doorVSprite.getHeight();
 				break;
 				
 			} else {
@@ -344,8 +344,8 @@ public class Clock {
 				doorX = Navigator.getDoorPosX(roomX, Constants.DIR_E);
 				doorY = Navigator.getDoorPosY(roomY, Constants.DIR_E);
 				
-				doorWidth = Assets.doorVSprite.getWidth();
-				doorHeight = Assets.doorVSprite.getHeight();
+				doorWidth = Assets.ins.doorVSprite.getWidth();
+				doorHeight = Assets.ins.doorVSprite.getHeight();
 				
 			} else {
 				// east door doesn't exist
@@ -357,8 +357,8 @@ public class Clock {
 				doorX = Navigator.getDoorPosX(roomX, Constants.DIR_W);
 				doorY = Navigator.getDoorPosY(roomY, Constants.DIR_W);
 				
-				doorWidth = Assets.doorVSprite.getWidth();
-				doorHeight = Assets.doorVSprite.getHeight();
+				doorWidth = Assets.ins.doorVSprite.getWidth();
+				doorHeight = Assets.ins.doorVSprite.getHeight();
 				
 			} else {
 				// west door doesn't exist

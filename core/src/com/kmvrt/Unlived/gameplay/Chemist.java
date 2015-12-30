@@ -23,6 +23,7 @@ public class Chemist {
 
 // create or dispose current game ------// decrease the mana if c is mainChar----------------------------------------------------------------------
 	public void initNewGame() {
+
 		data.magics.clear();
 	}
 	

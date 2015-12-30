@@ -1,6 +1,6 @@
 package com.kmvrt.Unlived;
 
-import com.badlogic.gdx.Gdx;
+//import com.badlogic.gdx.Gdx;
 import java.util.ArrayList;
 
 public class StateData {
@@ -8,14 +8,14 @@ public class StateData {
 	// store chars, magics, current room, and other game variables
 	// this is the one that updated by the updater and referred by the Painter
 
-	private static final String TAG = StateData.class.getName();
+//	private static final String TAG = StateData.class.getName();
 
-	public boolean switchScreen;
+	public boolean paused = false;
+	public boolean justResumed = false;
+//	public boolean switchScreen;
 	public boolean gameOver;
 	public boolean switchLevel;
 	
-	private int stateID;
-
 	private GameChar mainChar;
 	public ArrayList<GameChar> chars;
 	public GameMap map;
@@ -25,17 +25,14 @@ public class StateData {
 	// kill and death count
 	public int killCt;
 	public int deathCt;
+	
+	public int[] cOptions;
+	public int pointer = 0;
+	public boolean vSync;
+	
 
 // constructor ----------------------------------------------------------------------------------------------
-	public StateData(int stateID) {
-		
-		if(stateID != Constants.STATE_ARENA) {
-			Gdx.app.error(TAG, "Wrong input on StateData class: " + stateID);
-			Gdx.app.exit();
-
-		} else {
-			this.stateID = stateID;
-		}
+	public StateData() {
 		
 		newMap = false;
 		
@@ -66,11 +63,6 @@ public class StateData {
 		return mainChar;
 	}
 
-	public int getStateID() {
-	
-		return stateID;
-	}
-	
 	public boolean isLevelFinished() {
 		// return whether there's only mainChar left in the level
 	
