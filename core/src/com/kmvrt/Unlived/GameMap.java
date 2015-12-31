@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 public class GameMap {
 	// represent a map in-game
 	
-	private static final String TAG = GameMap.class.getName();
+//	private static final String TAG = GameMap.class.getName();
 
 	private int typeID;
 
@@ -34,17 +34,17 @@ public class GameMap {
 				if(rooms[x][y] != null 
 						&& rooms[x][y].getTypeID() == Constants.ROOM_SPAWN) {
 					Gdx.app.debug("GameMap", "Spawn in " + x + ", " + y);
-					spawnPosX = getMiddle(x, Constants.ROOM_WIDTH,
-							Constants.ROOMS_INTERVAL);
-					spawnPosY = getMiddle(y, Constants.ROOM_HEIGHT,
-							Constants.ROOMS_INTERVAL);
+					spawnPosX = getMiddle(x, Constants.ins.ROOM_WIDTH,
+							Constants.ins.ROOMS_INTERVAL);
+					spawnPosY = getMiddle(y, Constants.ins.ROOM_HEIGHT,
+							Constants.ins.ROOMS_INTERVAL);
 
-					portalPosX = getMiddle(x, Constants.ROOM_WIDTH,
-							Constants.ROOMS_INTERVAL) 
-						- (Constants.PORTAL_WIDTH / 2);
-					portalPosY = getMiddle(y, Constants.ROOM_HEIGHT,
-							Constants.ROOMS_INTERVAL) 
-						- (Constants.PORTAL_HEIGHT / 2);
+					portalPosX = getMiddle(x, Constants.ins.ROOM_WIDTH,
+							Constants.ins.ROOMS_INTERVAL) 
+						- (Constants.ins.PORTAL_WIDTH / 2);
+					portalPosY = getMiddle(y, Constants.ins.ROOM_HEIGHT,
+							Constants.ins.ROOMS_INTERVAL) 
+						- (Constants.ins.PORTAL_HEIGHT / 2);
 				} 
 			}
 		}
@@ -103,11 +103,7 @@ public class GameMap {
 		// return the specified room
 		
 		justChanged = true;
-		try {
-			rooms[roomX][roomY].visit(c);
-		} catch(NullPointerException e) {
-			Gdx.app.debug(TAG, "Trying to visit undefined room");
-		}
+		rooms[roomX][roomY].visit(c);
 /*		if(c.getID() == Constants.CHAR_MAIN) {
 			Gdx.app.debug(TAG, "c = mainchar (" + c.x + ", " + c.y + ") : " +
 					"(" + roomX + ", " + roomY + ")");

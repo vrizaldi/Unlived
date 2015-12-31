@@ -55,8 +55,8 @@ public class Chemist {
 			// check its current room
 			try {
 				int roomX = (int)(m.x / 
-						(Constants.ROOM_WIDTH + 
-						Constants.ROOMS_INTERVAL));
+						(Constants.ins.ROOM_WIDTH + 
+						Constants.ins.ROOMS_INTERVAL));
 				m.cRoom = data.map.getRoom(roomX, m.cRoom.getY());
 			} catch(ArrayIndexOutOfBoundsException e) {
 				// the magic is out of the room
@@ -79,16 +79,16 @@ public class Chemist {
 				if(dir == Constants.DIR_E) {
 					// deploy it in the east of the mainChar
 					magic = MagicFactory.cast(c.getName(), 
-							c.x + (Constants.CHAR_WIDTH / 2), 
-							c.y + ((Constants.CHAR_HEIGHT - c.getSpell().getHeight()) / 2),
+							c.x + (Constants.ins.CHAR_WIDTH / 2), 
+							c.y + ((Constants.ins.CHAR_HEIGHT - c.getSpell().getHeight()) / 2),
 							Constants.DIR_E, c);
 					data.magics.add(magic);
 			
 				} else if(dir == Constants.DIR_W) {
 					// deploy it in the west of the mainChar
 					magic = MagicFactory.cast(c.getName(), 
-							c.x + (Constants.CHAR_WIDTH / 2) - c.getSpell().getWidth(), 
-							c.y + ((Constants.CHAR_HEIGHT - c.getSpell().getHeight()) / 2),
+							c.x + (Constants.ins.CHAR_WIDTH / 2) - c.getSpell().getWidth(), 
+							c.y + ((Constants.ins.CHAR_HEIGHT - c.getSpell().getHeight()) / 2),
 							Constants.DIR_W, c);
 					data.magics.add(magic);
 				}

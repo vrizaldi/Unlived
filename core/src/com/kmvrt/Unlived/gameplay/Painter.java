@@ -37,8 +37,8 @@ public class Painter {
 		batch = new SpriteBatch();
 		cacheBatch = new SpriteCache();
 
-		cam = new OrthographicCamera(Constants.CAM_WIDTH, 
-			Constants.CAM_HEIGHT);
+		cam = new OrthographicCamera(Constants.ins.CAM_WIDTH, 
+			Constants.ins.CAM_HEIGHT);
 		ui = new OrthographicCamera(Gdx.graphics.getWidth(),
 			Gdx.graphics.getHeight());
 		ui.position.set(ui.viewportWidth / 2f, ui.viewportHeight / 2f, 0f);
@@ -64,8 +64,8 @@ public class Painter {
 		}
 		if(!data.justResumed) {
 			Assets.update(stateTime);
-			updateCam();
 		}
+		updateCam();
 
 		// clear the canvas
 		Gdx.gl.glClearColor(0, 0, 0, 1); // black
@@ -79,27 +79,14 @@ public class Painter {
 		
 		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
-
-		if(data.isLevelFinished()) {
-			// draw the portal
-			Assets.ins.portalSprite.setPosition(
-				data.map.getPortalPosX(), data.map.getPortalPosY());
-			Assets.ins.portalSprite.draw(batch);
-		}
 		
 		Assets.ins.shadowSprite.setPosition(
-				cam.position.x - (Constants.CHAR_WIDTH / 2),
-				cam.position.y - (Constants.CHAR_HEIGHT / 2));
+				cam.position.x - (Constants.ins.CHAR_WIDTH / 2),
+				cam.position.y - (Constants.ins.CHAR_HEIGHT / 2));
 		Assets.ins.shadowSprite.draw(batch);
 
 		// draw chars **************
 		for(GameChar c : data.chars) {		
-			
-/*			// draw the shadow
-			Assets.ins.shadowSprite.setPosition(c.x, c.y + Constants.SHADOW_OFFSET_Y);
-			Assets.ins.shadowSprite.draw(batch); */
-			
-			// render the shadow in the middle of the ca
 			
 			Sprite cSprite = Assets.ins.charSprites.get(c.getName());
 			cSprite.setPosition(c.x, c.y);
@@ -115,8 +102,8 @@ public class Painter {
 			if(c.cRoom == data.getMainChar().cRoom) {
 				texts.setText(Assets.ins.font, (int)c.atts.getMana() + "%");
 				Assets.ins.font.draw(batch, texts, 
-						(c.x + ((Constants.CHAR_WIDTH - texts.width) / 2)),
-						c.y + Constants.CHAR_HEIGHT + 10);
+						(c.x + ((Constants.ins.CHAR_WIDTH - texts.width) / 2)),
+						c.y + Constants.ins.CHAR_HEIGHT + 10);
 			}
 		}
 
@@ -136,7 +123,26 @@ public class Painter {
 		}
 
 		// draw UIs
+		// switch to ui cam
 		batch.setProjectionMatrix(ui.combined);
+		
+		// render black boxes around the visible screen
+		float visibleScrX = (cam.viewportWidth - Constants.ins.VISIBLE_SCR_WIDTH) / 2;
+		float visibleScrY = (cam.viewportHeight - Constants.ins.VISIBLE_SCR_HEIGHT) / 2;
+		
+		Assets.ins.blackBox.setSize(visibleScrX, cam.viewportHeight);
+		Assets.ins.blackBox.setPosition(0, 0);	// blackbox in the west
+		Assets.ins.blackBox.draw(batch);
+		Assets.ins.blackBox.setPosition(visibleScrX 	// east
+				+ Constants.ins.VISIBLE_SCR_WIDTH, 0);
+		Assets.ins.blackBox.draw(batch);
+		
+		Assets.ins.blackBox.setSize(cam.viewportWidth, visibleScrY);
+		Assets.ins.blackBox.setPosition(0, 0);	// south
+		Assets.ins.blackBox.draw(batch);
+		Assets.ins.blackBox.setPosition(0, 
+				visibleScrY + Constants.ins.VISIBLE_SCR_HEIGHT);	// north
+		Assets.ins.blackBox.draw(batch);
 		
 		// kill/death count on top-right screen
 		// set texts to be kill/death
@@ -162,13 +168,13 @@ public class Painter {
 		
 			if(c.getID() == Constants.CHAR_MAIN) {
 //				Gdx.app.log("Painter", "mainChar found");
-				float distX = ((c.x + Constants.CHAR_WIDTH / 2) 
+				float distX = ((c.x + Constants.ins.CHAR_WIDTH / 2) 
 						- cam.position.x) * 0.3f;
-				float distY = ((c.y + Constants.CHAR_WIDTH / 2) 
+				float distY = ((c.y + Constants.ins.CHAR_WIDTH / 2) 
 						- cam.position.y) * 0.3f;
 /*				double a = Math.atan(Math.abs(distY) / Math.abs(distX));
-				float moveX = (float)(Constants.NORMAL_SPEED * 3 * Math.cos(a));
-				float moveY = (float)(Constants.NORMAL_SPEED * 3 * Math.sin(a));
+				float moveX = (float)(Constants.ins.NORMAL_SPEED * 3 * Math.cos(a));
+				float moveY = (float)(Constants.ins.NORMAL_SPEED * 3 * Math.sin(a));
 				if(distX < 0) {
 					moveX = -moveX;
 				}
@@ -176,8 +182,8 @@ public class Painter {
 					moveY = -moveY;
 				} */
 				cam.translate(distX, distY, 0);
-				/*cam.position.set(c.x + (Constants.CHAR_WIDTH / 2), 
-					c.y + (Constants.CHAR_HEIGHT / 2), 0);*/
+				/*cam.position.set(c.x + (Constants.ins.CHAR_WIDTH / 2), 
+					c.y + (Constants.ins.CHAR_HEIGHT / 2), 0);*/
 				cam.update();
 				return;
 			}
@@ -199,10 +205,10 @@ public class Painter {
 					continue;
 				}
 				
-				float roomX = (x * Constants.ROOM_WIDTH) 
-						+ (x * Constants.ROOMS_INTERVAL);
-				float roomY = (y * Constants.ROOM_HEIGHT) 
-						+ (y * Constants.ROOMS_INTERVAL);
+				float roomX = (x * Constants.ins.ROOM_WIDTH) 
+						+ (x * Constants.ins.ROOMS_INTERVAL);
+				float roomY = (y * Constants.ins.ROOM_HEIGHT) 
+						+ (y * Constants.ins.ROOMS_INTERVAL);
 				Assets.ins.roomSprite.setPosition(roomX, roomY);
 				cacheBatch.add(Assets.ins.roomSprite);
 				
@@ -242,12 +248,16 @@ public class Painter {
 	}
 	
 	public void resize() {
-		cam.viewportWidth = Constants.CAM_WIDTH;
-		cam.viewportHeight = Constants.CAM_HEIGHT;
-		ui.viewportWidth = Constants.CAM_WIDTH;
-		ui.viewportHeight = Constants.CAM_HEIGHT;
+		Assets.resize();
+		Assets.update(stateTime);
+		cam.viewportWidth = Constants.ins.CAM_WIDTH;
+		cam.viewportHeight = Constants.ins.CAM_HEIGHT;
+		ui.viewportWidth = Constants.ins.CAM_WIDTH;
+		ui.viewportHeight = Constants.ins.CAM_HEIGHT;
 		ui.position.set(ui.viewportWidth / 2, ui.viewportHeight / 2, 0);
 		cam.update();
 		ui.update();
+		
+		updateMap();
 	}
 }

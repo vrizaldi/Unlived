@@ -44,6 +44,8 @@ public class GameChar {
 	
 		this.ID = Constants.CHAR_CREEP_FOLLOW;
 
+		cRoom = null;
+		
 		x = 0;
 		y = 0;
 
@@ -53,7 +55,6 @@ public class GameChar {
 		nX = 0;
 		nY = 0;
 		
-//		fainted = false;
 		affectingTime = 0;
 
 		dir = Constants.DIR_E;
@@ -67,6 +68,27 @@ public class GameChar {
 		
 		wandering = false;
 	}	// new()'s end
+	
+	public void reset() {
+		
+		x = 0;
+		y = 0;
+
+		sX = x;
+		sY = y;
+
+		nX = 0;
+		nY = 0;
+		
+		affectingTime = 0;
+
+		dir = Constants.DIR_E;
+		
+		bursting = false;
+		ableToShoot = true;
+		
+		affectors = new Attributes(false);
+	}
 
 
 

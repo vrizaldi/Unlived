@@ -68,11 +68,11 @@ public class Navigator {
 			// room check 
 			if(checkRoom) {
 				int x = (int)(c.x / 
-					(Constants.ROOM_WIDTH + 
-					Constants.ROOMS_INTERVAL));	// the gaps between rooms
+					(Constants.ins.ROOM_WIDTH + 
+					Constants.ins.ROOMS_INTERVAL));	// the gaps between rooms
 				int y = (int)(c.y / 
-					(Constants.ROOM_HEIGHT + 
-					Constants.ROOMS_INTERVAL));
+					(Constants.ins.ROOM_HEIGHT + 
+					Constants.ins.ROOMS_INTERVAL));
 				c.cRoom = data.map.visit(c, x, y);
 			}
 
@@ -282,10 +282,10 @@ public class Navigator {
 public static float getDoorPosX(float roomX, int dir) {
 		
 		if(dir == Constants.DIR_N || dir == Constants.DIR_S) {
-			return (roomX + ((Constants.ROOM_WIDTH - Assets.ins.doorHSprite.getWidth()) / 2));
+			return (roomX + ((Constants.ins.ROOM_WIDTH - Assets.ins.doorHSprite.getWidth()) / 2));
 			
 		} else if(dir == Constants.DIR_E) {
-			return roomX + Constants.ROOM_WIDTH - (float)1/16;
+			return roomX + Constants.ins.ROOM_WIDTH - (float)1/16;
 	
 		} else if(dir == Constants.DIR_W) {
 			return roomX - Assets.ins.doorVSprite.getWidth() + (float)1/16;
@@ -298,13 +298,13 @@ public static float getDoorPosX(float roomX, int dir) {
 	public static float getDoorPosY(float roomY, int dir) {
 				
 		if(dir == Constants.DIR_N) {
-			return roomY + Constants.ROOM_HEIGHT - (float)1/16;
+			return roomY + Constants.ins.ROOM_HEIGHT - (float)1/16;
 			
 		} else if(dir == Constants.DIR_S) {
 			return roomY - Assets.ins.doorHSprite.getHeight() + (float)1/16;
 			
 		} else if(dir == Constants.DIR_E || dir == Constants.DIR_W) {
-			return roomY + ((Constants.ROOM_HEIGHT 
+			return roomY + ((Constants.ins.ROOM_HEIGHT 
 					- Assets.ins.doorVSprite.getHeight()) / 2);
 			
 		} else {

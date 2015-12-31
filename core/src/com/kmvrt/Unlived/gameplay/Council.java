@@ -61,14 +61,16 @@ public class Council {
 			
 		} else {
 			mainChar = data.getMainChar();
-			mainChar.cRoom = null;
+			mainChar.reset();
 		}
 		data.chars.add(mainChar); 
 		data.setMainChar(mainChar);
 		
 		// put it in the middle of the room
-		mainChar.x = data.map.getSpawnPosX() - (Constants.CHAR_WIDTH / 2); 
-		mainChar.y = data.map.getSpawnPosY() - (Constants.CHAR_HEIGHT / 2);
+		mainChar.x = data.map.getSpawnPosX() 
+				- (Constants.ins.CHAR_WIDTH / 2); 
+		mainChar.y = data.map.getSpawnPosY() 
+				- (Constants.ins.CHAR_HEIGHT / 2);
 		mainChar.updateSafePos();		
 		
 		Gdx.app.log(TAG, "Deploying new creeps...");
@@ -137,21 +139,21 @@ public class Council {
 		// horizontal movements
 		if(Gdx.input.isKeyPressed(Keys.LEFT)) {
 				// move west
-				mainChar.move(-Constants.NORMAL_SPEED * delta, 0);
+				mainChar.move(-Constants.ins.NORMAL_SPEED * delta, 0);
 
 		} else if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
 				// move east
-				mainChar.move(Constants.NORMAL_SPEED * delta, 0);
+				mainChar.move(Constants.ins.NORMAL_SPEED * delta, 0);
 		}
 
 		// vertical movement
 		if(Gdx.input.isKeyPressed(Keys.UP)) {
 			// move north
-			mainChar.move(0, Constants.NORMAL_SPEED * delta);
+			mainChar.move(0, Constants.ins.NORMAL_SPEED * delta);
 
 		} else if(Gdx.input.isKeyPressed(Keys.DOWN)) {
 			// move south
-			mainChar.move(0, -Constants.NORMAL_SPEED * delta);
+			mainChar.move(0, -Constants.ins.NORMAL_SPEED * delta);
 		}
 	} // updateMainChar()'s end
 
@@ -166,16 +168,16 @@ public class Council {
 		if(dir == Constants.DIR_E) {
 			// deploy it in the east of the mainChar
 			magic = MagicFactory.cast(c.getName(),
-				c.x + (Constants.CHAR_WIDTH / 2), 
-				c.y + ((Constants.CHAR_HEIGHT - c.getSpell().getHeight()) / 2),
+				c.x + (Constants.ins.CHAR_WIDTH / 2), 
+				c.y + ((Constants.ins.CHAR_HEIGHT - c.getSpell().getHeight()) / 2),
 				Constants.DIR_E, c);
 			data.magics.add(magic);
 	
 		} else if(dir == Constants.DIR_W) {
 			// deploy it in the west of the mainChar
 			magic = MagicFactory.cast(c.getName(), 
-					c.x + (Constants.CHAR_WIDTH / 2) - c.getSpell().getWidth() , 
-					c.y + ((Constants.CHAR_HEIGHT - c.getSpell().getHeight()) / 2),
+					c.x + (Constants.ins.CHAR_WIDTH / 2) - c.getSpell().getWidth() , 
+					c.y + ((Constants.ins.CHAR_HEIGHT - c.getSpell().getHeight()) / 2),
 					Constants.DIR_W, c);
 			data.magics.add(magic);
 		}
@@ -192,14 +194,14 @@ public class Council {
 
 		// set rec1 as mainChar's y rectangle
 		rec1.setPosition(0, mainChar.y);
-		rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+		rec1.setSize(Constants.ins.CHAR_WIDTH, Constants.ins.CHAR_HEIGHT);
 		for(GameChar c : data.chars) {
 			float distX = Math.abs(mainChar.x - c.x);
 			float distY = Math.abs(mainChar.y - c.y);
 			if(c.cRoom == mainChar.cRoom
 					&& c != mainChar
-					&& distX < Constants.SAFE_DIST_X
-					&& distY < Constants.SAFE_DIST_Y
+					&& distX < Constants.ins.SAFE_DIST_X
+					&& distY < Constants.ins.SAFE_DIST_Y
 					&& distX < closestX) {
 				// if they're the closest found
 				closestX = distX;
@@ -240,10 +242,10 @@ public class Council {
 			int r = (int)(Math.random() * MagicFactory.totalSpells());
 			GameChar creep = new GameChar(MagicFactory.getSpellName(r));
 			Room room = data.map.getRandRoom();
-			creep.x = (room.getX() * Constants.ROOM_WIDTH) 
-					+ (room.getX() * Constants.ROOMS_INTERVAL)+ 1;
-			creep.y = (room.getY() * Constants.ROOM_HEIGHT)
-					+ (room.getY() * Constants.ROOMS_INTERVAL) + 1;
+			creep.x = (room.getX() * Constants.ins.ROOM_WIDTH) 
+					+ (room.getX() * Constants.ins.ROOMS_INTERVAL)+ 1;
+			creep.y = (room.getY() * Constants.ins.ROOM_HEIGHT)
+					+ (room.getY() * Constants.ins.ROOMS_INTERVAL) + 1;
 				// put it anywhere in the room;
 			creep.updateSafePos();
 			data.chars.add(creep);
@@ -384,27 +386,17 @@ public class Council {
 			roomX -= 1;
 		}
 		float nRoomX = 
-				GameMap.getMiddle(roomX, Constants.ROOM_WIDTH, 
-						Constants.ROOMS_INTERVAL) 
-				- Constants.CHAR_WIDTH / 2;
+				GameMap.getMiddle(roomX, Constants.ins.ROOM_WIDTH, 
+						Constants.ins.ROOMS_INTERVAL) 
+				- Constants.ins.CHAR_WIDTH / 2;
 		float nRoomY = 
-				GameMap.getMiddle(roomY, Constants.ROOM_HEIGHT,
-						Constants.ROOMS_INTERVAL)
-				- (Constants.CHAR_HEIGHT / 2);
+				GameMap.getMiddle(roomY, Constants.ins.ROOM_HEIGHT,
+						Constants.ins.ROOMS_INTERVAL)
+				- (Constants.ins.CHAR_HEIGHT / 2);
 
 		// aim to make the creep go pass through the door
 		float distX = nRoomX - creep.x;
-/*		if(distX > 0 && dir == Constants.DIR_E) {
-			distX += Constants.CHAR_WIDTH * 5;
-		} else if(distX < 0 && dir == Constants.DIR_W) {
-			distX -= Constants.CHAR_WIDTH * 5;
-		}*/
 		float distY = nRoomY - creep.y;
-/*		if(distY > 0 && dir == Constants.DIR_N) {
-			distY += Constants.CHAR_HEIGHT * 5;
-		} else if(distY < 0 && dir == Constants.DIR_S) {
-			distY -= Constants.CHAR_HEIGHT * 5;
-		}*/
 		follow(creep, distX, distY, delta);
 	}	// wander(GameChar, float)'s
 	
@@ -418,8 +410,8 @@ public class Council {
 			float a = Math.abs(distX);
 			float o = Math.abs(distY);
 			double angle = Math.atan(o / a);
-			float moveX = (float)(Constants.NORMAL_SPEED * Math.cos(angle));
-			float moveY = (float)(Constants.NORMAL_SPEED * Math.sin(angle));
+			float moveX = (float)(Constants.ins.NORMAL_SPEED * Math.cos(angle));
+			float moveY = (float)(Constants.ins.NORMAL_SPEED * Math.sin(angle));
 			if(distX < 0) {
 				moveX = -moveX;
 			}
@@ -433,11 +425,11 @@ public class Council {
 			
 		} else if(distX == 0) {
 			// just move to vertically
-			creep.move(0, Constants.NORMAL_SPEED * delta);
+			creep.move(0, Constants.ins.NORMAL_SPEED * delta);
 			
 		} else if(distY == 0) {
 			// just move horizontally
-			creep.move(Constants.NORMAL_SPEED * delta, 0);
+			creep.move(Constants.ins.NORMAL_SPEED * delta, 0);
 		}
 	}	// followMainChar(GameChar, float, float)'s end
 
@@ -455,17 +447,17 @@ public class Council {
 		// and also keep moving north/south
 		if(distX > 0) {
 			// move east
-			creep.move(Constants.NORMAL_SPEED * delta, 0);
+			creep.move(Constants.ins.NORMAL_SPEED * delta, 0);
 
 		} else if(distX < 0) {
 			// move west
-			creep.move(-Constants.NORMAL_SPEED * delta, 0);
+			creep.move(-Constants.ins.NORMAL_SPEED * delta, 0);
 		}
 
 		if(dirY == Constants.DIR_N) {
-			creep.move(0, Constants.NORMAL_SPEED * delta);
+			creep.move(0, Constants.ins.NORMAL_SPEED * delta);
 		} else {
-			creep.move(0, -Constants.NORMAL_SPEED * delta);			
+			creep.move(0, -Constants.ins.NORMAL_SPEED * delta);			
 		}
 	}	// followMainCharX(GameChar, float, int)'s end*/
 
@@ -475,21 +467,21 @@ public class Council {
 		// move horizontally
 		if(distX > 0) {
 			// move west
-			creep.move(-Constants.NORMAL_SPEED * delta, 0);
+			creep.move(-Constants.ins.NORMAL_SPEED * delta, 0);
 
 		} else if(distX < 0) {
 			// move east
-			creep.move(Constants.NORMAL_SPEED * delta, 0);
+			creep.move(Constants.ins.NORMAL_SPEED * delta, 0);
 		}
 
 		// move vertically
 		if(distY > 0) {
 			// move south 
-			creep.move(0, -Constants.NORMAL_SPEED * delta);
+			creep.move(0, -Constants.ins.NORMAL_SPEED * delta);
 
 		} else if(distY < 0) {
 			// move north
-			creep.move(0, Constants.NORMAL_SPEED * delta);
+			creep.move(0, Constants.ins.NORMAL_SPEED * delta);
 		}
 	}	// avoidMainChar(GameChar, float, float)'s end
 
@@ -501,24 +493,24 @@ public class Council {
 		
 		// set rec1 to be the mainChar's y related rectangle
 		rec1.setPosition(0, mainChar.y);
-		rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+		rec1.setSize(Constants.ins.CHAR_WIDTH, Constants.ins.CHAR_HEIGHT);
 
 		for(GameChar creep : data.chars) {
 			if(creep.getID() != Constants.CHAR_MAIN) {
 				// set rec2 to be current creep's y related rectangle
 				rec2.setPosition(0, creep.y);
-				rec2.setSize(Constants.CHAR_WIDTH, Constants.CAM_HEIGHT);
+				rec2.setSize(Constants.ins.CHAR_WIDTH, Constants.ins.CHAR_HEIGHT);
 
 				float distX = mainChar.x - creep.x > 0 ?
-						mainChar.x - (creep.x + (Constants.CHAR_WIDTH / 2))
+						mainChar.x - (creep.x + (Constants.ins.CHAR_WIDTH / 2))
 							+ creep.getSpell().getWidth() // east
 						: 
-						(creep.x + (Constants.CHAR_WIDTH / 2))
+						(creep.x + (Constants.ins.CHAR_WIDTH / 2))
 							- creep.getSpell().getWidth()
-							- mainChar.x + Constants.CHAR_WIDTH;	// west
+							- mainChar.x + Constants.ins.CHAR_WIDTH;	// west
 				if(Intersector.intersectRectangles(rec1, rec2, inter)
 						&& Math.abs(distX) <= creep.getSpell().getTravelDist()
-						&& inter.height > Constants.CHAR_HEIGHT * 0.1f) {
+						&& inter.height > Constants.ins.CHAR_HEIGHT * 0.1f) {
 					// if the mainChar is within the range of the creep shoot
 					shoot(creep, creep.getDir());
 				}

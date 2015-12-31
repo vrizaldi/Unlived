@@ -105,19 +105,19 @@ public class Clock {
 		// char to char and map
 		for(GameChar c1 : data.chars) {
 			// check if the char is out of the room
-			float roomX = (c1.cRoom.getX() * Constants.ROOM_WIDTH)
-					+ (c1.cRoom.getX() * Constants.ROOMS_INTERVAL);
-			float roomY = (c1.cRoom.getY() * Constants.ROOM_HEIGHT)
-					+ (c1.cRoom.getY() * Constants.ROOMS_INTERVAL);
+			float roomX = (c1.cRoom.getX() * Constants.ins.ROOM_WIDTH)
+					+ (c1.cRoom.getX() * Constants.ins.ROOMS_INTERVAL);
+			float roomY = (c1.cRoom.getY() * Constants.ins.ROOM_HEIGHT)
+					+ (c1.cRoom.getY() * Constants.ins.ROOMS_INTERVAL);
 			
-			if(c1.y + Constants.CHAR_HEIGHT > roomY + Constants.ROOM_HEIGHT) {
+			if(c1.y + Constants.ins.CHAR_HEIGHT > roomY + Constants.ins.ROOM_HEIGHT) {
 				// over to the north
 				if(hitWall(c1, Constants.DIR_N)) {
 					float dX = c1.x;
 					c1.x = c1.getSafeX();
 					if(hitWall(c1, Constants.DIR_N)) {
 						c1.x = dX;
-						c1.y = roomY + Constants.ROOM_HEIGHT - Constants.CHAR_HEIGHT;
+						c1.y = roomY + Constants.ins.ROOM_HEIGHT - Constants.ins.CHAR_HEIGHT;
 					}
 				} 
 			}
@@ -132,14 +132,14 @@ public class Clock {
 					}
 				} 
 			} 
-			if(c1.x + Constants.CHAR_WIDTH > roomX + Constants.ROOM_WIDTH) {
+			if(c1.x + Constants.ins.CHAR_WIDTH > roomX + Constants.ins.ROOM_WIDTH) {
 				// over to the east
 				if(hitWall(c1, Constants.DIR_E)) {
 					float dY = c1.y;
 					c1.y = c1.getSafeY();
 					if(hitWall(c1, Constants.DIR_E)) {
 						c1.y = dY;
-						c1.x = roomX + Constants.ROOM_WIDTH - Constants.CHAR_WIDTH;
+						c1.x = roomX + Constants.ins.ROOM_WIDTH - Constants.ins.CHAR_WIDTH;
 					}
 				}
 			}	
@@ -180,7 +180,7 @@ public class Clock {
 				if(areClose(m, c)) {
 					if(m.getSrc() != c) {	// can't hit its own caster						
 						rec2.setPosition(c.x, c.y);
-						rec2.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+						rec2.setSize(Constants.ins.CHAR_WIDTH, Constants.ins.CHAR_HEIGHT);
 						if(Intersector.intersectRectangles(rec1, rec2, inter)) {
 							float dist = 0;
 							if(m.getDir() == Constants.DIR_W) {
@@ -202,15 +202,15 @@ public class Clock {
 			// check if the magic hit the wall
 			float roomX = 0;
 			try {
-				roomX = (m.cRoom.getX() * Constants.ROOM_WIDTH)
-					+ (m.cRoom.getX() * Constants.ROOMS_INTERVAL);
+				roomX = (m.cRoom.getX() * Constants.ins.ROOM_WIDTH)
+					+ (m.cRoom.getX() * Constants.ins.ROOMS_INTERVAL);
 			} catch(NullPointerException e) {
 				Gdx.app.error(TAG, "The magic got lost");
 				continue;
 			} 
-			/*float roomY = (m.cRoom.getY() * Constants.ROOM_HEIGHT)
-					+ (m.cRoom.getY() * Constants.ROOMS_INTERVAL);*/
-			if(m.x + m.getSpell().getWidth() > roomX + Constants.ROOM_WIDTH) {
+			/*float roomY = (m.cRoom.getY() * Constants.ins.ROOM_HEIGHT)
+					+ (m.cRoom.getY() * Constants.ins.ROOMS_INTERVAL);*/
+			if(m.x + m.getSpell().getWidth() > roomX + Constants.ins.ROOM_WIDTH) {
 				// over to the east
 				if(hitWall(m, true)) {
 					iter.remove();
@@ -240,10 +240,10 @@ public class Clock {
 	private boolean hitWall(GameChar c, int dir) {
 		
 		// find the room coordinates
-		float roomX = (c.cRoom.getX() * Constants.ROOM_WIDTH)
-			+ (c.cRoom.getX() * Constants.ROOMS_INTERVAL);
-		float roomY = (c.cRoom.getY() * Constants.ROOM_HEIGHT)
-			+ (c.cRoom.getY() * Constants.ROOMS_INTERVAL);
+		float roomX = (c.cRoom.getX() * Constants.ins.ROOM_WIDTH)
+			+ (c.cRoom.getX() * Constants.ins.ROOMS_INTERVAL);
+		float roomY = (c.cRoom.getY() * Constants.ins.ROOM_HEIGHT)
+			+ (c.cRoom.getY() * Constants.ins.ROOMS_INTERVAL);
 		
 		// find the door coordinates
 		float doorX = 0; float doorY = 0;
@@ -309,7 +309,7 @@ public class Clock {
 		// check if c is in the door
 		// set rec1 as c's rectangle
 		rec1.setPosition(c.x, c.y);
-		rec1.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+		rec1.setSize(Constants.ins.CHAR_WIDTH, Constants.ins.CHAR_HEIGHT);
 		
 		// rec2 as door's rec
 		rec2.setPosition(doorX, doorY);
@@ -318,10 +318,10 @@ public class Clock {
 		if(Intersector.intersectRectangles(rec1, rec2, inter)) {
 			// if the char can fit into the door
 			if((dir == Constants.DIR_N || dir == Constants.DIR_S)
-					&& inter.width >= Constants.CHAR_WIDTH) {
+					&& inter.width >= Constants.ins.CHAR_WIDTH) {
 				return false;
 			} else if((dir == Constants.DIR_E || dir == Constants.DIR_W)
-					&& inter.height >= Constants.CHAR_HEIGHT * 0.9f) {
+					&& inter.height >= Constants.ins.CHAR_HEIGHT * 0.9f) {
 				return false;
 			}
 		}
@@ -331,10 +331,10 @@ public class Clock {
 	
 	private boolean hitWall(Magic m, boolean east) {
 		
-		float roomX = (m.cRoom.getX() * Constants.ROOM_WIDTH)
-				+ (m.cRoom.getX() * Constants.ROOMS_INTERVAL);
-		float roomY = (m.cRoom.getY() * Constants.ROOM_HEIGHT)
-				+ (m.cRoom.getY() * Constants.ROOMS_INTERVAL);
+		float roomX = (m.cRoom.getX() * Constants.ins.ROOM_WIDTH)
+				+ (m.cRoom.getX() * Constants.ins.ROOMS_INTERVAL);
+		float roomY = (m.cRoom.getY() * Constants.ins.ROOM_HEIGHT)
+				+ (m.cRoom.getY() * Constants.ins.ROOMS_INTERVAL);
 		
 		float doorX = 0; float doorY = 0;
 		float doorWidth = 0; float doorHeight = 0;
@@ -394,8 +394,8 @@ public class Clock {
 	private boolean areClose(Magic m, GameChar c) {
 		// return whether the magic and the char are close to each other
 
-		if(Math.abs(m.x - c.x) < Constants.CHAR_WIDTH + m.getSpell().getWidth()
-				&& Math.abs(m.y - c.y) < Constants.CHAR_HEIGHT + m.getSpell().getHeight()) {
+		if(Math.abs(m.x - c.x) < Constants.ins.CHAR_WIDTH + m.getSpell().getWidth()
+				&& Math.abs(m.y - c.y) < Constants.ins.CHAR_HEIGHT + m.getSpell().getHeight()) {
 			return true;
 
 		} else {

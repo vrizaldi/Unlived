@@ -13,7 +13,7 @@ public class Arena implements Screen {
 
 	// logging tag
 	private static final String TAG = Arena.class.getName();
-
+	
 	private Manager manager;
 
 	// data of current state of the game
@@ -98,10 +98,7 @@ public class Arena implements Screen {
 	@Override
 	public void render(float delta) {
 
-		if(!data.paused
-				&& !data.justResumed) {
-			update();
-		}
+		update();
 		painter.render();	// render game to the screen
 	}
 
@@ -129,8 +126,10 @@ public class Arena implements Screen {
 		} */
 		
 		// the order is important: council before navigator
-		council.update();
 		navigator.update();
+		if(!data.paused
+				&& !data.justResumed)
+		council.update();
 		chemist.update();
 		clock.update();
 
@@ -161,9 +160,30 @@ public class Arena implements Screen {
 	// unused(yet) -------------------------------------------------------------------------------------------
 	@Override
 	public void resize(int width, int height) {
-		Constants.CAM_WIDTH = width;
-		Constants.CAM_HEIGHT = height;
+//		Constants.ins.CAM_WIDTH = width;
+//		Constants.ins.CAM_HEIGHT = height;
+		int oldUnitConv = manager.resize(height);
+//		Gdx.app.debug(TAG, "old unit conv = " + oldUnitConv);
+		float unitConvRatio = (float)Manager.UNIT_CONV / oldUnitConv;
+			// the ratio of the new to the old unit conversion
 		painter.resize();
+		
+		// convert the old coor to the new one
+		// if they're different
+		if(unitConvRatio != 1) {
+			for(GameChar c : data.chars) {
+				Gdx.app.debug(TAG, "old c.x = " + c.x);
+				c.x *= unitConvRatio;
+				Gdx.app.debug(TAG, "new c.x = " + c.x);
+				c.y *= unitConvRatio;
+			}
+			for(Magic m : data.magics) {
+				m.x *= unitConvRatio;
+				m.y *= unitConvRatio;
+			}
+		}
+		
+//		data.newMap = true;
 	}
 	
 }

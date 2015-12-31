@@ -6,8 +6,35 @@ import com.badlogic.gdx.Gdx;
 public class Constants {
 	// store all the constants
 	
+	public static Constants ins;
+	
+	public static void init() {
+		
+		ins = new Constants();
+		
+		ins.CAM_WIDTH = Gdx.graphics.getWidth();
+		ins.CAM_HEIGHT = Gdx.graphics.getHeight();
+		
+		// visible screen must always have 4 : 3 screen ratio
+		ins.VISIBLE_SCR_WIDTH = 4 * ins.CAM_HEIGHT / 3;
+		ins.VISIBLE_SCR_HEIGHT = ins.CAM_HEIGHT;
+		
+		ins.ROOM_WIDTH = 20 * Manager.UNIT_CONV;
+		ins.ROOM_HEIGHT = 20 * Manager.UNIT_CONV;
+		ins.ROOMS_INTERVAL = 3 * Manager.UNIT_CONV;
+		ins.DOOR_OFFSET = 1 * Manager.UNIT_CONV;
+		ins.PORTAL_WIDTH = 2 * Manager.UNIT_CONV;
+		ins.PORTAL_HEIGHT = 2 * Manager.UNIT_CONV;
+		
+		ins.CHAR_WIDTH = 2 * Manager.UNIT_CONV;
+		ins.CHAR_HEIGHT = 3 * Manager.UNIT_CONV;
+		ins.NORMAL_SPEED = 20 * Manager.UNIT_CONV;
+		ins.SAFE_DIST_X = 10 * Manager.UNIT_CONV;
+		ins.SAFE_DIST_Y = 10 * Manager.UNIT_CONV;
+	}
+	
 	// game state IDs
-	public static final int STATE_Manager = 202;
+//	public static final int STATE_Manager = 202;
 
 	public static final float ANIMATION_CHAR_DURATION = 0.1f;	// in sec
 	public static final float ANIMATION_SHADOW_DURATION = 0.5f;
@@ -20,22 +47,23 @@ public class Constants {
 	public static final int DIR_S = 4;
 
 	// size of things in world unit
-	public static int CAM_WIDTH = Gdx.graphics.getWidth();
-	public static int CAM_HEIGHT = Gdx.graphics.getHeight();
-	public static final int ROOM_WIDTH = 20 * Manager.UNIT_CONV;
-	public static final int ROOM_HEIGHT = 20 * Manager.UNIT_CONV;
-	public static final int ROOMS_INTERVAL = 3 * Manager.UNIT_CONV;
-	public static final int CHAR_WIDTH = 2 * Manager.UNIT_CONV;
-	public static final int CHAR_HEIGHT = 3 * Manager.UNIT_CONV;
-	public static final int PORTAL_WIDTH = 2 * Manager.UNIT_CONV;
-	public static final int PORTAL_HEIGHT = 2 * Manager.UNIT_CONV;
-	public static final int NORMAL_SPEED = 20 * Manager.UNIT_CONV;
+	public int CAM_WIDTH;
+	public int CAM_HEIGHT;
+	public int VISIBLE_SCR_WIDTH;
+	public int VISIBLE_SCR_HEIGHT;
+	public int ROOM_WIDTH;
+	public int ROOM_HEIGHT;
+	public int PORTAL_WIDTH;
+	public int PORTAL_HEIGHT;
+	public int ROOMS_INTERVAL;
+	public int DOOR_OFFSET;
+	
+	public int CHAR_WIDTH;
+	public int CHAR_HEIGHT;
+	public int NORMAL_SPEED;
 		// default moving speed per second
-	public static final int DOOR_OFFSET = 1 * Manager.UNIT_CONV;
-	// safe distance between creep and mainChar
-	public static final int SAFE_DIST_X = 10 * Manager.UNIT_CONV;
-	public static final int SAFE_DIST_Y = 10 * Manager.UNIT_CONV;
-	public static final float SHADOW_OFFSET_Y = -0.5f * Manager.UNIT_CONV;
+	public int SAFE_DIST_X;	// safe distance between creep and mainChar
+	public int SAFE_DIST_Y;
 	
 	// map 
 	public static final int MAP_NORMAL = 148;
@@ -48,10 +76,10 @@ public class Constants {
 	// char IDs
 	public static final int CHAR_MAIN = 98;
 	public static final int CHAR_CREEP_FOLLOW = 99;
-//	public static final int CHAR_CREEP_FOLLOW_N = 100;
-//	public static final int CHAR_CREEP_FOLLOW_S = 101;
+//	public final int CHAR_CREEP_FOLLOW_N = 100;
+//	public final int CHAR_CREEP_FOLLOW_S = 101;
 	public static final int CHAR_CREEP_AVOID = 103;
-//	public static final int CHAR_CREEP_INACTIVE = 103;
+//	public final int CHAR_CREEP_INACTIVE = 103;
 
 	// intervals between things happening
 	public static final float CREEPS_CHANGE_INTERVAL = 1f;	// in second

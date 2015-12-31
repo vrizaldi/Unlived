@@ -15,7 +15,7 @@ public class Manager extends Game {
 	// logging tag
 	private static final String TAG = Manager.class.getName();
 
-	public static final int UNIT_CONV = 16;
+	public static int UNIT_CONV;
 	
 	// game screens
 	private Arena arena;
@@ -27,11 +27,13 @@ public class Manager extends Game {
 // constructor ---------------------------------------------------------------------------------------------
 	@Override
 	public void create() {
-
-		MagicFactory.init();
 		
 		Gdx.app.log(TAG, "Initialising the game...");
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		resize(Gdx.graphics.getHeight());
+/*		UNIT_CONV = 16 * Gdx.graphics.getHeight() / 480;
+		Constants.init();
+		MagicFactory.init();*/
 		data = new StateData();
 		arena = new Arena(this, data);
 		menu = new Menu(this, data);
@@ -106,4 +108,20 @@ public class Manager extends Game {
 		Gdx.app.log(TAG, "Quitting game...");
 	}
 
+
+	
+// resize ------------------------------------------------------------------------------------------------
+	public int resize(/*int width,*/ int height) {
+		
+		int oldUnitConv = Manager.UNIT_CONV;
+			// save it to be returned later
+		Manager.UNIT_CONV = 16 * height / 480;
+		if(UNIT_CONV != oldUnitConv) {
+			Constants.init();
+			MagicFactory.init();
+		}
+		
+		return oldUnitConv;
+	}
+	
 }

@@ -68,7 +68,7 @@ public class MagicFactory {
 		final String ARG_INIT_CAST = "cast";
 		final String ARG_INIT_CAST_END = "castend";
 
-		if(!initialised) {
+//		if(!initialised) {
 			initialised = true;
 
 			// read and use the data from the magic files **********
@@ -309,10 +309,10 @@ public class MagicFactory {
 			}	// file iterator's end
 		// if initialised == false 's end
 
-		} else {		// already been initialised
+/*		} else {		// already been initialised
 			Gdx.app.error(TAG, "MagicFactory is initialised more than once");	
 			Gdx.app.exit();
-		}
+		}*/
 	
 	}	// init()'s end
 

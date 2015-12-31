@@ -40,6 +40,9 @@ public class Assets {
 	public ArrayList<TextureAtlas> magicImgs;
 	public HashMap<String, Sprite> magicSprites;
 	public HashMap<String, Animation> magicAnims;
+	
+	public TextureAtlas uiImgs;
+	public Sprite blackBox;
 
 	public BitmapFont font; // default font
 
@@ -59,18 +62,18 @@ public class Assets {
 			ins.mapImgs = new TextureAtlas("res/map/map.pack");
 
 			ins.roomSprite = new Sprite(ins.mapImgs.findRegion("map"));
-			ins.roomSprite.setSize(Constants.ROOM_WIDTH, Constants.ROOM_HEIGHT);
+			ins.roomSprite.setSize(Constants.ins.ROOM_WIDTH, Constants.ins.ROOM_HEIGHT);
 		
 			ins.doorVSprite = new Sprite(ins.mapImgs.findRegion("door"));
-			ins.doorVSprite.setSize(Constants.ROOMS_INTERVAL + Constants.DOOR_OFFSET, 
-					Constants.DOOR_OFFSET + Constants.CHAR_HEIGHT);
+			ins.doorVSprite.setSize(Constants.ins.ROOMS_INTERVAL + Constants.ins.DOOR_OFFSET, 
+					Constants.ins.DOOR_OFFSET + Constants.ins.CHAR_HEIGHT);
 		
 			ins.doorHSprite = new Sprite(ins.mapImgs.findRegion("door"));
-			ins.doorHSprite.setSize(Constants.CHAR_WIDTH + Constants.DOOR_OFFSET, 
-					Constants.DOOR_OFFSET + Constants.ROOMS_INTERVAL);
+			ins.doorHSprite.setSize(Constants.ins.CHAR_WIDTH + Constants.ins.DOOR_OFFSET, 
+					Constants.ins.DOOR_OFFSET + Constants.ins.ROOMS_INTERVAL);
 			
 			ins.shadowSprite = new Sprite(ins.mapImgs.findRegion("shadow"));
-			ins.shadowSprite.setSize(Constants.CHAR_WIDTH, 1 * Manager.UNIT_CONV);
+			ins.shadowSprite.setSize(Constants.ins.CHAR_WIDTH, 1 * Manager.UNIT_CONV);
 		
 			ins.charImgs = new ArrayList<TextureAtlas>();
 			ins.charSprites = new HashMap<String, Sprite>();
@@ -81,7 +84,7 @@ public class Assets {
 			ins.magicAnims = new HashMap<String, Animation>();
 
 			ins.portalSprite = new Sprite(ins.mapImgs.findRegion("portalImg"));
-			ins.portalSprite.setSize(Constants.PORTAL_WIDTH, Constants.PORTAL_HEIGHT);
+			ins.portalSprite.setSize(Constants.ins.PORTAL_WIDTH, Constants.ins.PORTAL_HEIGHT);
 
 			FreeTypeFontParameter param = new FreeTypeFontParameter();
 			param.size = 10;
@@ -89,6 +92,9 @@ public class Assets {
 			ins.font = new FreeTypeFontGenerator(Gdx.files.internal("res/font/PressStart2P.ttf")) 
 				.generateFont(param);
 		
+			ins.uiImgs = new TextureAtlas("res/ui/ui.pack");
+			ins.blackBox = new Sprite(ins.uiImgs.findRegion("blackBox"));
+			
 			initialised = true;	// flag it
 			Gdx.app.log(TAG, "Assets initialised");
 			
@@ -143,7 +149,7 @@ public class Assets {
 
 				// sprites
 				Sprite cSp = new Sprite(cAnim.getKeyFrame(0));
-				cSp.setSize(Constants.CHAR_WIDTH, Constants.CHAR_HEIGHT);
+				cSp.setSize(Constants.ins.CHAR_WIDTH, Constants.ins.CHAR_HEIGHT);
 
 				// put them into the collections
 				ins.charImgs.add(cImgs);
@@ -208,11 +214,35 @@ public class Assets {
 //			Gdx.app.error(TAG, "Trying to update unitialised assets");
 		}
 	}	// update(float)'s
+	
+	public static void resize() {
+		// resize all the assets according to the current unit
+	
+		ins.roomSprite.setSize(Constants.ins.ROOM_WIDTH, Constants.ins.ROOM_HEIGHT);
+	
+		ins.doorVSprite.setSize(Constants.ins.ROOMS_INTERVAL + Constants.ins.DOOR_OFFSET, 
+				Constants.ins.DOOR_OFFSET + Constants.ins.CHAR_HEIGHT);
+		ins.doorHSprite.setSize(Constants.ins.CHAR_WIDTH + Constants.ins.DOOR_OFFSET, 
+				Constants.ins.DOOR_OFFSET + Constants.ins.ROOMS_INTERVAL);
+		
+		ins.shadowSprite.setSize(Constants.ins.CHAR_WIDTH, 1 * Manager.UNIT_CONV);
+
+		ins.portalSprite.setSize(Constants.ins.PORTAL_WIDTH, Constants.ins.PORTAL_HEIGHT);
+		
+		for(String key : ins.charSprites.keySet()) {
+			ins.charSprites.get(key).setSize(
+					Constants.ins.CHAR_WIDTH, Constants.ins.CHAR_HEIGHT);
+			ins.magicSprites.get(key).setSize(MagicFactory.getSpell(key).getWidth(),
+					MagicFactory.getSpell(key).getHeight());
+		}
+	}
 
 	public static void dispose() {
 		// dispose all the resources 	
 
+		Gdx.app.debug(TAG, "dispose() called");
 		if(initialised) {
+			Gdx.app.log(TAG, "Disposing assets...");
 			ins.mapImgs.dispose();
 			for(TextureAtlas img : ins.charImgs) {
 				img.dispose();

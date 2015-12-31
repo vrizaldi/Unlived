@@ -18,6 +18,7 @@ public class DesktopLauncher {
 		config.title = "Unlived";
 		config.fullscreen = false;
 		config.vSyncEnabled = true;
+//		config.samples = 1;
 		
 	//	useRes(config, 1920, 1080);
 		new LwjglApplication(new Manager(), config);
