@@ -1,8 +1,9 @@
 package com.kmvrt.Unlived.menu;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+//import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.GL20;
@@ -59,14 +60,13 @@ public class Painter {
 	
 		for(int i = 0; i < data.cOptions.length; i++) {
 			// draw the button labels
-			BitmapFont font;
 			if(i == data.pointer) {
-				font = Assets.ins.fontSel;
+				Assets.ins.font.setColor(Color.BLACK);
 			} else {
-				font = Assets.ins.fontNorm;
+				Assets.ins.font.setColor(Color.WHITE);
 			}
 			int p = data.cOptions[i];
-			texts.setText(font, 
+			texts.setText(Assets.ins.font, 
 					Assets.ins.labels.get(p));
 			
 			int gapY = 20;
@@ -83,7 +83,7 @@ public class Painter {
 
 			// un/show pointer every 0.3 sec
 			timerPointer += Gdx.graphics.getDeltaTime();
-			if(timerPointer > 0.5f) {
+			if(timerPointer > 0.3f) {
 				showPointer = !showPointer;
 				timerPointer -= 0.3f;
 			}
@@ -95,15 +95,17 @@ public class Painter {
 						textY + offsetY - extra / 2);
 				Assets.ins.pntrSprite.draw(batch);	
 			}
-			font.draw(batch, texts, textX, textY);
+			Assets.ins.font.draw(batch, texts, textX, textY);
 				// draw the text
+			Assets.ins.font.setColor(Color.WHITE);
+				// reset the colour
 			
 			if(data.cOptions == Assets.ins.optionsSetting) {
 				// draw the currently applied settings
 				if(p == Constants.OPT_RES) {
-					texts.setText(Assets.ins.fontNorm, 
+					texts.setText(Assets.ins.font, 
 							Gdx.graphics.getWidth() + "x" + Gdx.graphics.getHeight());
-					Assets.ins.fontNorm.draw(batch, texts, cam.viewportWidth / 2, textY);
+					Assets.ins.font.draw(batch, texts, cam.viewportWidth / 2, textY);
 
 				} else if(p == Constants.OPT_VOL) {
 					Assets.ins.pntrSprite.setPosition(
@@ -123,13 +125,13 @@ public class Painter {
 
 				} else if(p == Constants.OPT_F11) {
 					String sw = Gdx.graphics.isFullscreen() ? "ON" : "OFF";
-					texts.setText(Assets.ins.fontNorm, sw);
-					Assets.ins.fontNorm.draw(batch, texts, cam.viewportWidth / 2, textY);
+					texts.setText(Assets.ins.font, sw);
+					Assets.ins.font.draw(batch, texts, cam.viewportWidth / 2, textY);
 					
 				} else if(p == Constants.OPT_VSNC) {
 					String sw = data.vSync ? "ON" : "OFF";
-					texts.setText(Assets.ins.fontNorm, sw);
-					Assets.ins.fontNorm.draw(batch, texts, cam.viewportWidth / 2, textY);
+					texts.setText(Assets.ins.font, sw);
+					Assets.ins.font.draw(batch, texts, cam.viewportWidth / 2, textY);
 					
 				}
 			}

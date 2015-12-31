@@ -14,8 +14,6 @@ public class Manager extends Game {
 
 	// logging tag
 	private static final String TAG = Manager.class.getName();
-
-	public static int UNIT_CONV;
 	
 	// game screens
 	private Arena arena;
@@ -113,11 +111,13 @@ public class Manager extends Game {
 // resize ------------------------------------------------------------------------------------------------
 	public int resize(/*int width,*/ int height) {
 		
-		int oldUnitConv = Manager.UNIT_CONV;
+		int oldUnitConv = 0;
+		if(Constants.ins != null) {
+			oldUnitConv = Constants.ins.UNIT_CONV;
+		}
 			// save it to be returned later
-		Manager.UNIT_CONV = 16 * height / 480;
-		if(UNIT_CONV != oldUnitConv) {
-			Constants.init();
+		Constants.init();
+		if(Constants.ins.UNIT_CONV != oldUnitConv) {
 			MagicFactory.init();
 		}
 		

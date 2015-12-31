@@ -200,8 +200,8 @@ public class Council {
 			float distY = Math.abs(mainChar.y - c.y);
 			if(c.cRoom == mainChar.cRoom
 					&& c != mainChar
-					&& distX < Constants.ins.SAFE_DIST_X
 					&& distY < Constants.ins.SAFE_DIST_Y
+					&& distX < Constants.ins.SAFE_DIST_X
 					&& distX < closestX) {
 				// if they're the closest found
 				closestX = distX;
@@ -370,6 +370,7 @@ public class Council {
 
 		creepsDirChange = false;
 	}	// moveCreeps()'s end
+	
 
 	private void wander(GameChar creep, float delta) {
 		// wander around the map moving through doors

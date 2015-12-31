@@ -164,8 +164,8 @@ public class Arena implements Screen {
 //		Constants.ins.CAM_HEIGHT = height;
 		int oldUnitConv = manager.resize(height);
 //		Gdx.app.debug(TAG, "old unit conv = " + oldUnitConv);
-		float unitConvRatio = (float)Manager.UNIT_CONV / oldUnitConv;
-			// the ratio of the new to the old unit conversion
+		float unitConvRatio = (float)Constants.ins.UNIT_CONV / oldUnitConv;
+			// the ratio of the new unit to the old unit
 		painter.resize();
 		
 		// convert the old coor to the new one

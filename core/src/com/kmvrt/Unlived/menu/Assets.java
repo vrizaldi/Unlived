@@ -23,8 +23,7 @@ public class Assets {
 	public Sprite pntrSprite;
 	public Sprite pauseBGSprite;
 	
-	public BitmapFont fontNorm;
-	public BitmapFont fontSel;
+	public BitmapFont font;
 
 	public HashMap<Integer, String> labels;
 	public int[] optionsMenu;
@@ -80,19 +79,17 @@ public class Assets {
 			ins.labels.put(Constants.OPT_TOMENU, "BACK TO MAINMENU");
 			ins.labels.put(Constants.OPT_RESUME, "RESUME");
 			ins.labels.put(Constants.OPT_BACK, "BACK");
-			
-			FreeTypeFontGenerator font = new 
-				FreeTypeFontGenerator(Gdx.files.internal("res/font/PressStart2P.ttf"));
 
-			FreeTypeFontParameter pNorm = new FreeTypeFontParameter();
-			pNorm.size = 20;
-			pNorm.color = Color.WHITE;
-			ins.fontNorm = font.generateFont(pNorm);
+			FreeTypeFontParameter param = new FreeTypeFontParameter();
+			param.size = 20;
+			param.color = Color.WHITE;
+			ins.font = new FreeTypeFontGenerator(Gdx.files.internal("res/font/PressStart2P.ttf"))
+				.generateFont(param);
 
-			FreeTypeFontParameter pSel = new FreeTypeFontParameter(); 
+/*			FreeTypeFontParameter pSel = new FreeTypeFontParameter(); 
 			pSel.size = 20;
 			pSel.color = Color.BLACK;
-			ins.fontSel = font.generateFont(pSel);
+			ins.fontSel = font.generateFont(pSel);*/
 
 			ins.menuImgs = new TextureAtlas("res/menu/menu.pack");
 			ins.pntrSprite = new Sprite(ins.menuImgs.findRegion("pointer"));
@@ -113,8 +110,7 @@ public class Assets {
 			Gdx.app.log(TAG, "Disposing assets...");
 			
 			ins.menuImgs.dispose();
-			ins.fontNorm.dispose();
-			ins.fontSel.dispose();
+			ins.font.dispose();
 			
 			ins.labels.clear();
 			ins.optionsMenu = null;

@@ -12,6 +12,7 @@ public class Constants {
 		
 		ins = new Constants();
 		
+		ins.UNIT_CONV = 16 * Gdx.graphics.getHeight() / 480;
 		ins.CAM_WIDTH = Gdx.graphics.getWidth();
 		ins.CAM_HEIGHT = Gdx.graphics.getHeight();
 		
@@ -19,18 +20,20 @@ public class Constants {
 		ins.VISIBLE_SCR_WIDTH = 4 * ins.CAM_HEIGHT / 3;
 		ins.VISIBLE_SCR_HEIGHT = ins.CAM_HEIGHT;
 		
-		ins.ROOM_WIDTH = 20 * Manager.UNIT_CONV;
-		ins.ROOM_HEIGHT = 20 * Manager.UNIT_CONV;
-		ins.ROOMS_INTERVAL = 3 * Manager.UNIT_CONV;
-		ins.DOOR_OFFSET = 1 * Manager.UNIT_CONV;
-		ins.PORTAL_WIDTH = 2 * Manager.UNIT_CONV;
-		ins.PORTAL_HEIGHT = 2 * Manager.UNIT_CONV;
+		ins.ROOM_WIDTH = 20 * ins.UNIT_CONV;
+		ins.ROOM_HEIGHT = 20 * ins.UNIT_CONV;
+		ins.ROOMS_INTERVAL = 3 * ins.UNIT_CONV;
+		ins.DOOR_OFFSET = 1 * ins.UNIT_CONV;
+		ins.PORTAL_WIDTH = 2 * ins.UNIT_CONV;
+		ins.PORTAL_HEIGHT = 2 * ins.UNIT_CONV;
 		
-		ins.CHAR_WIDTH = 2 * Manager.UNIT_CONV;
-		ins.CHAR_HEIGHT = 3 * Manager.UNIT_CONV;
-		ins.NORMAL_SPEED = 20 * Manager.UNIT_CONV;
-		ins.SAFE_DIST_X = 10 * Manager.UNIT_CONV;
-		ins.SAFE_DIST_Y = 10 * Manager.UNIT_CONV;
+		ins.CHAR_WIDTH = 2 * ins.UNIT_CONV;
+		ins.CHAR_HEIGHT = 3 * ins.UNIT_CONV;
+		ins.NORMAL_SPEED = 20 * ins.UNIT_CONV;
+		ins.SAFE_DIST_X = 10 * ins.UNIT_CONV;
+		ins.SAFE_DIST_Y = 10 * ins.UNIT_CONV;
+		
+		ins.HALO_SIZE = 2 * ins.UNIT_CONV;
 	}
 	
 	// game state IDs
@@ -47,6 +50,8 @@ public class Constants {
 	public static final int DIR_S = 4;
 
 	// size of things in world unit
+	public int UNIT_CONV;
+		// number of px/unit
 	public int CAM_WIDTH;
 	public int CAM_HEIGHT;
 	public int VISIBLE_SCR_WIDTH;
@@ -57,6 +62,7 @@ public class Constants {
 	public int PORTAL_HEIGHT;
 	public int ROOMS_INTERVAL;
 	public int DOOR_OFFSET;
+	public int HALO_SIZE;
 	
 	public int CHAR_WIDTH;
 	public int CHAR_HEIGHT;

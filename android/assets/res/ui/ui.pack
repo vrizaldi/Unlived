@@ -3,6 +3,41 @@ ui.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+haloOn4
+  rotate: false
+  xy: 1, 5
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+haloOff
+  rotate: false
+  xy: 35, 5
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+haloOn3
+  rotate: false
+  xy: 69, 5
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+haloOn2
+  rotate: false
+  xy: 103, 5
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+haloOn1
+  rotate: false
+  xy: 137, 5
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
 blackBox
   rotate: false
   xy: 1, 1

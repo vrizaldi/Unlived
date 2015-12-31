@@ -151,13 +151,13 @@ public class MagicFactory {
 										break;
 
 									case ATT_ACCEL:
-										cCond.applyAccel(Float.parseFloat(arg) * Manager.UNIT_CONV);
+										cCond.applyAccel(Float.parseFloat(arg) * Constants.ins.UNIT_CONV);
 										Gdx.app.debug(TAG, "\t" + arg + " accel applied");
 										
 										break;
 
 									case ATT_FORCE:
-										cCond.applyForce(Float.parseFloat(arg) * Manager.UNIT_CONV);
+										cCond.applyForce(Float.parseFloat(arg) * Constants.ins.UNIT_CONV);
 										Gdx.app.debug(TAG, "\t" + arg + " force applied");
 										break;
 
@@ -250,22 +250,22 @@ public class MagicFactory {
 									break;
 									
 								case ATT_WIDTH:
-									width = Float.parseFloat(arg) * Manager.UNIT_CONV;
+									width = Float.parseFloat(arg) * Constants.ins.UNIT_CONV;
 									Gdx.app.debug(TAG, "\twidth = " + Float.parseFloat(arg));
 									break;
 									
 								case ATT_HEIGHT:
-									height = Float.parseFloat(arg) * Manager.UNIT_CONV;
+									height = Float.parseFloat(arg) * Constants.ins.UNIT_CONV;
 									Gdx.app.debug(TAG, "\theight = " + Float.parseFloat(arg));
 									break;
 									
 								case ATT_SPEED:
-									speed = Float.parseFloat(arg) * Manager.UNIT_CONV;
+									speed = Float.parseFloat(arg) * Constants.ins.UNIT_CONV;
 									Gdx.app.debug(TAG, "\tspeed = " + Float.parseFloat(arg));
 									break;
 									
 								case ATT_TRAVEL_DIST:
-									travelDist = Float.parseFloat(arg) * Manager.UNIT_CONV;
+									travelDist = Float.parseFloat(arg) * Constants.ins.UNIT_CONV;
 									Gdx.app.debug(TAG, "\ttravel distance = " + Float.parseFloat(arg));
 									break;
 									

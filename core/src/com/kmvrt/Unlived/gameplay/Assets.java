@@ -43,6 +43,9 @@ public class Assets {
 	
 	public TextureAtlas uiImgs;
 	public Sprite blackBox;
+	public Sprite haloOff;
+	public Sprite haloOn;
+	public Animation haloOnAnim;
 
 	public BitmapFont font; // default font
 
@@ -73,7 +76,7 @@ public class Assets {
 					Constants.ins.DOOR_OFFSET + Constants.ins.ROOMS_INTERVAL);
 			
 			ins.shadowSprite = new Sprite(ins.mapImgs.findRegion("shadow"));
-			ins.shadowSprite.setSize(Constants.ins.CHAR_WIDTH, 1 * Manager.UNIT_CONV);
+			ins.shadowSprite.setSize(Constants.ins.CHAR_WIDTH, 1 * Constants.ins.UNIT_CONV);
 		
 			ins.charImgs = new ArrayList<TextureAtlas>();
 			ins.charSprites = new HashMap<String, Sprite>();
@@ -88,12 +91,34 @@ public class Assets {
 
 			FreeTypeFontParameter param = new FreeTypeFontParameter();
 			param.size = 10;
-			param.color = Color.RED;
+			param.color = Color.WHITE;
 			ins.font = new FreeTypeFontGenerator(Gdx.files.internal("res/font/PressStart2P.ttf")) 
 				.generateFont(param);
 		
 			ins.uiImgs = new TextureAtlas("res/ui/ui.pack");
 			ins.blackBox = new Sprite(ins.uiImgs.findRegion("blackBox"));
+			ins.haloOff = new Sprite(ins.uiImgs.findRegion("haloOff"));
+			ins.haloOff.setSize(Constants.ins.HALO_SIZE, Constants.ins.HALO_SIZE);
+			Array<TextureRegion> haloOnFrames = new Array<TextureRegion>(4);
+			for(int i = 1;; i++) {
+				TextureRegion frame = ins.uiImgs.findRegion("haloOn" + i);
+				if(frame == null) {
+					// has finished
+					break;
+				}
+				
+				try {
+					haloOnFrames.add(frame);
+				} catch(Exception e) {
+					// increase the array size
+					haloOnFrames.ensureCapacity(1);
+					haloOnFrames.add(frame);
+				}
+			}
+			ins.haloOnAnim = new Animation(0.2f / haloOnFrames.size,
+					haloOnFrames, Animation.PlayMode.LOOP);
+			ins.haloOn = new Sprite(ins.haloOnAnim.getKeyFrame(0));
+			ins.haloOn.setSize(Constants.ins.HALO_SIZE, Constants.ins.HALO_SIZE);
 			
 			initialised = true;	// flag it
 			Gdx.app.log(TAG, "Assets initialised");
@@ -126,6 +151,7 @@ public class Assets {
 				TextureAtlas cImgs = new TextureAtlas(
 						"res/chars/" + c.getName() + ".pack");
 			
+				// retrieve all the char sprites
 				Array<TextureRegion> charFrames = new Array<TextureRegion>(1);
 				for(int i = 1;; i++) {
 					TextureRegion frame = cImgs.findRegion(c.getName() + i);
@@ -142,7 +168,6 @@ public class Assets {
 						charFrames.add(frame);
 					}
 				}
-			
 				// animation (west facing)
 				Animation cAnim = new Animation((float)1 / (charFrames.size * 3), 
 						charFrames, Animation.PlayMode.LOOP);
@@ -159,6 +184,7 @@ public class Assets {
 				// magic sprites
 				TextureAtlas mImgs = new TextureAtlas("res/magic/sprites/" + c.getName() + ".pack");
 				Array<TextureRegion> magicFrames = new Array<TextureRegion>(1);
+				// retrieve all the magic sprites
 				for(int i = 1;; i++) {
 					TextureRegion frame = mImgs.findRegion(c.getName() + i);
 					if(frame == null) {
@@ -210,6 +236,9 @@ public class Assets {
 						ins.magicAnims.get(key).getKeyFrame(stateTime));
 			}
 			
+			// halo
+			ins.haloOn.setRegion(ins.haloOnAnim.getKeyFrame(stateTime));
+			
 		} else {
 //			Gdx.app.error(TAG, "Trying to update unitialised assets");
 		}
@@ -225,7 +254,7 @@ public class Assets {
 		ins.doorHSprite.setSize(Constants.ins.CHAR_WIDTH + Constants.ins.DOOR_OFFSET, 
 				Constants.ins.DOOR_OFFSET + Constants.ins.ROOMS_INTERVAL);
 		
-		ins.shadowSprite.setSize(Constants.ins.CHAR_WIDTH, 1 * Manager.UNIT_CONV);
+		ins.shadowSprite.setSize(Constants.ins.CHAR_WIDTH, 1 * Constants.ins.UNIT_CONV);
 
 		ins.portalSprite.setSize(Constants.ins.PORTAL_WIDTH, Constants.ins.PORTAL_HEIGHT);
 		
@@ -235,6 +264,9 @@ public class Assets {
 			ins.magicSprites.get(key).setSize(MagicFactory.getSpell(key).getWidth(),
 					MagicFactory.getSpell(key).getHeight());
 		}
+		
+		ins.haloOff.setSize(Constants.ins.HALO_SIZE, Constants.ins.HALO_SIZE);
+		ins.haloOn.setSize(Constants.ins.HALO_SIZE, Constants.ins.HALO_SIZE);
 	}
 
 	public static void dispose() {

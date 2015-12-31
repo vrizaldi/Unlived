@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteCache;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.Gdx;
@@ -99,12 +100,14 @@ public class Painter {
 			}
 			
 			// render the mana percentage
+			Assets.ins.font.setColor(Color.BLACK);
 			if(c.cRoom == data.getMainChar().cRoom) {
 				texts.setText(Assets.ins.font, (int)c.atts.getMana() + "%");
 				Assets.ins.font.draw(batch, texts, 
 						(c.x + ((Constants.ins.CHAR_WIDTH - texts.width) / 2)),
 						c.y + Constants.ins.CHAR_HEIGHT + 10);
 			}
+			Assets.ins.font.setColor(Color.WHITE);
 		}
 
 		// draw magics *************
@@ -115,7 +118,8 @@ public class Painter {
 				if(m.cRoom == null) {
 					iter.remove();
 				} else if(m.cRoom.isVisited()) {
-					Sprite mSprite = Assets.ins.magicSprites.get(m.getSpell().getName());
+					Sprite mSprite = Assets.ins.magicSprites
+							.get(m.getSpell().getName());
 					mSprite.setPosition(m.x, m.y);
 					mSprite.draw(batch);
 				}
@@ -127,35 +131,52 @@ public class Painter {
 		batch.setProjectionMatrix(ui.combined);
 		
 		// render black boxes around the visible screen
-		float visibleScrX = (cam.viewportWidth - Constants.ins.VISIBLE_SCR_WIDTH) / 2;
-		float visibleScrY = (cam.viewportHeight - Constants.ins.VISIBLE_SCR_HEIGHT) / 2;
+		// fix the aspect ratio
+		float visibleScrX = (ui.viewportWidth - Constants.ins.VISIBLE_SCR_WIDTH) / 2;
+//		float visibleScrY = (ui.viewportHeight - Constants.ins.VISIBLE_SCR_HEIGHT) / 2;
 		
-		Assets.ins.blackBox.setSize(visibleScrX, cam.viewportHeight);
+		Assets.ins.blackBox.setSize(visibleScrX, ui.viewportHeight);
 		Assets.ins.blackBox.setPosition(0, 0);	// blackbox in the west
 		Assets.ins.blackBox.draw(batch);
 		Assets.ins.blackBox.setPosition(visibleScrX 	// east
 				+ Constants.ins.VISIBLE_SCR_WIDTH, 0);
 		Assets.ins.blackBox.draw(batch);
 		
-		Assets.ins.blackBox.setSize(cam.viewportWidth, visibleScrY);
-		Assets.ins.blackBox.setPosition(0, 0);	// south
-		Assets.ins.blackBox.draw(batch);
-		Assets.ins.blackBox.setPosition(0, 
-				visibleScrY + Constants.ins.VISIBLE_SCR_HEIGHT);	// north
+		// blackbox in the north
+		// will be used as the canvas for the current stats
+		float statHeight = ui.viewportHeight * 0.1f;
+		float statY = ui.viewportHeight - statHeight;
+		Assets.ins.blackBox.setSize(ui.viewportWidth, statHeight);
+		Assets.ins.blackBox.setPosition(0, statY);	
 		Assets.ins.blackBox.draw(batch);
 		
+		// draw the halo
+				Sprite halo = null;
+				if(data.getMainChar().isAbleToShoot()) {
+					halo = Assets.ins.haloOn;
+				} else {
+					halo = Assets.ins.haloOff;
+				}
+				halo.setPosition(
+						(ui.viewportWidth - halo.getWidth()) / 2, 
+						statY + (statHeight - halo.getHeight()) / 2);
+				halo.draw(batch);
+
 		// kill/death count on top-right screen
 		// set texts to be kill/death
 		texts.setText(Assets.ins.font, String.format("%.2f", data.getKillPerDeath()) 
 			+ " kills/death");
-		Assets.ins.font.draw(batch, texts, ui.viewportWidth - texts.width,
-			ui.viewportHeight - texts.height);
+		Assets.ins.font.setColor(Color.WHITE);
+		Assets.ins.font.draw(batch, texts, 
+			cam.viewportWidth - texts.width - 5,
+			statY + (statHeight / 2));
 
 		// mainChar mana on top left screen
 		texts.setText(Assets.ins.font, "Mana: " 
 				+ String.format("%.2f", data.getMainChar().atts.getMana()));
-		Assets.ins.font.draw(batch, texts, 10,
-				ui.viewportHeight - texts.height/* - 0.5f*/);		
+		Assets.ins.font.setColor(Color.WHITE);
+		Assets.ins.font.draw(batch, texts, 
+				5, statY + (statHeight / 2));		
 		
 		batch.end();
 	}
