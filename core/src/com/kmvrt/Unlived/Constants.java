@@ -34,6 +34,7 @@ public class Constants {
 		ins.SAFE_DIST_Y = 10 * ins.UNIT_CONV;
 		
 		ins.HALO_SIZE = 2 * ins.UNIT_CONV;
+		ins.BEEP_SIZE = 10 * ins.UNIT_CONV;
 	}
 	
 	// game state IDs
@@ -63,6 +64,7 @@ public class Constants {
 	public int ROOMS_INTERVAL;
 	public int DOOR_OFFSET;
 	public int HALO_SIZE;
+	public int BEEP_SIZE;
 	
 	public int CHAR_WIDTH;
 	public int CHAR_HEIGHT;
@@ -113,5 +115,11 @@ public class Constants {
 	public static final int OPT_RESUME = 630;
 	public static final int OPT_TOMENU = 631;
 	public static final int OPT_BACK = 632;
+	public static final int OPT_YES = 633;
+	public static final int OPT_NO = 634;
+	
+	// prompts ids
+	public static final int PROMPT_TOMENU = 781;
+	public static final int PROMPT_QUIT = 782;
 
 }	// public class' end

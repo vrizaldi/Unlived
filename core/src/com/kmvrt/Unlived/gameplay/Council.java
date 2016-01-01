@@ -57,7 +57,7 @@ public class Council {
 		GameChar mainChar = null;
 		if(initMainChar) {
 		// create objects for a new game
-			mainChar = new GameChar("pull");
+			mainChar = new GameChar("tiny");
 			
 		} else {
 			mainChar = data.getMainChar();

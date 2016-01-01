@@ -29,6 +29,8 @@ public class Assets {
 	public int[] optionsMenu;
 	public int[] optionsSetting;
 	public int[] optionsPause;
+	public int[] optionsPromptQuit;
+	public int[] optionsPromptToMenu;
 	
 	public DisplayMode[] availableRes;
 	public float volMusic;
@@ -63,6 +65,16 @@ public class Assets {
 			ins.optionsPause[2] = Constants.OPT_TOMENU;
 			ins.optionsPause[3] = Constants.OPT_QUIT;
 			
+			ins.optionsPromptQuit = new int[3];
+			ins.optionsPromptQuit[0] = Constants.PROMPT_QUIT;
+			ins.optionsPromptQuit[1] = Constants.OPT_NO;
+			ins.optionsPromptQuit[2] = Constants.OPT_YES;
+			
+			ins.optionsPromptToMenu = new int[3];
+			ins.optionsPromptToMenu[0] = Constants.PROMPT_TOMENU;
+			ins.optionsPromptToMenu[1] = Constants.OPT_NO;
+			ins.optionsPromptToMenu[2] = Constants.OPT_YES;
+			
 			ins.availableRes = Gdx.graphics.getDisplayModes();
 			ins.volMusic = 1f;
 			ins.volSound = 1f;
@@ -79,6 +91,13 @@ public class Assets {
 			ins.labels.put(Constants.OPT_TOMENU, "BACK TO MAINMENU");
 			ins.labels.put(Constants.OPT_RESUME, "RESUME");
 			ins.labels.put(Constants.OPT_BACK, "BACK");
+			ins.labels.put(Constants.OPT_NO, "M-NO");
+			ins.labels.put(Constants.OPT_YES, "M-YA");
+			
+			ins.labels.put(Constants.PROMPT_TOMENU, 
+					"DO YOU WANT TO GO BACK TO THE MAINMENU?");
+			ins.labels.put(Constants.PROMPT_QUIT, 
+					"ARE YOU QUITTING?");
 
 			FreeTypeFontParameter param = new FreeTypeFontParameter();
 			param.size = 20;

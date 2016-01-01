@@ -66,6 +66,9 @@ public class Painter {
 				Assets.ins.font.setColor(Color.WHITE);
 			}
 			int p = data.cOptions[i];
+		/*	texts.setText(Assets.ins.font, 
+					Assets.ins.labels.get(p),
+					, targetWidth, halign, wrap);*/
 			texts.setText(Assets.ins.font, 
 					Assets.ins.labels.get(p));
 			

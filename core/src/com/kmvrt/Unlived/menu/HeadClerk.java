@@ -67,7 +67,27 @@ public class HeadClerk {
 		
 		} else if(Gdx.input.isKeyJustPressed(Keys.D)) {
 			// select the pointed button
-			if(data.cOptions == Assets.ins.optionsSetting) {
+			if(data.cOptions == Assets.ins.optionsPromptQuit) {
+				if(p == Constants.OPT_NO) {
+					if(data.paused) {
+						data.cOptions = Assets.ins.optionsPause;
+					} else {
+						data.cOptions = Assets.ins.optionsMenu;
+					}
+				} else if(p == Constants.OPT_YES) {
+					Gdx.app.exit();
+				}
+			// if on quit prompt
+				
+			} else if(data.cOptions == Assets.ins.optionsPromptToMenu) {
+				if(p == Constants.OPT_NO) {
+					data.cOptions = Assets.ins.optionsPause;
+				} else if(p == Constants.OPT_YES) {
+					menu.toMainMenu();
+				}
+			// if on to mainmenu prompt
+				
+			} else if(data.cOptions == Assets.ins.optionsSetting) {
 				if(p == Constants.OPT_BACK) {
 					// get back to the main menu
 					if(data.paused) {
@@ -79,6 +99,7 @@ public class HeadClerk {
 						data.pointer = 0;
 					}
 				}
+			// if on setting
 				
 			} else if(data.cOptions == Assets.ins.optionsMenu) {
 				if(p == Constants.OPT_START) {
@@ -92,7 +113,8 @@ public class HeadClerk {
 				
 				} else if(p == Constants.OPT_QUIT) {
 					// quit
-					Gdx.app.exit();
+					data.cOptions = Assets.ins.optionsPromptQuit;
+					data.pointer = 1;
 					
 				}
 			// if on mainmenu's
@@ -107,10 +129,12 @@ public class HeadClerk {
 					data.cOptions = Assets.ins.optionsSetting;
 					
 				} else if(p == Constants.OPT_TOMENU) {
-					menu.toMainMenu();
+					data.cOptions = Assets.ins.optionsPromptToMenu;
+					data.pointer = 1;
 					
 				} else if(p == Constants.OPT_QUIT) {
-					Gdx.app.exit();
+					data.cOptions = Assets.ins.optionsPromptQuit;
+					data.pointer = 1;
 				}
 			}
 		// if D is pressed's

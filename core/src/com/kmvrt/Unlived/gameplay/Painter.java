@@ -72,6 +72,18 @@ public class Painter {
 		Gdx.gl.glClearColor(0, 0, 0, 1); // black
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		if(data.beep) {
+			// just render the beep
+			batch.setProjectionMatrix(ui.combined);
+			batch.begin();
+			Sprite cBeep = Assets.ins.beepSprites[data.beepIter];	
+			cBeep.setPosition((ui.viewportWidth - cBeep.getWidth()) / 2,
+					(ui.viewportHeight - cBeep.getHeight()) / 2);
+			cBeep.draw(batch);
+			batch.end();
+			return;
+		}
+
 		cacheBatch.setProjectionMatrix(cam.combined);
 		cacheBatch.begin();
 		// draw map ****************

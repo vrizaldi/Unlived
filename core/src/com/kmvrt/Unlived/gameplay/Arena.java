@@ -77,6 +77,17 @@ public class Arena implements Screen {
 							data.justResumed = false;
 						}
 //						Gdx.app.debug(TAG, "PEW PEW PEW");
+						data.beep = true;
+							// render the beep
+						Timer.schedule(
+							new Timer.Task() {
+							
+								@Override
+								public void run() {
+									data.beep = false;
+									data.beepIter = (data.beepIter + 1) % 3;
+								}
+							}, 0.2f);
 					}
 				}, 1, 1, 2);
 	}

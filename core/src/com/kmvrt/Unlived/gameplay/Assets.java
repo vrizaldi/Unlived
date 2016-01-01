@@ -46,6 +46,7 @@ public class Assets {
 	public Sprite haloOff;
 	public Sprite haloOn;
 	public Animation haloOnAnim;
+	public Sprite[] beepSprites;
 
 	public BitmapFont font; // default font
 
@@ -89,14 +90,17 @@ public class Assets {
 			ins.portalSprite = new Sprite(ins.mapImgs.findRegion("portalImg"));
 			ins.portalSprite.setSize(Constants.ins.PORTAL_WIDTH, Constants.ins.PORTAL_HEIGHT);
 
+			// default font
 			FreeTypeFontParameter param = new FreeTypeFontParameter();
 			param.size = 10;
 			param.color = Color.WHITE;
 			ins.font = new FreeTypeFontGenerator(Gdx.files.internal("res/font/PressStart2P.ttf")) 
 				.generateFont(param);
 		
+			// ui images
 			ins.uiImgs = new TextureAtlas("res/ui/ui.pack");
 			ins.blackBox = new Sprite(ins.uiImgs.findRegion("blackBox"));
+
 			ins.haloOff = new Sprite(ins.uiImgs.findRegion("haloOff"));
 			ins.haloOff.setSize(Constants.ins.HALO_SIZE, Constants.ins.HALO_SIZE);
 			Array<TextureRegion> haloOnFrames = new Array<TextureRegion>(4);
@@ -119,6 +123,14 @@ public class Assets {
 					haloOnFrames, Animation.PlayMode.LOOP);
 			ins.haloOn = new Sprite(ins.haloOnAnim.getKeyFrame(0));
 			ins.haloOn.setSize(Constants.ins.HALO_SIZE, Constants.ins.HALO_SIZE);
+
+			ins.beepSprites = new Sprite[3];
+			ins.beepSprites[0] = new Sprite(ins.uiImgs.findRegion("beep1"));
+			ins.beepSprites[1] = new Sprite(ins.uiImgs.findRegion("beep2"));
+			ins.beepSprites[2] = new Sprite(ins.uiImgs.findRegion("beep3"));
+			for(Sprite s : ins.beepSprites) {
+				s.setSize(Constants.ins.BEEP_SIZE, Constants.ins.BEEP_SIZE);
+			}
 			
 			initialised = true;	// flag it
 			Gdx.app.log(TAG, "Assets initialised");
@@ -267,6 +279,10 @@ public class Assets {
 		
 		ins.haloOff.setSize(Constants.ins.HALO_SIZE, Constants.ins.HALO_SIZE);
 		ins.haloOn.setSize(Constants.ins.HALO_SIZE, Constants.ins.HALO_SIZE);
+
+		for(Sprite s : ins.beepSprites) {
+				s.setSize(Constants.ins.BEEP_SIZE, Constants.ins.BEEP_SIZE);
+		}
 	}
 
 	public static void dispose() {

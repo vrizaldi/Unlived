@@ -11,7 +11,6 @@ public class StateData {
 //	private static final String TAG = StateData.class.getName();
 
 	public boolean paused = false;
-	public boolean justResumed = false;
 //	public boolean switchScreen;
 	public boolean gameOver;
 	public boolean switchLevel;
@@ -29,6 +28,10 @@ public class StateData {
 	public int[] cOptions;
 	public int pointer = 0;
 	public boolean vSync;
+
+	public boolean justResumed = false;
+	public boolean beep = false;
+	public int beepIter = 0;
 	
 
 // constructor ----------------------------------------------------------------------------------------------

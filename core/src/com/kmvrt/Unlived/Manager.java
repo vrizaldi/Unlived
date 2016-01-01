@@ -71,7 +71,17 @@ public class Manager extends Game {
 						if(!this.isScheduled()) {
 							data.justResumed = false;
 						}
-//						Gdx.app.debug(TAG, "PEW PEW PEW");
+						data.beep = true;
+							// render the beep to set the player ready
+						Timer.schedule(
+								new Timer.Task() {
+								
+									@Override
+									public void run() {
+										data.beep = false;
+										data.beepIter = (data.beepIter + 1) % 3;
+									}
+								}, 0.2f);
 					}
 				}, 1, 1, 2);
 		this.setScreen(arena);
