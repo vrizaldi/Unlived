@@ -118,8 +118,11 @@ public class Constants {
 	public static final int OPT_YES = 633;
 	public static final int OPT_NO = 634;
 	
-	// prompts ids
+	// prompts/labels ids
 	public static final int PROMPT_TOMENU = 781;
 	public static final int PROMPT_QUIT = 782;
+	public static final int LABEL_MAINMENU = 783;
+	public static final int LABEL_PAUSE = 784;
+	public static final int LABEL_SETTING = 785;
 
 }	// public class' end

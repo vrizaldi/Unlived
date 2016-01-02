@@ -56,14 +56,14 @@ public class HeadClerk {
 		int p = data.cOptions[data.pointer];
 		if(Gdx.input.isKeyJustPressed(Keys.UP)) {
 			// move pointer up
-			data.pointer = (data.pointer - 1) % data.cOptions.length;
+			data.pointer = (data.pointer - 1) % (data.cOptions.length - 1);
 			if(data.pointer < 0) {
-				data.pointer += data.cOptions.length;
+				data.pointer += (data.cOptions.length - 1);
 			}
 			
 		} else if(Gdx.input.isKeyJustPressed(Keys.DOWN)) {
 			// move pointer down
-			data.pointer = (data.pointer + 1) % data.cOptions.length;
+			data.pointer = (data.pointer + 1) % (data.cOptions.length - 1);
 		
 		} else if(Gdx.input.isKeyJustPressed(Keys.D)) {
 			// select the pointed button
@@ -149,11 +149,14 @@ public class HeadClerk {
 							cDIndex += Assets.ins.availableRes.length;
 						}
 						DisplayMode d = Assets.ins.availableRes[cDIndex];
+						Gdx.app.log(TAG, "Setting resolution to " + d.width + "x" + d.height + "...");
 						Gdx.graphics.setDisplayMode(d.width, d.height, fullscreen);
 					
 					} else if(p == Constants.OPT_F11) {
 						fullscreen = !fullscreen;
 						DisplayMode d = Assets.ins.availableRes[cDIndex];
+						String sw = fullscreen ? "on" : "of";
+						Gdx.app.log(TAG, "Setting fullscreen " + sw);
 						Gdx.graphics.setDisplayMode(
 								d.width, d.height, fullscreen);
 						
@@ -187,12 +190,15 @@ public class HeadClerk {
 	//					justChange();
 						cDIndex = (cDIndex + 1) % Assets.ins.availableRes.length;
 						DisplayMode d = Assets.ins.availableRes[cDIndex];
+						Gdx.app.log(TAG, "Setting resolution to " + d.width + "x" + d.height + "...");
 						Gdx.graphics.setDisplayMode(d.width, d.height, fullscreen);
 					
 					
 					} else if(p == Constants.OPT_F11) {
 						fullscreen = !fullscreen;
 						DisplayMode d = Assets.ins.availableRes[cDIndex];
+						String sw = fullscreen ? "on" : "of";
+						Gdx.app.log(TAG, "Setting fullscreen " + sw);
 						Gdx.graphics.setDisplayMode(
 								d.width, d.height, fullscreen);
 						

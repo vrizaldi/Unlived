@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.utils.Align;
 import com.kmvrt.Unlived.*;
 
 public class Painter {
@@ -57,8 +58,21 @@ public class Painter {
 		// clear the canvas
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		// draw the label
+		String label = Assets.ins.labels.get(
+				data.cOptions[data.cOptions.length - 1]);
+		texts.setText(Assets.ins.font, label, Color.WHITE,
+				cam.viewportWidth / 2, Align.left, true);
+		Assets.ins.font.draw(batch, texts, 
+				5, cam.viewportHeight - texts.height / 2);
 	
-		for(int i = 0; i < data.cOptions.length; i++) {
+		int gapY = 20;
+		int offsetY = -15;
+		
+		float extra = 4;
+
+		for(int i = 0; i < data.cOptions.length - 1; i++) {
 			// draw the button labels
 			if(i == data.pointer) {
 				Assets.ins.font.setColor(Color.BLACK);
@@ -71,12 +85,9 @@ public class Painter {
 					, targetWidth, halign, wrap);*/
 			texts.setText(Assets.ins.font, 
 					Assets.ins.labels.get(p));
-			
-			int gapY = 20;
-			int offsetY = -15;
-			float OPT_ORIGIN_Y = texts.height * data.cOptions.length
-					+ gapY * (data.cOptions.length - 1) - offsetY * 2;
-			float extra = 4;
+		
+			float OPT_ORIGIN_Y = texts.height * (data.cOptions.length - 1)
+					+ gapY * (data.cOptions.length - 2) - offsetY * 2;
 			
 			float textX = 5;
 			float textY = OPT_ORIGIN_Y - (texts.height * (i + 1))
