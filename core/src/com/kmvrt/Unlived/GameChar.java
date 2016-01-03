@@ -1,5 +1,6 @@
 package com.kmvrt.Unlived;
 
+//import com.kmvrt.Unlived.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
 
@@ -26,8 +27,6 @@ public class GameChar {
 	public float affectingTime;
 	public Attributes atts;
 		// store the attribute. e.g. mana, accel, force, etc.
-	
-	private boolean hasSlowMo;
 	
 	private int dir;  // the direction the character facing
 	public boolean wandering;
@@ -70,7 +69,7 @@ public class GameChar {
 		
 		wandering = false;
 		
-		hasSlowMo = false;
+//		hasSlowMo = false;
 	}	// new()'s end
 	
 	public void reset() {
@@ -162,7 +161,6 @@ public class GameChar {
 		}
 	} 
 
-
 	// type id
 	public void changeCreep(int type) {
 		// change the creep type
@@ -184,15 +182,7 @@ public class GameChar {
 		return ID;
 	} // getID()'s end
 	
-	public void slowMo() {
-		hasSlowMo = true;
-	}
-	
-	public boolean hasSlowMo() {
-		return hasSlowMo;
-	}
 
-	
 	
 // interaction with magic --------------------------------------------------------------------------------------------------	
 	public void affectedBy(Magic m) {
@@ -225,7 +215,7 @@ public class GameChar {
 		if(firstShot) {
 			// disable the char from shooting for awhile
 			ableToShoot = false;
-			Timer.schedule(
+			WorldTimer.schedule(
 				new Timer.Task() {
 				
 					@Override
@@ -235,7 +225,7 @@ public class GameChar {
 				}, spell.getInterval());
 			
 			if(spell.getBurst() > 1) {
-				Timer.schedule(
+				WorldTimer.schedule(
 					new Timer.Task() {
 						
 						@Override
@@ -244,7 +234,7 @@ public class GameChar {
 							Gdx.app.log(TAG, "burstin = " + String.valueOf(bursting));
 						}
 					}, spell.getBurstInterval(),
-					spell.getBurstInterval(), spell.getBurst() - 2);
+					spell.getBurst() - 2);
 			}
 			
 		} else { // not the first shot

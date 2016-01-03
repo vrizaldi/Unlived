@@ -25,7 +25,8 @@ public class Menu implements Screen {
 		this.data = data;
 		this.manager = manager;
 
-		headClerk = new HeadClerk(this, data);
+		headClerk = new HeadClerk(this, data, 
+				manager.prefs);
 		painter = new Painter(data);
 	}
 

@@ -5,8 +5,10 @@ package com.kmvrt.Unlived;
 import com.kmvrt.Unlived.gameplay.Arena;
 import com.kmvrt.Unlived.menu.Menu;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Timer;
 
 public class Manager extends Game {
@@ -18,6 +20,8 @@ public class Manager extends Game {
 	// game screens
 	private Arena arena;
 	private Menu menu;
+	
+	public Preferences prefs;
 
 	private StateData data;
 	
@@ -32,6 +36,12 @@ public class Manager extends Game {
 /*		UNIT_CONV = 16 * Gdx.graphics.getHeight() / 480;
 		Constants.init();
 		MagicFactory.init();*/
+		prefs = Gdx.app.getPreferences("Unlived");
+		DisplayMode defDM = Gdx.graphics.getDesktopDisplayMode();
+		Gdx.graphics.setDisplayMode(
+				prefs.getInteger("resWidth", defDM.width), 
+				prefs.getInteger("resHeight", defDM.height), 
+				prefs.getBoolean("fullscreen", true));
 		data = new StateData();
 		arena = new Arena(this, data);
 		menu = new Menu(this, data);

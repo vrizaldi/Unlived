@@ -54,7 +54,6 @@ public class Council {
 		// clear char and magic collection
 		data.chars.clear();
 		data.magics.clear();
-		data.slowMo = false;
 		GameChar mainChar = null;
 		if(initMainChar) {
 		// create objects for a new game
@@ -89,7 +88,7 @@ public class Council {
 			}, Constants.CREEPS_CHANGE_INTERVAL,
 			Constants.CREEPS_CHANGE_INTERVAL);
 		
-		creepsDirChange = false;
+		creepsDirChange = true;
 		Timer.schedule(
 				new Timer.Task() {
 					
@@ -97,7 +96,7 @@ public class Council {
 					public void run() {
 						creepsDirChange = true;
 					}
-				}, 0, 0.8f);
+				}, 0.8f, 0.8f);
 	}	// initNewGame()'s end
 
 
@@ -107,26 +106,32 @@ public class Council {
 		// update the current game state
 
 		float delta = Gdx.graphics.getDeltaTime();
-		if(data.getMainChar().atts.getMana() <= 10) {
-			// activate slowmo
-			if(!data.slowMo
-					&& !data.getMainChar().hasSlowMo()) {
+		if(data.slowMoable && !data.slowMo) {
+			// check if there's a creep close
+			if(closestCreep() != null) {
+				data.slowMoable = false;
 				data.slowMo = true;
-				data.getMainChar().slowMo();
 				Timer.schedule(
 						new Timer.Task() {
-
+							
 							@Override
 							public void run() {
 								data.slowMo = false;
+								Timer.schedule(
+										new Timer.Task() {
+											
+											@Override
+											public void run() {
+												data.slowMoable = true;
+											}
+										}, 3);
 							}
-						}, 3f);
+						}, 2);
 			}
+		}
+		
+		if(data.slowMo) {
 			delta *= Constants.SLOWMO_RATIO;
-			
-		} else if(data.getMainChar().atts.getMana() > 10
-				&& data.slowMo) {
-			data.slowMo = false;
 		}
 		
 		updateMainChar(delta);
@@ -208,11 +213,14 @@ public class Council {
 	}
 
 	private GameChar closestCreep() {
-		// return the inactive creep closest to the mainChar
+		// return the creep closest to the mainChar 
+		// that has all the requirements
+		// return null if can't find any
 
 		GameChar mainChar = data.getMainChar();
 		GameChar closest = null;
-		float closestX = 100;
+		float closestX = Constants.ins.SAFE_DIST_X;
+		float closestY = Constants.ins.SAFE_DIST_Y;
 
 		// set rec1 as mainChar's y rectangle
 		rec1.setPosition(0, mainChar.y);
@@ -221,13 +229,16 @@ public class Council {
 			float distX = Math.abs(mainChar.x - c.x);
 			float distY = Math.abs(mainChar.y - c.y);
 			if(c.cRoom == mainChar.cRoom
-					&& c != mainChar
-					&& distY < Constants.ins.SAFE_DIST_Y
-					&& distX < Constants.ins.SAFE_DIST_X
-					&& distX < closestX) {
+					&& c != mainChar) {
 				// if they're the closest found
-				closestX = distX;
-				closest = c;
+				if((distY < closestY
+					|| (distY - closestY < 0.5f * Constants.ins.UNIT_CONV)
+						&& distX < closestX)) {
+					closestX = distX;
+					closestY = distY;
+					closest = c;
+				}
+				
 			}	// if they're close's
 		}	// chars iterator's
 

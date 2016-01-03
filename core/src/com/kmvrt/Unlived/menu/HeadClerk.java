@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.Preferences;
 //import com.badlogic.gdx.utils.Timer;
 
 public class HeadClerk {
@@ -15,6 +16,8 @@ public class HeadClerk {
 	private Menu menu;
 	private StateData data;
 	
+	private Preferences prefs;
+	
 	private int cDIndex;
 	private boolean fullscreen;
 //	private boolean vSync;
@@ -23,12 +26,13 @@ public class HeadClerk {
 
 
 // constructor ------------------------------------------------------------------------------------------------
-	public HeadClerk(Menu menu, StateData data) {
+	public HeadClerk(Menu menu, StateData data, Preferences prefs) {
 
 		Assets.init();
 		this.menu = menu;
 		this.data = data;
 		
+		this.prefs = prefs;
 		int width = Gdx.graphics.getWidth();
 		int height = Gdx.graphics.getHeight();
 		for(int i = 0; i < Assets.ins.availableRes.length; i++) {
@@ -40,8 +44,7 @@ public class HeadClerk {
 			}
 		}
 		fullscreen = Gdx.graphics.isFullscreen();
-		
-		data.vSync = true; 
+		data.vSync = prefs.getBoolean("vSync", true); 
 		Gdx.graphics.setVSync(data.vSync);
 	} 
 
@@ -152,6 +155,8 @@ public class HeadClerk {
 						DisplayMode d = Assets.ins.availableRes[cDIndex];
 						Gdx.app.log(TAG, "Setting resolution to " + d.width + "x" + d.height + "...");
 						Gdx.graphics.setDisplayMode(d.width, d.height, fullscreen);
+						prefs.putInteger("resWidth", d.width);
+						prefs.putInteger("resHeight", d.height);
 					
 					} else if(p == Constants.OPT_F11) {
 						fullscreen = !fullscreen;
@@ -160,10 +165,12 @@ public class HeadClerk {
 						Gdx.app.log(TAG, "Setting fullscreen " + sw);
 						Gdx.graphics.setDisplayMode(
 								d.width, d.height, fullscreen);
+						prefs.putBoolean("fullscreen", fullscreen);
 						
 					} else if(p == Constants.OPT_VSNC) {
 						data.vSync = !data.vSync;
 						Gdx.graphics.setVSync(data.vSync);
+						prefs.putBoolean("vSync", data.vSync);
 					}
 				}
 			} 	// if on setting
@@ -193,7 +200,8 @@ public class HeadClerk {
 						DisplayMode d = Assets.ins.availableRes[cDIndex];
 						Gdx.app.log(TAG, "Setting resolution to " + d.width + "x" + d.height + "...");
 						Gdx.graphics.setDisplayMode(d.width, d.height, fullscreen);
-					
+						prefs.putInteger("resWidth", d.width);
+						prefs.putInteger("resHeight", d.height);
 					
 					} else if(p == Constants.OPT_F11) {
 						fullscreen = !fullscreen;
@@ -202,10 +210,12 @@ public class HeadClerk {
 						Gdx.app.log(TAG, "Setting fullscreen " + sw);
 						Gdx.graphics.setDisplayMode(
 								d.width, d.height, fullscreen);
+						prefs.putBoolean("fullscreen", fullscreen);
 						
 					} else if(p == Constants.OPT_VSNC) {
 						data.vSync = !data.vSync;
 						Gdx.graphics.setVSync(data.vSync);
+						prefs.putBoolean("vSync", data.vSync);
 					}
 				}	// if !just change
 			}
@@ -225,6 +235,8 @@ public class HeadClerk {
 				}
 			}
 		} // if left is pressed
+		
+		prefs.flush();
 	}	// procInput()'s
 
 	private void justChange() {

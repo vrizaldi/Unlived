@@ -90,6 +90,10 @@ public class Arena implements Screen {
 							}, 0.2f);
 					}
 				}, 1, 1, 2);
+
+		// time the slowmo
+		data.slowMo = false;
+		data.slowMoable = true;
 	}
 	
 	@Override
@@ -102,6 +106,7 @@ public class Arena implements Screen {
 		Gdx.app.log(TAG, "Disposing assets...");
 		Assets.dispose();
 		Timer.instance().clear();
+		WorldTimer.clear();
 	}
 
 
@@ -137,6 +142,11 @@ public class Arena implements Screen {
 		} */
 		
 		// the order is important: council before navigator
+		float delta = Gdx.graphics.getDeltaTime();
+		if(data.slowMo) {
+			delta *= Constants.SLOWMO_RATIO;
+		}
+		WorldTimer.update(delta);
 		navigator.update();
 		if(!data.paused
 				&& !data.justResumed)

@@ -212,7 +212,7 @@ public class Assets {
 						magicFrames.add(frame);
 					}
 				}
-				Animation mAnim = new Animation(0.1f / magicFrames.size,
+				Animation mAnim = new Animation(0.03f / magicFrames.size,
 						magicFrames, Animation.PlayMode.LOOP);
 			
 				Sprite mSp = new Sprite(mAnim.getKeyFrame(0));
