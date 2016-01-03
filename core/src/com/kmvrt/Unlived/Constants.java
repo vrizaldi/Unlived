@@ -81,6 +81,8 @@ public class Constants {
 		// total of the normal room types
 		// will be changed as types added
 
+	public static final float SLOWMO_RATIO = 0.05f;
+	
 	// char IDs
 	public static final int CHAR_MAIN = 98;
 	public static final int CHAR_CREEP_FOLLOW = 99;

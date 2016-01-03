@@ -27,6 +27,8 @@ public class GameChar {
 	public Attributes atts;
 		// store the attribute. e.g. mana, accel, force, etc.
 	
+	private boolean hasSlowMo;
+	
 	private int dir;  // the direction the character facing
 	public boolean wandering;
 	
@@ -67,6 +69,8 @@ public class GameChar {
 		affectors = new Attributes(false);
 		
 		wandering = false;
+		
+		hasSlowMo = false;
 	}	// new()'s end
 	
 	public void reset() {
@@ -179,6 +183,14 @@ public class GameChar {
 		
 		return ID;
 	} // getID()'s end
+	
+	public void slowMo() {
+		hasSlowMo = true;
+	}
+	
+	public boolean hasSlowMo() {
+		return hasSlowMo;
+	}
 
 	
 	

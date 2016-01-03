@@ -21,9 +21,8 @@ public class Menu implements Screen {
 // constructor ---------------------------------------------------------------------------------------------
 	public Menu(Manager manager, StateData data) {
 		
-		Assets.init();
+//		Assets.init();
 		this.data = data;
-	
 		this.manager = manager;
 
 		headClerk = new HeadClerk(this, data);

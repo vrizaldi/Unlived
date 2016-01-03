@@ -38,6 +38,10 @@ public class Chemist {
 		// update the magics in the current state of the game
 
 		float delta = Gdx.graphics.getDeltaTime();
+		if(data.slowMo) {
+			delta *= Constants.SLOWMO_RATIO;
+				// 10 times slower
+		}
 		
 		for(Iterator<Magic> iter = data.magics.iterator(); iter.hasNext();) {
 			Magic m = iter.next();

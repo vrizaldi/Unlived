@@ -25,6 +25,7 @@ public class HeadClerk {
 // constructor ------------------------------------------------------------------------------------------------
 	public HeadClerk(Menu menu, StateData data) {
 
+		Assets.init();
 		this.menu = menu;
 		this.data = data;
 		

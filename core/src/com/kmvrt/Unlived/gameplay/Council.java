@@ -54,6 +54,7 @@ public class Council {
 		// clear char and magic collection
 		data.chars.clear();
 		data.magics.clear();
+		data.slowMo = false;
 		GameChar mainChar = null;
 		if(initMainChar) {
 		// create objects for a new game
@@ -106,6 +107,27 @@ public class Council {
 		// update the current game state
 
 		float delta = Gdx.graphics.getDeltaTime();
+		if(data.getMainChar().atts.getMana() <= 10) {
+			// activate slowmo
+			if(!data.slowMo
+					&& !data.getMainChar().hasSlowMo()) {
+				data.slowMo = true;
+				data.getMainChar().slowMo();
+				Timer.schedule(
+						new Timer.Task() {
+
+							@Override
+							public void run() {
+								data.slowMo = false;
+							}
+						}, 3f);
+			}
+			delta *= Constants.SLOWMO_RATIO;
+			
+		} else if(data.getMainChar().atts.getMana() > 10
+				&& data.slowMo) {
+			data.slowMo = false;
+		}
 		
 		updateMainChar(delta);
 		updateCreeps(delta);

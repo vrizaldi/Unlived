@@ -57,7 +57,11 @@ public class Painter {
 		// render the objects to the screen, based on the data
 		
 		// update the stuff
-		stateTime += Gdx.graphics.getDeltaTime();
+		if(!data.slowMo) {
+			stateTime += Gdx.graphics.getDeltaTime();
+		} else {
+			stateTime += Gdx.graphics.getDeltaTime() * Constants.SLOWMO_RATIO;
+		}
 		if(data.newMap || data.map.justChanged) {
 			data.newMap = false;
 			data.map.justChanged = false;
@@ -114,7 +118,7 @@ public class Painter {
 			// render the mana percentage
 			Assets.ins.font.setColor(Color.BLACK);
 			if(c.cRoom == data.getMainChar().cRoom) {
-				texts.setText(Assets.ins.font, (int)c.atts.getMana() + "%");
+				texts.setText(Assets.ins.font, String.format("%.1f", c.atts.getMana()) + '%');
 				Assets.ins.font.draw(batch, texts, 
 						(c.x + ((Constants.ins.CHAR_WIDTH - texts.width) / 2)),
 						c.y + Constants.ins.CHAR_HEIGHT + 10);

@@ -29,6 +29,8 @@ public class StateData {
 	public int pointer = 0;
 	public boolean vSync;
 
+	public boolean slowMo = false;
+
 	public boolean justResumed = false;
 	public boolean beep = false;
 	public int beepIter = 0;
