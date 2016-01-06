@@ -106,32 +106,29 @@ public class Council {
 		// update the current game state
 
 		float delta = Gdx.graphics.getDeltaTime();
-		if(data.slowMoable && !data.slowMo) {
-			// check if there's a creep close
-			if(closestCreep() != null) {
-				data.slowMoable = false;
-				data.slowMo = true;
-				Timer.schedule(
-						new Timer.Task() {
-							
-							@Override
-							public void run() {
-								data.slowMo = false;
-								Timer.schedule(
-										new Timer.Task() {
-											
-											@Override
-											public void run() {
-												data.slowMoable = true;
-											}
-										}, 3);
-							}
-						}, 2);
-			}
+		if(data.getMainChar().atts.getMana() < 6
+				&& !data.getMainChar().hasSlowMo
+				&& !data.slowMo) {
+			data.getMainChar().hasSlowMo = true;
+			data.slowMo = true;
+			// time the slowmo for x secs
+			Timer.schedule(
+				new Timer.Task() {
+				
+					@Override
+					public void run() {
+						
+						data.slowMo = false;	
+					}
+				}, 1);
 		}
 		
 		if(data.slowMo) {
-			delta *= Constants.SLOWMO_RATIO;
+			if(data.getMainChar().atts.getMana() >= 6) {
+				data.slowMo = false;
+			} else {
+				delta *= Constants.SLOWMO_RATIO;
+			}
 		}
 		
 		updateMainChar(delta);
@@ -221,6 +218,7 @@ public class Council {
 		GameChar closest = null;
 		float closestX = Constants.ins.SAFE_DIST_X;
 		float closestY = Constants.ins.SAFE_DIST_Y;
+		boolean isClosestSameRoom = false;
 
 		// set rec1 as mainChar's y rectangle
 		rec1.setPosition(0, mainChar.y);
@@ -228,7 +226,29 @@ public class Council {
 		for(GameChar c : data.chars) {
 			float distX = Math.abs(mainChar.x - c.x);
 			float distY = Math.abs(mainChar.y - c.y);
+			// check the ones in the same room first
 			if(c.cRoom == mainChar.cRoom
+					&& c != mainChar) {
+				if(!isClosestSameRoom
+						&& distY < Constants.ins.SAFE_DIST_Y
+						&& distX < Constants.ins.SAFE_DIST_X) {
+					// take this one as the closest
+					closestX = distX;
+					closestY = distY;
+					closest = c;
+					isClosestSameRoom = true;
+				
+				} else if(distY < closestY
+					|| ((distY - closestY < 0.5f * Constants.ins.UNIT_CONV)
+						&& distX < closestX)) {
+					closestX = distX;
+					closestY = distY;
+					closest = c;
+				}
+			// if in the same room as mainchar
+				
+			} else if(!isClosestSameRoom
+					&& areConnected(c.cRoom, mainChar.cRoom)
 					&& c != mainChar) {
 				// if they're the closest found
 				if((distY < closestY
@@ -244,6 +264,37 @@ public class Council {
 
 		return closest;
 	}
+	
+	public boolean areConnected(Room r1, Room r2) {
+		
+		// if they're the same room
+		// just return true
+		if(r1 == r2) {
+			return true;
+		}
+		
+		// check if they're next to each other
+		// it can only be EITHER vertically or horizontally
+		boolean horizontally = Math.abs(r1.getX() - r2.getX()) == 1 ? true : false;
+		boolean vertically = Math.abs(r1.getY() - r2.getY()) == 1 ? true : false;
+		if(horizontally ^ vertically) {
+			if(horizontally) {
+				// horizontal bond
+				if((r1.east && r2.west)
+						|| (r1.west && r2.east)) {
+					return true;
+				}
+				
+			} else {	// vertically
+				if((r1.north && r2.south)
+						|| (r1.south && r2.north)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}	// areConnected(Room, Room)'s
 
 	
 	

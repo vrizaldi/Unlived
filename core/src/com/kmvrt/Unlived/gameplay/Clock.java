@@ -119,7 +119,11 @@ public class Clock {
 						c1.x = dX;
 						c1.y = roomY + Constants.ins.ROOM_HEIGHT - Constants.ins.CHAR_HEIGHT;
 					}
-				} 
+					
+				} else {
+					// visit the north room
+					data.map.visit(c1, c1.cRoom.getX(), c1.cRoom.getY() + 1);
+				}
 			}
 			if(c1.y < roomY) {
 				// over to the south
@@ -130,7 +134,11 @@ public class Clock {
 						c1.x = dX;
 						c1.y = roomY;
 					}
-				} 
+					
+				} else {
+					// visit the south room
+					data.map.visit(c1, c1.cRoom.getX(), c1.cRoom.getY() - 1);
+				}
 			} 
 			if(c1.x + Constants.ins.CHAR_WIDTH > roomX + Constants.ins.ROOM_WIDTH) {
 				// over to the east
@@ -141,12 +149,20 @@ public class Clock {
 						c1.y = dY;
 						c1.x = roomX + Constants.ins.ROOM_WIDTH - Constants.ins.CHAR_WIDTH;
 					}
+					
+				} else {
+					// visit the east room
+					data.map.visit(c1, c1.cRoom.getX() + 1, c1.cRoom.getY());
 				}
 			}	
 			if(c1.x < roomX) {
 				// over to the west
 				if(hitWall(c1, Constants.DIR_W)) {
 					c1.x = roomX;
+					
+				} else {
+					// visit the west room
+					data.map.visit(c1, c1.cRoom.getX() - 1, c1.cRoom.getY());
 				}
 			} 
 			

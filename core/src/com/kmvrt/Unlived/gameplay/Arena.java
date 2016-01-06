@@ -93,7 +93,6 @@ public class Arena implements Screen {
 
 		// time the slowmo
 		data.slowMo = false;
-		data.slowMoable = true;
 	}
 	
 	@Override

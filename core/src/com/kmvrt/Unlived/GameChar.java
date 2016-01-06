@@ -36,6 +36,8 @@ public class GameChar {
 	private Spell spell;
 	private boolean bursting;
 	private boolean ableToShoot;
+
+	public boolean hasSlowMo = false;
 	
 	public Room cRoom;
 
@@ -90,12 +92,17 @@ public class GameChar {
 		bursting = false;
 		ableToShoot = true;
 		
+		hasSlowMo = false;
+		
+		// add 50 mana
+		atts.applyMana(50);
 		affectors = new Attributes(false);
 	}
 
 
 
 // setter and getter ------------------------------------------------------------------------------------------
+
 	// next move
 	public void move(float x, float y) {
 		// move the char by the specified distance
@@ -308,7 +315,8 @@ public class GameChar {
 	// apply the attribute ------------------------------------------------------------
 		public void applyMana(float mana) {
 
-			this.mana += mana;
+			// max 99
+			this.mana += Math.min(mana, 99 - this.mana);
 		}
 
 		public void applyAccel(float accel) {

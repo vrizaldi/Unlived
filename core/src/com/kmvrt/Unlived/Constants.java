@@ -30,8 +30,8 @@ public class Constants {
 		ins.CHAR_WIDTH = 2 * ins.UNIT_CONV;
 		ins.CHAR_HEIGHT = 3 * ins.UNIT_CONV;
 		ins.NORMAL_SPEED = 20 * ins.UNIT_CONV;
-		ins.SAFE_DIST_X = 10 * ins.UNIT_CONV;
-		ins.SAFE_DIST_Y = 10 * ins.UNIT_CONV;
+		ins.SAFE_DIST_X = 7 * ins.UNIT_CONV;
+		ins.SAFE_DIST_Y = 7 * ins.UNIT_CONV;
 		
 		ins.HALO_SIZE = 2 * ins.UNIT_CONV;
 		ins.BEEP_SIZE = 10 * ins.UNIT_CONV;
@@ -81,7 +81,7 @@ public class Constants {
 		// total of the normal room types
 		// will be changed as types added
 
-	public static final float SLOWMO_RATIO = 0.05f;
+	public static final float SLOWMO_RATIO = 0.01f;
 	
 	// char IDs
 	public static final int CHAR_MAIN = 98;
