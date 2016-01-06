@@ -37,7 +37,7 @@ public class GameChar {
 	private boolean bursting;
 	private boolean ableToShoot;
 
-	public boolean hasSlowMo = false;
+//	public boolean hasSlowMo = false;
 	
 	public Room cRoom;
 
@@ -92,7 +92,7 @@ public class GameChar {
 		bursting = false;
 		ableToShoot = true;
 		
-		hasSlowMo = false;
+//		hasSlowMo = false;
 		
 		// add 50 mana
 		atts.applyMana(50);

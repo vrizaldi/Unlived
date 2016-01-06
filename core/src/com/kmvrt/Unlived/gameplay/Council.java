@@ -71,10 +71,16 @@ public class Council {
 				- (Constants.ins.CHAR_WIDTH / 2); 
 		mainChar.y = data.map.getSpawnPosY() 
 				- (Constants.ins.CHAR_HEIGHT / 2);
+		mainChar.cRoom = data.map.visit(mainChar, 
+				(int)(mainChar.x / (Constants.ins.ROOM_WIDTH 
+						+ Constants.ins.ROOMS_INTERVAL)), 
+				(int)(mainChar.y / (Constants.ins.ROOM_HEIGHT + 
+						Constants.ins.ROOMS_INTERVAL)));
+			// give it its first room
 		mainChar.updateSafePos();		
 		
 		Gdx.app.log(TAG, "Deploying new creeps...");
-		deployCreeps((int)(Math.random() * Constants.CHARS_MAX));
+		deployCreeps((int)(data.map.getRoomsNum() / 2));
 		Assets.initChars(data.chars);
 		
 		creepsChange = true;
@@ -106,26 +112,36 @@ public class Council {
 		// update the current game state
 
 		float delta = Gdx.graphics.getDeltaTime();
-		if(data.getMainChar().atts.getMana() < 6
-				&& !data.getMainChar().hasSlowMo
-				&& !data.slowMo) {
-			data.getMainChar().hasSlowMo = true;
+		if(data.getMainChar().atts.getMana() < 11
+				&& !data.slowMo
+				&& data.slowMoable) {
+//			data.getMainChar().hasSlowMo = true;
 			data.slowMo = true;
+			data.slowMoable = false;
 			// time the slowmo for x secs
 			Timer.schedule(
 				new Timer.Task() {
-				
+					
 					@Override
 					public void run() {
-						
-						data.slowMo = false;	
+						// disable the slowmo
+						data.slowMo = false;
+						Timer.schedule(new Timer.Task() {
+							
+							@Override
+							public void run() {
+								// enable the slowmoable
+								data.slowMoable = true;
+							}
+						}, 1.5f);
 					}
 				}, 1);
 		}
 		
 		if(data.slowMo) {
-			if(data.getMainChar().atts.getMana() >= 6) {
+			if(data.getMainChar().atts.getMana() >= 11) {
 				data.slowMo = false;
+				data.slowMoable = true;
 			} else {
 				delta *= Constants.SLOWMO_RATIO;
 			}
@@ -252,8 +268,8 @@ public class Council {
 					&& c != mainChar) {
 				// if they're the closest found
 				if((distY < closestY
-					|| (distY - closestY < 0.5f * Constants.ins.UNIT_CONV)
-						&& distX < closestX)) {
+					|| (distY - closestY < 0.5f * Constants.ins.UNIT_CONV))
+						&& distX < closestX) {
 					closestX = distX;
 					closestY = distY;
 					closest = c;
@@ -318,18 +334,36 @@ public class Council {
 	private void deployCreeps(int num) {
 		// deploy creeps to the room
 
+		boolean[][] occupied = new boolean[Constants.ROOMS_NUM_X][Constants.ROOMS_NUM_Y];
+			// store the flagged rooms
+		// fill it with false
+		for(int y = 0; y < Constants.ROOMS_NUM_Y; y++) {
+			for(int x = 0; x < Constants.ROOMS_NUM_X; x++) {
+				occupied[x][y] = false;
+			}	// col iter's
+		} // row iter's
+		
+		occupied[data.getMainChar().cRoom.getX()][data.getMainChar().cRoom.getY()] 
+				= true;
+			// flag the mainChar's room first
 		num = Math.max(num, Constants.CHARS_MIN - 1);
+			// set to minimal if it's too small
+		
 			// creeps deployed can't be less than <CHAR_MIN> - 1
 		for(int i = 0; i < num; i++) {
 			// create <num> creeps
 
 			int r = (int)(Math.random() * MagicFactory.totalSpells());
 			GameChar creep = new GameChar(MagicFactory.getSpellName(r));
-			Room room = data.map.getRandRoom();
-			creep.x = (room.getX() * Constants.ins.ROOM_WIDTH) 
-					+ (room.getX() * Constants.ins.ROOMS_INTERVAL)+ 1;
-			creep.y = (room.getY() * Constants.ins.ROOM_HEIGHT)
-					+ (room.getY() * Constants.ins.ROOMS_INTERVAL) + 1;
+			Room room = null;
+			do {
+				room = data.map.getRandRoom();
+			} while(occupied[room.getX()][room.getY()]);
+			occupied[room.getX()][room.getY()] = true;
+			creep.x = GameMap.getMiddle(room.getX(), Constants.ins.ROOM_WIDTH, Constants.ins.ROOMS_INTERVAL)
+					- (Constants.ins.CHAR_WIDTH / 2);
+			creep.y = GameMap.getMiddle(room.getY(), Constants.ins.ROOM_HEIGHT, Constants.ins.ROOMS_INTERVAL)
+					- (Constants.ins.CHAR_HEIGHT / 2);
 				// put it anywhere in the room;
 			creep.updateSafePos();
 			data.chars.add(creep);
@@ -517,34 +551,6 @@ public class Council {
 			creep.move(Constants.ins.NORMAL_SPEED * delta, 0);
 		}
 	}	// followMainChar(GameChar, float, float)'s end
-
-/*	private void followX(GameChar creep, float distX, int dirY, float delta) {
-		// follow the mainChar horizontally
-		// and keep moving towards dirY(either N or S)
-	
-		if(dirY != Constants.DIR_N
-			&& dirY != Constants.DIR_S) {
-			Gdx.app.error(TAG, "ERROR: invalid argument in method followMainCharX()");
-			Gdx.app.exit();
-		}
-
-		// move horizontally towards the mainChar
-		// and also keep moving north/south
-		if(distX > 0) {
-			// move east
-			creep.move(Constants.ins.NORMAL_SPEED * delta, 0);
-
-		} else if(distX < 0) {
-			// move west
-			creep.move(-Constants.ins.NORMAL_SPEED * delta, 0);
-		}
-
-		if(dirY == Constants.DIR_N) {
-			creep.move(0, Constants.ins.NORMAL_SPEED * delta);
-		} else {
-			creep.move(0, -Constants.ins.NORMAL_SPEED * delta);			
-		}
-	}	// followMainCharX(GameChar, float, int)'s end*/
 
 	private void avoid(GameChar creep, float distX, float distY, float delta) {
 		// move the creep away from mainChar

@@ -51,7 +51,7 @@ public class GameMap {
 		justChanged = false;
 	}	// new(int)'s end
 
-	public static float getMiddle(int coor, float length, float add) {
+	public static float getMiddle(int coor, float length, int add) {
 		// return the middle of a line 
 
 		return (coor * length + (coor * add)) + (length / 2);
@@ -118,6 +118,21 @@ public class GameMap {
 	public Room getRoom(int x, int y) {
 		
 		return rooms[x][y];
+	}
+	
+	public int getRoomsNum() {
+		// return the number of the rooms
+		
+		int roomNum = 0;
+		for(int y = 0; y < Constants.ROOMS_NUM_Y; y++) {
+			for(int x = 0; x < Constants.ROOMS_NUM_X; x++) {
+				if(rooms[x][y] != null) {
+					roomNum++;
+				}
+			} // col iter's
+		} // row iter's
+		
+		return roomNum;
 	}
 
 // room class ---------------------------------------------------------------------------------------------------

@@ -30,7 +30,8 @@ public class StateData {
 	public boolean vSync;
 
 	public boolean slowMo = false;
-
+	public boolean slowMoable = true;
+	
 	public boolean justResumed = false;
 	public boolean beep = false;
 	public int beepIter = 0;
