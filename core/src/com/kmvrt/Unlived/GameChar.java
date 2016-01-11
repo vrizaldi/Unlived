@@ -36,6 +36,7 @@ public class GameChar {
 	private Spell spell;
 	private boolean bursting;
 	private boolean ableToShoot;
+	private int costume;
 
 //	public boolean hasSlowMo = false;
 	
@@ -43,7 +44,7 @@ public class GameChar {
 
 
 // constructor ------------------------------------------------------------------------------------------------
-	public GameChar(String spellName) {
+	public GameChar(String spellName, int costume) {
 	
 		this.ID = Constants.CHAR_CREEP_FOLLOW;
 
@@ -65,6 +66,8 @@ public class GameChar {
 		spell = MagicFactory.getSpell(spellName);
 		bursting = false;
 		ableToShoot = true;
+
+		this.costume = costume;
 
 		atts = new Attributes(true);
 		affectors = new Attributes(false);
@@ -188,6 +191,12 @@ public class GameChar {
 		
 		return ID;
 	} // getID()'s end
+
+	public int getCostume() {
+		// return the costume id
+	
+		return costume;
+	}
 	
 
 	

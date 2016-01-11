@@ -4,11 +4,11 @@ import com.kmvrt.Unlived.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Graphics.DisplayMode;
-import com.badlogic.gdx.utils.Timer;
+//import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.Preferences;
 //import com.badlogic.gdx.utils.Timer;
 
-public class HeadClerk {
+class HeadClerk {
 	// update the menu screen
 	
 	public static final String TAG = HeadClerk.class.getName();
@@ -22,7 +22,7 @@ public class HeadClerk {
 	private boolean fullscreen;
 //	private boolean vSync;
 	//private boolean procInput;
-	private boolean justChange = false;
+//	private boolean justChange = false;
 
 
 // constructor ------------------------------------------------------------------------------------------------
@@ -58,16 +58,19 @@ public class HeadClerk {
 	private void procInput() {
 	
 		int p = data.cOptions[data.pointer];
+			// the selected option
 		if(Gdx.input.isKeyJustPressed(Keys.UP)) {
 			// move pointer up
-			data.pointer = (data.pointer - 1) % (data.cOptions.length - 1);
+			data.pointer -= 1;
 			if(data.pointer < 0) {
 				data.pointer += (data.cOptions.length - 1);
 			}
+		// if up is just pressed
 			
 		} else if(Gdx.input.isKeyJustPressed(Keys.DOWN)) {
 			// move pointer down
 			data.pointer = (data.pointer + 1) % (data.cOptions.length - 1);
+		// if down is just pressed
 		
 		} else if(Gdx.input.isKeyJustPressed(Keys.D)) {
 			// select the pointed button
@@ -145,35 +148,32 @@ public class HeadClerk {
 			
 		} else if(Gdx.input.isKeyJustPressed(Keys.RIGHT)) {
 			if(data.cOptions == Assets.ins.optionsSetting) {
-				if(!justChange) {
-//					justChange();
-					if(p == Constants.OPT_RES) {
-						cDIndex = (cDIndex - 1) % Assets.ins.availableRes.length;
-						if(cDIndex < 0) {
-							cDIndex += Assets.ins.availableRes.length;
-						}
-						DisplayMode d = Assets.ins.availableRes[cDIndex];
-						Gdx.app.log(TAG, "Setting resolution to " + d.width + "x" + d.height + "...");
-						Gdx.graphics.setDisplayMode(d.width, d.height, fullscreen);
-						prefs.putInteger("resWidth", d.width);
-						prefs.putInteger("resHeight", d.height);
-					
-					} else if(p == Constants.OPT_F11) {
-						fullscreen = !fullscreen;
-						DisplayMode d = Assets.ins.availableRes[cDIndex];
-						String sw = fullscreen ? "on" : "of";
-						Gdx.app.log(TAG, "Setting fullscreen " + sw);
-						Gdx.graphics.setDisplayMode(
-								d.width, d.height, fullscreen);
-						prefs.putBoolean("fullscreen", fullscreen);
-						
-					} else if(p == Constants.OPT_VSNC) {
-						data.vSync = !data.vSync;
-						Gdx.graphics.setVSync(data.vSync);
-						prefs.putBoolean("vSync", data.vSync);
+				if(p == Constants.OPT_RES) {
+					cDIndex = (cDIndex - 1) % Assets.ins.availableRes.length;
+					if(cDIndex < 0) {
+						cDIndex += Assets.ins.availableRes.length;
 					}
+					DisplayMode d = Assets.ins.availableRes[cDIndex];
+					Gdx.app.log(TAG, "Setting resolution to " + d.width + "x" + d.height + "...");
+					Gdx.graphics.setDisplayMode(d.width, d.height, fullscreen);
+					prefs.putInteger("resWidth", d.width);
+					prefs.putInteger("resHeight", d.height);
+					
+				} else if(p == Constants.OPT_F11) {
+					fullscreen = !fullscreen;
+					DisplayMode d = Assets.ins.availableRes[cDIndex];
+					String sw = fullscreen ? "on" : "of";
+					Gdx.app.log(TAG, "Setting fullscreen " + sw);
+					Gdx.graphics.setDisplayMode(
+							d.width, d.height, fullscreen);
+					prefs.putBoolean("fullscreen", fullscreen);
+					
+				} else if(p == Constants.OPT_VSNC) {
+					data.vSync = !data.vSync;
+					Gdx.graphics.setVSync(data.vSync);
+					prefs.putBoolean("vSync", data.vSync);
 				}
-			} 	// if on setting
+		} 	// if on setting
 			
 		} else if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
 			if(data.cOptions == Assets.ins.optionsSetting) {
@@ -192,32 +192,28 @@ public class HeadClerk {
 		
 		} else if(Gdx.input.isKeyJustPressed(Keys.LEFT)) {
 			if(data.cOptions == Assets.ins.optionsSetting) {
-				if(!justChange) {
-					justChange();
-					if(p == Constants.OPT_RES) {
-	//					justChange();
-						cDIndex = (cDIndex + 1) % Assets.ins.availableRes.length;
-						DisplayMode d = Assets.ins.availableRes[cDIndex];
-						Gdx.app.log(TAG, "Setting resolution to " + d.width + "x" + d.height + "...");
-						Gdx.graphics.setDisplayMode(d.width, d.height, fullscreen);
-						prefs.putInteger("resWidth", d.width);
-						prefs.putInteger("resHeight", d.height);
+				if(p == Constants.OPT_RES) {
+					cDIndex = (cDIndex + 1) % Assets.ins.availableRes.length;
+					DisplayMode d = Assets.ins.availableRes[cDIndex];
+					Gdx.app.log(TAG, "Setting resolution to " + d.width + "x" + d.height + "...");
+					Gdx.graphics.setDisplayMode(d.width, d.height, fullscreen);
+					prefs.putInteger("resWidth", d.width);
+					prefs.putInteger("resHeight", d.height);
 					
-					} else if(p == Constants.OPT_F11) {
-						fullscreen = !fullscreen;
-						DisplayMode d = Assets.ins.availableRes[cDIndex];
-						String sw = fullscreen ? "on" : "of";
-						Gdx.app.log(TAG, "Setting fullscreen " + sw);
-						Gdx.graphics.setDisplayMode(
-								d.width, d.height, fullscreen);
-						prefs.putBoolean("fullscreen", fullscreen);
+				} else if(p == Constants.OPT_F11) {
+					fullscreen = !fullscreen;
+					DisplayMode d = Assets.ins.availableRes[cDIndex];
+					String sw = fullscreen ? "on" : "of";
+					Gdx.app.log(TAG, "Setting fullscreen " + sw);
+					Gdx.graphics.setDisplayMode(
+							d.width, d.height, fullscreen);
+					prefs.putBoolean("fullscreen", fullscreen);
 						
-					} else if(p == Constants.OPT_VSNC) {
-						data.vSync = !data.vSync;
-						Gdx.graphics.setVSync(data.vSync);
-						prefs.putBoolean("vSync", data.vSync);
-					}
-				}	// if !just change
+				} else if(p == Constants.OPT_VSNC) {
+					data.vSync = !data.vSync;
+					Gdx.graphics.setVSync(data.vSync);
+					prefs.putBoolean("vSync", data.vSync);
+				}
 			}
 		// if left is just pressed
 			
@@ -239,7 +235,7 @@ public class HeadClerk {
 		prefs.flush();
 	}	// procInput()'s
 
-	private void justChange() {
+/*	private void justChange() {
 		justChange = true;
 		Timer.schedule(
 				new Timer.Task() {
@@ -249,6 +245,6 @@ public class HeadClerk {
 						justChange = false;
 					}
 				}, 0.8f);
-	}
+	}*/
 	
 }	// public class'

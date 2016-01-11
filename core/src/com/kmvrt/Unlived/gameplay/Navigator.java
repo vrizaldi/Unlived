@@ -7,7 +7,7 @@ import com.badlogic.gdx.Gdx;
 //import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.Timer;
 
-public class Navigator {
+class Navigator {
 	// update the map in-game
 
 	private static final String TAG = Navigator.class.getName();
@@ -83,7 +83,6 @@ public class Navigator {
 					// if the level is finished
 					// move to the next level
 					data.switchLevel = true;
-					
 					data.newMap = true;
 				} 
 			} 

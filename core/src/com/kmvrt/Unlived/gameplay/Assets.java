@@ -15,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-public class Assets {
+class Assets {
 
 	private static final String TAG = Assets.class.getName();
 	
@@ -66,18 +66,22 @@ public class Assets {
 			ins.mapImgs = new TextureAtlas("res/map/map.pack");
 
 			ins.roomSprite = new Sprite(ins.mapImgs.findRegion("map"));
-			ins.roomSprite.setSize(Constants.ins.ROOM_WIDTH, Constants.ins.ROOM_HEIGHT);
+			ins.roomSprite.setSize(
+					Constants.ins.ROOM_WIDTH, Constants.ins.ROOM_HEIGHT);
 		
 			ins.doorVSprite = new Sprite(ins.mapImgs.findRegion("door"));
 			ins.doorVSprite.setSize(Constants.ins.ROOMS_INTERVAL + Constants.ins.DOOR_OFFSET, 
 					Constants.ins.DOOR_OFFSET + Constants.ins.CHAR_HEIGHT);
 		
 			ins.doorHSprite = new Sprite(ins.mapImgs.findRegion("door"));
-			ins.doorHSprite.setSize(Constants.ins.CHAR_WIDTH + Constants.ins.DOOR_OFFSET, 
+			ins.doorHSprite.setSize(
+					Constants.ins.CHAR_WIDTH + Constants.ins.DOOR_OFFSET, 
 					Constants.ins.DOOR_OFFSET + Constants.ins.ROOMS_INTERVAL);
 			
-			ins.shadowSprite = new Sprite(ins.mapImgs.findRegion("shadow"));
-			ins.shadowSprite.setSize(Constants.ins.CHAR_WIDTH, 1 * Constants.ins.UNIT_CONV);
+			ins.shadowSprite = 
+				new Sprite(ins.mapImgs.findRegion("shadow"));
+			ins.shadowSprite.setSize(
+					Constants.ins.CHAR_WIDTH, 1 * Constants.ins.UNIT_CONV);
 		
 			ins.charImgs = new ArrayList<TextureAtlas>();
 			ins.charSprites = new HashMap<String, Sprite>();
@@ -87,14 +91,17 @@ public class Assets {
 			ins.magicSprites = new HashMap<String, Sprite>();
 			ins.magicAnims = new HashMap<String, Animation>();
 
-			ins.portalSprite = new Sprite(ins.mapImgs.findRegion("portalImg"));
-			ins.portalSprite.setSize(Constants.ins.PORTAL_WIDTH, Constants.ins.PORTAL_HEIGHT);
+			ins.portalSprite = 
+				new Sprite(ins.mapImgs.findRegion("portalImg"));
+			ins.portalSprite.setSize(
+					Constants.ins.PORTAL_WIDTH, Constants.ins.PORTAL_HEIGHT);
 
 			// default font
 			FreeTypeFontParameter param = new FreeTypeFontParameter();
 			param.size = 10;
 			param.color = Color.WHITE;
-			ins.font = new FreeTypeFontGenerator(Gdx.files.internal("res/font/PressStart2P.ttf")) 
+			ins.font = 
+				new FreeTypeFontGenerator(Gdx.files.internal("res/font/PressStart2P.ttf")) 
 				.generateFont(param);
 		
 			// ui images
@@ -161,7 +168,8 @@ public class Assets {
 			
 				// atlas
 				TextureAtlas cImgs = new TextureAtlas(
-						"res/chars/" + c.getName() + ".pack");
+						"res/chars/" + c.getName() + "/" 
+						+ c.getCostume() + "/" + c.getName() + ".pack");
 			
 				// retrieve all the char sprites
 				Array<TextureRegion> charFrames = new Array<TextureRegion>(1);
@@ -190,8 +198,8 @@ public class Assets {
 
 				// put them into the collections
 				ins.charImgs.add(cImgs);
-				ins.charSprites.put(c.getName(), cSp);
-				ins.charAnims.put(c.getName(), cAnim);
+				ins.charSprites.put(c.getName() + c.getCostume(), cSp);
+				ins.charAnims.put(c.getName() + c.getCostume(), cAnim);
 
 				// magic sprites
 				TextureAtlas mImgs = new TextureAtlas("res/magic/sprites/" + c.getName() + ".pack");
@@ -273,6 +281,9 @@ public class Assets {
 		for(String key : ins.charSprites.keySet()) {
 			ins.charSprites.get(key).setSize(
 					Constants.ins.CHAR_WIDTH, Constants.ins.CHAR_HEIGHT);
+			
+		}
+		for(String key : ins.magicSprites.keySet()) {
 			ins.magicSprites.get(key).setSize(MagicFactory.getSpell(key).getWidth(),
 					MagicFactory.getSpell(key).getHeight());
 		}

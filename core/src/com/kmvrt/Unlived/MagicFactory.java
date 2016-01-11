@@ -151,18 +151,23 @@ public class MagicFactory {
 										break;
 
 									case ATT_ACCEL:
-										cCond.applyAccel(Float.parseFloat(arg) * Constants.ins.UNIT_CONV);
+										cCond.applyAccel(
+												Float.parseFloat(arg) 
+												* Constants.ins.UNIT_CONV);
 										Gdx.app.debug(TAG, "\t" + arg + " accel applied");
 										
 										break;
 
 									case ATT_FORCE:
-										cCond.applyForce(Float.parseFloat(arg) * Constants.ins.UNIT_CONV);
+										cCond.applyForce(
+												Float.parseFloat(arg) 
+												* Constants.ins.UNIT_CONV);
 										Gdx.app.debug(TAG, "\t" + arg + " force applied");
 										break;
 
 									default:
-										Gdx.app.error(TAG, "Invalid attribute ID declared in the file "
+										Gdx.app.error(TAG, 
+												"Invalid attribute ID declared in the file "
 												+ file.path() + ": " + attStatedID);
 										Gdx.app.exit();
 									}
@@ -236,41 +241,49 @@ public class MagicFactory {
 								switch(attStatedID) {
 								case ATT_BURST:
 									burst = Integer.parseInt(arg);
-									Gdx.app.debug(TAG, "\t" + Integer.parseInt(arg) + " shots/cast");
+									Gdx.app.debug(TAG, "\t" 
+											+ Integer.parseInt(arg) + " shots/cast");
 									break;
 
 								case ATT_BURST_INTERVAL:
 									burstInterval = Float.parseFloat(arg);
-									Gdx.app.debug(TAG, "\t" + Float.parseFloat(arg) + "s between each shots");
+									Gdx.app.debug(TAG, 
+											"\t" + Float.parseFloat(arg) + "s between each shots");
 									break;
 									
 								case ATT_INTERVAL:
 									interval = Float.parseFloat(arg);
-									Gdx.app.debug(TAG, "\t" + Float.parseFloat(arg) + " s between each cast");
+									Gdx.app.debug(TAG, 
+											"\t" + Float.parseFloat(arg) + " s between each cast");
 									break;
 									
 								case ATT_WIDTH:
 									width = Float.parseFloat(arg) * Constants.ins.UNIT_CONV;
-									Gdx.app.debug(TAG, "\twidth = " + Float.parseFloat(arg));
+									Gdx.app.debug(TAG, 
+											"\twidth = " + Float.parseFloat(arg));
 									break;
 									
 								case ATT_HEIGHT:
 									height = Float.parseFloat(arg) * Constants.ins.UNIT_CONV;
-									Gdx.app.debug(TAG, "\theight = " + Float.parseFloat(arg));
+									Gdx.app.debug(TAG, 
+											"\theight = " + Float.parseFloat(arg));
 									break;
 									
 								case ATT_SPEED:
 									speed = Float.parseFloat(arg) * Constants.ins.UNIT_CONV;
-									Gdx.app.debug(TAG, "\tspeed = " + Float.parseFloat(arg));
+									Gdx.app.debug(TAG, 
+											"\tspeed = " + Float.parseFloat(arg));
 									break;
 									
 								case ATT_TRAVEL_DIST:
 									travelDist = Float.parseFloat(arg) * Constants.ins.UNIT_CONV;
-									Gdx.app.debug(TAG, "\ttravel distance = " + Float.parseFloat(arg));
+									Gdx.app.debug(TAG, 
+											"\ttravel distance = " + Float.parseFloat(arg));
 									break;
 									
 								default:
-									Gdx.app.error(TAG, "Invalid attribute ID declared in file "
+									Gdx.app.error(TAG, 
+											"Invalid attribute ID declared in file "
 											+ file.path() + ": " + attStatedID);
 									Gdx.app.exit();
 								}		

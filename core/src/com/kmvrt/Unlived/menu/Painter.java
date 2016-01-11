@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Align;
 import com.kmvrt.Unlived.*;
 
-public class Painter {
+class Painter {
 
 //	private static final String TAG = Painter.class.getName();
 	

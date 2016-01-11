@@ -106,11 +106,15 @@ public class Arena implements Screen {
 		Gdx.app.log(TAG, "Disposing assets...");
 		Assets.dispose();
 		Timer.instance().clear();
+		if(data.map != null) {
+			data.map.clearMap();
+		}
 		WorldTimer.clear();
 	}
 
 
-	// updates and renders -----------------------------------------------------------------------------------
+
+// updates and renders -----------------------------------------------------------------------------------
 	@Override
 	public void render(float delta) {
 

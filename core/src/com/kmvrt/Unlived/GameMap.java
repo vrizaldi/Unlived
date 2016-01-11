@@ -57,6 +57,15 @@ public class GameMap {
 		return (coor * length + (coor * add)) + (length / 2);
 	}
 
+	public void clearMap() {
+		// unreference all the room, prevent memory leaking
+
+		for(int y = 0; y < Constants.ROOMS_NUM_Y; y++) {
+			for(int x = 0; x < Constants.ROOMS_NUM_X; x++) {
+				rooms[x][y] = null;
+			}
+		}
+	}
 
 // getters and setters ----------------------------------------------------------------------------------------
 	public int getTypeID() {
@@ -134,7 +143,5 @@ public class GameMap {
 		
 		return roomNum;
 	}
-
-// room class ---------------------------------------------------------------------------------------------------
 
 }

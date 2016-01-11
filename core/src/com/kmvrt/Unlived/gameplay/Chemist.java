@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 
-public class Chemist {
+class Chemist {
 	// update the magics and chars that got hit by magic
 	
 //	private static final String TAG = Chemist.class.getName();

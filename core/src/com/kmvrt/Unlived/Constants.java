@@ -76,7 +76,7 @@ public class Constants {
 	// map 
 	public static final int MAP_NORMAL = 148;
 		// ID
-	public static final int CHARS_MIN = 4;
+	public static final int CHARS_MIN = 2;
 	public static final int CHARS_MAX = 7;
 		// total of the normal room types
 		// will be changed as types added
@@ -95,8 +95,8 @@ public class Constants {
 	public static final float CREEPS_CHANGE_INTERVAL = 1f;	// in second
 
 	// number of rooms in a map
-	public static final int ROOMS_NUM_X = 4;
-	public static final int ROOMS_NUM_Y = 4;
+	public static final int ROOMS_NUM_X = 2;
+	public static final int ROOMS_NUM_Y = 2;
 	public static final int ROOMS_NUM_MIN = 4;//6;
 
 	// room type id

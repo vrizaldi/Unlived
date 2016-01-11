@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Comparator;
 
-public class Council {
+class Council {
 	// update the characters in-game without moving it
 	
 	private static final String TAG = Council.class.getName();
@@ -57,7 +57,7 @@ public class Council {
 		GameChar mainChar = null;
 		if(initMainChar) {
 		// create objects for a new game
-			mainChar = new GameChar("tiny");
+			mainChar = new GameChar("tiny", 1);
 			
 		} else {
 			mainChar = data.getMainChar();
@@ -329,6 +329,11 @@ public class Council {
 		}
 		moveCreeps(delta);
 		creepsAttack();
+		for(GameChar c : data.chars) {
+			if(c.cRoom == data.getMainChar().cRoom) {
+				Gdx.app.debug(TAG, "c type: " + c.getID());
+			}
+		}
 	} // updateCreeps()'s end
 
 	private void deployCreeps(int num) {
@@ -346,7 +351,7 @@ public class Council {
 		occupied[data.getMainChar().cRoom.getX()][data.getMainChar().cRoom.getY()] 
 				= true;
 			// flag the mainChar's room first
-		num = Math.max(num, Constants.CHARS_MIN - 1);
+		num = Math.max(num, Constants.CHARS_MIN);
 			// set to minimal if it's too small
 		
 			// creeps deployed can't be less than <CHAR_MIN> - 1
@@ -354,15 +359,17 @@ public class Council {
 			// create <num> creeps
 
 			int r = (int)(Math.random() * MagicFactory.totalSpells());
-			GameChar creep = new GameChar(MagicFactory.getSpellName(r));
+			GameChar creep = new GameChar(MagicFactory.getSpellName(r), 1);
 			Room room = null;
 			do {
 				room = data.map.getRandRoom();
 			} while(occupied[room.getX()][room.getY()]);
 			occupied[room.getX()][room.getY()] = true;
-			creep.x = GameMap.getMiddle(room.getX(), Constants.ins.ROOM_WIDTH, Constants.ins.ROOMS_INTERVAL)
+			creep.x = GameMap.getMiddle(room.getX(), 
+					Constants.ins.ROOM_WIDTH, Constants.ins.ROOMS_INTERVAL)
 					- (Constants.ins.CHAR_WIDTH / 2);
-			creep.y = GameMap.getMiddle(room.getY(), Constants.ins.ROOM_HEIGHT, Constants.ins.ROOMS_INTERVAL)
+			creep.y = GameMap.getMiddle(room.getY(), 
+					Constants.ins.ROOM_HEIGHT, Constants.ins.ROOMS_INTERVAL)
 					- (Constants.ins.CHAR_HEIGHT / 2);
 				// put it anywhere in the room;
 			creep.updateSafePos();

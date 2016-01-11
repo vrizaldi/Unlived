@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import java.util.HashMap;
 
-public class Assets {
+class Assets {
 	// store all the assets to be used in menu
 
 	private static final String TAG = Assets.class.getName();

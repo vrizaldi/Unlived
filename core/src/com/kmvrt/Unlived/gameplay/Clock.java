@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.Gdx;
 import java.util.Iterator;
 
-public class Clock {
+class Clock {
 	// update the time of the game
 	// every actual movements are updated here
 		
