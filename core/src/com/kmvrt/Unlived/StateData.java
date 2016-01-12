@@ -35,6 +35,9 @@ public class StateData {
 	public boolean justResumed = false;
 	public boolean beep = false;
 	public int beepIter = 0;
+
+	public String selChar;
+	public int selCostume;
 	
 
 // constructor ----------------------------------------------------------------------------------------------
@@ -49,6 +52,9 @@ public class StateData {
 		
 		killCt = 0;
 		deathCt = 0;
+
+		selChar = "tiny";
+		selCostume = 1; 
 	} // new(int)'s end
 
 

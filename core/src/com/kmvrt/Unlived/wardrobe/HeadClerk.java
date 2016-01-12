@@ -9,6 +9,8 @@ class HeadClerk {
 	private Wardrobe wardrobe;
 	private StateData data;
 
+//	private int pointer;
+
 
 // constructor ------------------------------------------------------------------------------------------------
 	public HeadClerk(Wardrobe wardrobe, StateData data) {
@@ -27,23 +29,34 @@ class HeadClerk {
 
 	public void procInput() {
 	
-		int p = data.cOptions[data.pointer];
+		String p = MagicFactory.getSpellNames().get(data.pointer);
 			// selected pointer
 		if(Gdx.input.isKeyJustPressed(Keys.UP)) {
-		// if up is just pressed
+			data.selCostume = ++data.selCostume % Identities.ins.getCostumeNum(p);
+		// if up is just pressed's
 		
 		} else if(Gdx.input.isKeyJustPressed(Keys.DOWN)) {
-		// if down is just pressed
+			--data.selCostume;
+			if(data.selCostume < 0) {
+				data.pointer += Identities.ins.getCostumeNum(p);
+			}
+		// if down is just pressed's
 		
 		} else if(Gdx.input.isKeyJustPressed(Keys.RIGHT)) {
-		data.pointer = (data.pointer + 1) % data.cOptions.length - 1;
-		// if right is just pressed
+			data.pointer = ++data.pointer % data.cOptions.length;
+			data.selCostume = 0;
+		// if right is just pressed's
 
 		} else if(Gdx.input.isKeyJustPressed(Keys.LEFT)) {
-		  data.pointer -= 1;
-		  if(data.pointer < 0) {
-			data.pointer += data.cOptions.length - 1;
-		  }
+			--data.pointer;
+			if(data.pointer < 0) {
+				data.pointer += data.cOptions.length;
+			}
+			data.selCostume = 0;
+		// if left is just pressed's
+
+		} else if(Gdx.input.isKeyJustPressed(Keys.D)) {
+			data.selChar = MagicFactory.getSpellName(data.pointer);
 		}
 	}
 

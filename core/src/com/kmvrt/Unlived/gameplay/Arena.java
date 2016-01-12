@@ -52,44 +52,62 @@ public class Arena implements Screen {
 		Gdx.app.log(TAG, "Selected as current screen");
 	}
 
-	public void initNewGame(boolean initProps, boolean initMainChar) {
-		// initialise a new game
-		
+	public void revive() {
+
 		Assets.init();	// init assets
 			
 		// the order is important: navigator before council
 		navigator.initNewGame();
-		council.initNewGame(initMainChar);
+		council.initNewGame();
 		chemist.initNewGame();
-		if(initProps) {
-			data.initKill();
-			data.initDeath();
-		}
-		
+		init();
+	}
+
+	public void initNewGame() {
+
+		data.initKill();
+		data.initDeath();
+		revive();		
+	}
+
+	public void initNewLevel() {
+	
+		Assets.init();	// init assets
+			
+		navigator.initNewGame();
+		council.initNewLevel();
+		chemist.initNewGame();
+		init();
+	}
+
+	private void init() {
+		// reinit the game
+
 		data.justResumed = true;
 		// count to 3 before resuming
 		Timer.schedule(
-				new Timer.Task() {
+			new Timer.Task() {
 					
-					@Override
-					public void run() {
-						if(!this.isScheduled()) {
-							data.justResumed = false;
-						}
-//						Gdx.app.debug(TAG, "PEW PEW PEW");
-						data.beep = true;
-							// render the beep
-						Timer.schedule(
-							new Timer.Task() {
-							
-								@Override
-								public void run() {
-									data.beep = false;
-									data.beepIter = (data.beepIter + 1) % 3;
-								}
-							}, 0.2f);
+				@Override
+				public void run() {
+					if(!this.isScheduled()) {
+						data.justResumed = false;
 					}
-				}, 1, 1, 2);
+//						Gdx.app.debug(TAG, "PEW PEW PEW");
+					data.beep = true;
+						// render the beep
+					Timer.schedule(
+						new Timer.Task() {
+							
+							@Override
+							public void run() {
+
+								data.beep = false;
+								data.beepIter = (data.beepIter + 1) % 3;
+							}
+						}, 0.2f);
+				}
+			}, 1, 1, 2);
 
 		// time the slowmo
 		data.slowMo = false;
@@ -129,12 +147,12 @@ public class Arena implements Screen {
 		if(data.switchLevel) {
 			data.switchLevel = false;
 			dispose();
-			initNewGame(false, false);
+			initNewLevel();
 			
 		} else if(data.gameOver) {
 			data.gameOver = false;
 			dispose();
-			initNewGame(false, true);
+			revive();
 			
 		} else if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			manager.pauseArena();

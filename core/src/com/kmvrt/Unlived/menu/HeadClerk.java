@@ -61,7 +61,7 @@ class HeadClerk {
 			// the selected option
 		if(Gdx.input.isKeyJustPressed(Keys.UP)) {
 			// move pointer up
-			data.pointer -= 1;
+			--data.pointer;
 			if(data.pointer < 0) {
 				data.pointer += (data.cOptions.length - 1);
 			}
@@ -69,7 +69,7 @@ class HeadClerk {
 			
 		} else if(Gdx.input.isKeyJustPressed(Keys.DOWN)) {
 			// move pointer down
-			data.pointer = (data.pointer + 1) % (data.cOptions.length - 1);
+			data.pointer = ++data.pointer % (data.cOptions.length - 1);
 		// if down is just pressed
 		
 		} else if(Gdx.input.isKeyJustPressed(Keys.D)) {

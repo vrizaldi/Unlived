@@ -51,18 +51,18 @@ public class Manager extends Game {
 
 
 // switch between screens ----------------------------------------------------------------------------------
-	// called when the player go to arena
 	public void startArena() {
+		// called when the player go to arena
 	
-		// switch screen to arena
 		Gdx.app.log(TAG, "Switching to Arena...");
-		arena.initNewGame(true, true);
+		arena.initNewGame();
 		this.setScreen(arena);
 	}
 
 	public void pauseArena() {
 		// pause the arena
 		// switch screen to the menu (pause)
+
 		data.paused = true;
 		menu.initPauseMenu();
 		this.setScreen(menu);
@@ -74,26 +74,26 @@ public class Manager extends Game {
 		data.justResumed = true;
 		// count to 3 before resuming
 		Timer.schedule(
-				new Timer.Task() {
+			new Timer.Task() {
 					
-					@Override
-					public void run() {
-						if(!this.isScheduled()) {
-							data.justResumed = false;
-						}
-						data.beep = true;
-							// render the beep to set the player ready
-						Timer.schedule(
-								new Timer.Task() {
-								
-									@Override
-									public void run() {
-										data.beep = false;
-										data.beepIter = (data.beepIter + 1) % 3;
-									}
-								}, 0.2f);
+				@Override
+				public void run() {
+					if(!this.isScheduled()) {
+						data.justResumed = false;
 					}
-				}, 1, 1, 2);
+					data.beep = true;
+						// render the beep to set the player ready
+					Timer.schedule(
+						new Timer.Task() {
+							
+							@Override
+							public void run() {
+								data.beep = false;
+								data.beepIter = (data.beepIter + 1) % 3;
+							}
+						}, 0.2f);
+				}
+			}, 1, 1, 2);
 		this.setScreen(arena);
 	}
 

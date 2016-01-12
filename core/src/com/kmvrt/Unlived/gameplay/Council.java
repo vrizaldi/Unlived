@@ -50,23 +50,31 @@ class Council {
 
 
 // create or dispose current game --------------------------------------------------------------------------
-	public void initNewGame(boolean initMainChar) {
-		// clear char and magic collection
+	public void initNewGame() {
+
 		data.chars.clear();
 		data.magics.clear();
-		GameChar mainChar = null;
-		if(initMainChar) {
-		// create objects for a new game
-			mainChar = new GameChar("tiny", 1);
-			
-		} else {
-			mainChar = data.getMainChar();
-			mainChar.reset();
-		}
+
+		GameChar mainChar = new GameChar(data.selChar, data.selCostume);
+		init(mainChar);
+	}	// initNewGame(String, int)'s
+
+	public void initNewLevel() {
+
+		data.chars.clear();
+		data.magics.clear();
+
+		GameChar mainChar = data.getMainChar();
+		mainChar.reset();
+		init(mainChar);
+	}	// initNewLevel()'s end
+
+	private void init(GameChar mainChar) {
+
 		data.chars.add(mainChar); 
 		data.setMainChar(mainChar);
-		
-		// put it in the middle of the room
+
+		// put mainChar in the middle of the room
 		mainChar.x = data.map.getSpawnPosX() 
 				- (Constants.ins.CHAR_WIDTH / 2); 
 		mainChar.y = data.map.getSpawnPosY() 
@@ -89,6 +97,7 @@ class Council {
 				
 				@Override
 				public void run() {
+
 					creepsChange = true;
 				}
 			}, Constants.CREEPS_CHANGE_INTERVAL,
@@ -96,14 +105,15 @@ class Council {
 		
 		creepsDirChange = true;
 		Timer.schedule(
-				new Timer.Task() {
+			new Timer.Task() {
 					
-					@Override
-					public void run() {
-						creepsDirChange = true;
-					}
-				}, 0.8f, 0.8f);
-	}	// initNewGame()'s end
+				@Override
+				public void run() {
+
+					creepsDirChange = true;
+				}
+			}, 0.8f, 0.8f);
+	}	// init(GameChar)'s
 
 
 

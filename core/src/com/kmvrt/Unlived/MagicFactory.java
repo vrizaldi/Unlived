@@ -98,7 +98,8 @@ public class MagicFactory {
 				float speed = 50;
 				float travelDist = 60;
 				
-				reader = new BufferedReader(new InputStreamReader(file.read()));
+				reader = new BufferedReader(
+						new InputStreamReader(file.read()));
 				String line;
 				while((line = readNextLine(reader)) != null) {
 					// keep looping until it reach the end of the file
@@ -385,7 +386,7 @@ public class MagicFactory {
 		// return the magic with properties of the specified spell
 	
 		if(!initialised) {
-			Gdx.app.error(TAG, "Spell book haven't been initialized yet");
+			Gdx.app.error(TAG, "Tried to access unitialised magic factory");
 			Gdx.app.exit();
 		}
 	
@@ -398,10 +399,15 @@ public class MagicFactory {
 
 		return spellBook.get(name);
 	}
-	
+
 	public static String getSpellName(int index) {
 		
-		return keys.get(index);
+		return getSpellNames().get(index);
+	}
+
+	public static ArrayList<String> getSpellNames() {
+		
+		return keys;
 	}
 	
 	public static int totalSpells() {
