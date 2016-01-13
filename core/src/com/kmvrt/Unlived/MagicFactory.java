@@ -152,16 +152,14 @@ public class MagicFactory {
 										break;
 
 									case ATT_ACCEL:
-										cCond.applyAccel(
-												Float.parseFloat(arg) 
+										cCond.applyAccel(Float.parseFloat(arg) 
 												* Constants.ins.UNIT_CONV);
 										Gdx.app.debug(TAG, "\t" + arg + " accel applied");
 										
 										break;
 
 									case ATT_FORCE:
-										cCond.applyForce(
-												Float.parseFloat(arg) 
+										cCond.applyForce(Float.parseFloat(arg)
 												* Constants.ins.UNIT_CONV);
 										Gdx.app.debug(TAG, "\t" + arg + " force applied");
 										break;

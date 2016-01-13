@@ -52,7 +52,99 @@ class Assets {
 
 
 // constructor ------------------------------------------------------------------------------------------------
-	private Assets() {}	// make this a static class
+	private Assets() {
+	
+		initMapAssets();
+
+		// get the collections ready
+		charImgs = new ArrayList<TextureAtlas>();
+		charSprites = new HashMap<String, Sprite>();
+		charAnims = new HashMap<String, Animation>();
+		
+		magicImgs = new ArrayList<TextureAtlas>();
+		magicSprites = new HashMap<String, Sprite>();
+		magicAnims = new HashMap<String, Animation>();
+		
+		// default font
+		FreeTypeFontParameter param = new FreeTypeFontParameter();
+		param.size = 10;
+		param.color = Color.WHITE;
+		font = new FreeTypeFontGenerator(
+				Gdx.files.internal("res/font/PressStart2P.ttf")) 
+				.generateFont(param);
+		
+		// ui images
+		uiImgs = new TextureAtlas("res/ui/ui.pack");
+		blackBox = new Sprite(uiImgs.findRegion("blackBox"));
+		initHaloAssets();
+		initBeepAssets();
+	}
+
+	private void initMapAssets() {
+
+		mapImgs = new TextureAtlas("res/map/map.pack");
+
+		roomSprite = new Sprite(mapImgs.findRegion("map"));
+		roomSprite.setSize(
+				Constants.ins.ROOM_WIDTH, Constants.ins.ROOM_HEIGHT);
+		
+		doorVSprite = new Sprite(mapImgs.findRegion("door"));
+		doorVSprite.setSize(Constants.ins.ROOMS_INTERVAL + Constants.ins.DOOR_OFFSET, 
+					Constants.ins.DOOR_OFFSET + Constants.ins.CHAR_HEIGHT);
+		
+		doorHSprite = new Sprite(mapImgs.findRegion("door"));
+		doorHSprite.setSize(
+					Constants.ins.CHAR_WIDTH + Constants.ins.DOOR_OFFSET, 
+					Constants.ins.DOOR_OFFSET + Constants.ins.ROOMS_INTERVAL);
+			
+		shadowSprite = 
+				new Sprite(mapImgs.findRegion("shadow"));
+		shadowSprite.setSize(
+					Constants.ins.CHAR_WIDTH, 1 * Constants.ins.UNIT_CONV);
+
+		portalSprite = 
+				new Sprite(mapImgs.findRegion("portalImg"));
+		portalSprite.setSize(
+				Constants.ins.PORTAL_WIDTH, Constants.ins.PORTAL_HEIGHT);
+
+	}
+
+	private void initHaloAssets() {
+	
+		haloOff = new Sprite(uiImgs.findRegion("haloOff"));
+		haloOff.setSize(Constants.ins.HALO_SIZE, Constants.ins.HALO_SIZE);
+		Array<TextureRegion> haloOnFrames = new Array<TextureRegion>(4);
+		for(int i = 1;; i++) {
+			TextureRegion frame = uiImgs.findRegion("haloOn" + i);
+			if(frame == null) {
+				// has finished
+				break;
+			}
+				
+			try {
+				haloOnFrames.add(frame);
+			} catch(Exception e) {
+				// increase the array size
+				haloOnFrames.ensureCapacity(1);
+				haloOnFrames.add(frame);
+			}
+		}
+		haloOnAnim = new Animation(0.2f / haloOnFrames.size,
+				haloOnFrames, Animation.PlayMode.LOOP);
+		haloOn = new Sprite(haloOnAnim.getKeyFrame(0));
+		haloOn.setSize(Constants.ins.HALO_SIZE, Constants.ins.HALO_SIZE);
+	}
+
+	private void initBeepAssets() {
+	
+		beepSprites = new Sprite[3];
+		beepSprites[0] = new Sprite(uiImgs.findRegion("beep1"));
+		beepSprites[1] = new Sprite(uiImgs.findRegion("beep2"));
+		beepSprites[2] = new Sprite(uiImgs.findRegion("beep3"));
+		for(Sprite s : beepSprites) {
+			s.setSize(Constants.ins.BEEP_SIZE, Constants.ins.BEEP_SIZE);
+		}
+	}
 
 
 // initialise and dispose resources ---------------------------------------------------------------------------
@@ -63,89 +155,10 @@ class Assets {
 			Gdx.app.log(TAG, "Initialising assets...");
 			ins = new Assets();
 		
-			ins.mapImgs = new TextureAtlas("res/map/map.pack");
-
-			ins.roomSprite = new Sprite(ins.mapImgs.findRegion("map"));
-			ins.roomSprite.setSize(
-					Constants.ins.ROOM_WIDTH, Constants.ins.ROOM_HEIGHT);
-		
-			ins.doorVSprite = new Sprite(ins.mapImgs.findRegion("door"));
-			ins.doorVSprite.setSize(Constants.ins.ROOMS_INTERVAL + Constants.ins.DOOR_OFFSET, 
-					Constants.ins.DOOR_OFFSET + Constants.ins.CHAR_HEIGHT);
-		
-			ins.doorHSprite = new Sprite(ins.mapImgs.findRegion("door"));
-			ins.doorHSprite.setSize(
-					Constants.ins.CHAR_WIDTH + Constants.ins.DOOR_OFFSET, 
-					Constants.ins.DOOR_OFFSET + Constants.ins.ROOMS_INTERVAL);
-			
-			ins.shadowSprite = 
-				new Sprite(ins.mapImgs.findRegion("shadow"));
-			ins.shadowSprite.setSize(
-					Constants.ins.CHAR_WIDTH, 1 * Constants.ins.UNIT_CONV);
-		
-			ins.charImgs = new ArrayList<TextureAtlas>();
-			ins.charSprites = new HashMap<String, Sprite>();
-			ins.charAnims = new HashMap<String, Animation>();
-		
-			ins.magicImgs = new ArrayList<TextureAtlas>();
-			ins.magicSprites = new HashMap<String, Sprite>();
-			ins.magicAnims = new HashMap<String, Animation>();
-
-			ins.portalSprite = 
-				new Sprite(ins.mapImgs.findRegion("portalImg"));
-			ins.portalSprite.setSize(
-					Constants.ins.PORTAL_WIDTH, Constants.ins.PORTAL_HEIGHT);
-
-			// default font
-			FreeTypeFontParameter param = new FreeTypeFontParameter();
-			param.size = 10;
-			param.color = Color.WHITE;
-			ins.font = 
-				new FreeTypeFontGenerator(Gdx.files.internal("res/font/PressStart2P.ttf")) 
-				.generateFont(param);
-		
-			// ui images
-			ins.uiImgs = new TextureAtlas("res/ui/ui.pack");
-			ins.blackBox = new Sprite(ins.uiImgs.findRegion("blackBox"));
-
-			ins.haloOff = new Sprite(ins.uiImgs.findRegion("haloOff"));
-			ins.haloOff.setSize(Constants.ins.HALO_SIZE, Constants.ins.HALO_SIZE);
-			Array<TextureRegion> haloOnFrames = new Array<TextureRegion>(4);
-			for(int i = 1;; i++) {
-				TextureRegion frame = ins.uiImgs.findRegion("haloOn" + i);
-				if(frame == null) {
-					// has finished
-					break;
-				}
-				
-				try {
-					haloOnFrames.add(frame);
-				} catch(Exception e) {
-					// increase the array size
-					haloOnFrames.ensureCapacity(1);
-					haloOnFrames.add(frame);
-				}
-			}
-			ins.haloOnAnim = new Animation(0.2f / haloOnFrames.size,
-					haloOnFrames, Animation.PlayMode.LOOP);
-			ins.haloOn = new Sprite(ins.haloOnAnim.getKeyFrame(0));
-			ins.haloOn.setSize(Constants.ins.HALO_SIZE, Constants.ins.HALO_SIZE);
-
-			ins.beepSprites = new Sprite[3];
-			ins.beepSprites[0] = new Sprite(ins.uiImgs.findRegion("beep1"));
-			ins.beepSprites[1] = new Sprite(ins.uiImgs.findRegion("beep2"));
-			ins.beepSprites[2] = new Sprite(ins.uiImgs.findRegion("beep3"));
-			for(Sprite s : ins.beepSprites) {
-				s.setSize(Constants.ins.BEEP_SIZE, Constants.ins.BEEP_SIZE);
-			}
-			
 			initialised = true;	// flag it
 			Gdx.app.log(TAG, "Assets initialised");
 			
-		} else {
-			Gdx.app.error(TAG, "Tried to initialise assets again");
-//			Gdx.app.exit();
-		}
+		} 	
 	} // init()'s end
 
 	public static void initChars(ArrayList<GameChar> chars) {
@@ -322,11 +335,7 @@ class Assets {
 			ins = null;
 			initialised = false;	// unflag it
 			
-		} else {
-			Gdx.app.error(TAG, "Dispose called before init");
-//			Gdx.app.exit();
-		}
-		
+		}		
 	}	// dispose()'s end
 
 }

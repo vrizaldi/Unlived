@@ -12,7 +12,7 @@ public class Wardrobe implements Screen {
 	private StateData data;
 	
 	private HeadClerk headClerk;
-//	private Painter painter;
+	private Painter painter;
 
 
 // constructor -----------------------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ public class Wardrobe implements Screen {
 		this.data = data;
 	
 		headClerk = new HeadClerk(this, data);
-	//	painter = new Painter(data);
+		painter = new Painter(data);
 	}
 
 
@@ -42,7 +42,7 @@ public class Wardrobe implements Screen {
 	public void show() {
 	
 		Gdx.app.log(TAG, "Selected as the active screen");
-//		Assets.init();
+		Assets.init();
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class Wardrobe implements Screen {
 	@Override
 	public void dispose() {
 	
-//		Assets.dispose();
+		Assets.dispose();
 	}
 
 
@@ -63,10 +63,7 @@ public class Wardrobe implements Screen {
 	@Override
 	public void resize(int width, int height) {
 	
-/*		painter.cam.viewportWidth = width;
-		painter.cam.viewportHeight = height;
-		painter.cam.position.set(width / 2, height / 2);
-		painter.cam.update();*/
+		painter.resize(width, height);
 	} 
 
 

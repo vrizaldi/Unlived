@@ -112,10 +112,8 @@ public class Menu implements Screen {
 // resize ---------------------------------------------------------------------------------------------------
 	@Override
 	public void resize(int width, int height) {
-		painter.cam.viewportWidth = width;
-		painter.cam.viewportHeight = height;
-		painter.cam.position.set(width / 2, height / 2, 0);
-		painter.cam.update();
+
+		painter.resize(width, height);
 	}
 
 }	// public class'

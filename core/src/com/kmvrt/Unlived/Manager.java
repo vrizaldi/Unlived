@@ -34,8 +34,8 @@ public class Manager extends Game {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		resize(Gdx.graphics.getHeight());
 /*		UNIT_CONV = 16 * Gdx.graphics.getHeight() / 480;
-		Constants.init();
-		MagicFactory.init();*/
+		Constants.init();*/
+		MagicFactory.init();
 		prefs = Gdx.app.getPreferences("Unlived");
 		DisplayMode defDM = Gdx.graphics.getDesktopDisplayMode();
 		Gdx.graphics.setDisplayMode(
@@ -137,9 +137,9 @@ public class Manager extends Game {
 		}
 			// save it to be returned later
 		Constants.init();
-		if(Constants.ins.UNIT_CONV != oldUnitConv) {
+	/*	if(Constants.ins.UNIT_CONV != oldUnitConv) {
 			MagicFactory.init();
-		}
+		}*/
 		
 		return oldUnitConv;
 	}
