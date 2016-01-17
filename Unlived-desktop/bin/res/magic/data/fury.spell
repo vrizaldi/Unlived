@@ -1,0 +1,18 @@
+spell
+	speed 80
+	traveldist 7
+	burst 1
+	burstinterval 0
+	interval 0.1
+	width 2
+	height 0.5
+
+	cast
+		mana -1
+		force -3
+	castend
+
+	hit
+		mana -5.7
+	hitend
+spellend

@@ -1,0 +1,19 @@
+
+menu.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+pauseBG
+  rotate: false
+  xy: 1, 5
+  size: 2, 2
+  orig: 2, 2
+  offset: 0, 0
+  index: -1
+pointer
+  rotate: false
+  xy: 1, 1
+  size: 2, 2
+  orig: 2, 2
+  offset: 0, 0
+  index: -1
