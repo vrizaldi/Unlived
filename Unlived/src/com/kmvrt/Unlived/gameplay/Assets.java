@@ -273,6 +273,8 @@ class Assets {
 	
 	public static void resize() {
 		// resize all the assets according to the current unit
+		
+		Gdx.app.log(TAG, "Resizing assets...");
 	
 		ins.roomSprite.setSize(Constants.ins.ROOM_WIDTH, Constants.ins.ROOM_HEIGHT);
 	

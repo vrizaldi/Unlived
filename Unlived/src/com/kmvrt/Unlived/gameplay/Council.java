@@ -339,11 +339,6 @@ class Council {
 		}
 		moveCreeps(delta);
 		creepsAttack();
-		for(GameChar c : data.chars) {
-			if(c.cRoom == data.getMainChar().cRoom) {
-				Gdx.app.debug(TAG, "c type: " + c.getID());
-			}
-		}
 	} // updateCreeps()'s end
 
 	private void deployCreeps(int num) {
@@ -410,19 +405,23 @@ class Council {
 						if(creep.cRoom == null) {
 							Gdx.app.debug(TAG, "cRoom is empty");
 						}
-						if(mood == 0 && creep.cRoom.north) {
+						if(mood == 0 && creep.cRoom.north
+								&& creep.cRoom.getY() != Constants.ROOMS_NUM_Y - 1) {
 							creep.changeCreep(Constants.DIR_N);
 							finish = true;
 
-						} else if(mood == 1 && creep.cRoom.south) {
+						} else if(mood == 1 && creep.cRoom.south
+								&& creep.cRoom.getY() != 0) {
 							creep.changeCreep(Constants.DIR_S);
 							finish = true;
 
-						} else if(mood == 2 && creep.cRoom.east) {
+						} else if(mood == 2 && creep.cRoom.east
+								&& creep.cRoom.getX() != Constants.ROOMS_NUM_X - 1) {
 							creep.changeCreep(Constants.DIR_E);
 							finish = true;
 
-						} else if(mood == 3 && creep.cRoom.west) {	
+						} else if(mood == 3 && creep.cRoom.west
+								&& creep.cRoom.getX() != 0) {	
 							creep.changeCreep(Constants.DIR_W);
 							finish = true;
 						}

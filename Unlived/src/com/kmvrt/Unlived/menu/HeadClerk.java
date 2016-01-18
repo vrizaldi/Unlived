@@ -176,13 +176,13 @@ class HeadClerk {
 				} else if(data.cOptions == Assets.ins.optionsSetting) {
 					if(p == Constants.OPT_VOL) {
 						Assets.ins.volMusic =
-								Math.min(Assets.ins.volMusic + 0.01f, 1f);
+								Math.min(Assets.ins.volMusic + 0.1f, 1f);
 						// the maximum is 1 (100%)
 					}
 	
 				} else if(p == Constants.OPT_SND) {
 					Assets.ins.volSound =
-							Math.min(Assets.ins.volSound + 0.01f, 1f);				
+							Math.min(Assets.ins.volSound + 0.1f, 1f);				
 				} 
 			} 	// if on setting
 		// if right is pressed
@@ -213,12 +213,12 @@ class HeadClerk {
 					
 				} else if(p == Constants.OPT_VOL) {
 					Assets.ins.volMusic =
-							Math.max(Assets.ins.volMusic - 0.01f, 0);
+							Math.max(Assets.ins.volMusic - 0.1f, 0);
 						// the minimum is 0 (0%)
 	
 				} else if(p == Constants.OPT_SND) {
 					Assets.ins.volSound =
-							Math.max(Assets.ins.volSound - 0.01f, 0);
+							Math.max(Assets.ins.volSound - 0.1f, 0);
 					
 				}
 			}

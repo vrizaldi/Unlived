@@ -63,11 +63,11 @@ class Clock {
 			}
 
 			// move the chars
-			c.x += c.getNextX() + c.atts.getAccel();
+			c.x += c.getNextX() + c.atts.getAccel() * Constants.ins.UNIT_CONV;
 			if(c.atts.getForce() != 0) {
-				c.x += c.atts.getForce();	
+				c.x += c.atts.getForce() * Constants.ins.UNIT_CONV;	
 			}
-			c.y += c.getNextY() + c.atts.getAccel();
+			c.y += c.getNextY() + c.atts.getAccel() * Constants.ins.UNIT_CONV;
 			c.moved();
 		}	// chars iterator's
 

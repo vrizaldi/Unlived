@@ -35,7 +35,7 @@ public class Receptionist {
 	private boolean justMoveRight;
 	private boolean justMoveLeft;
 	private boolean justShootRight;
-	private boolean justShootLeft;
+//	private boolean justShootLeft;
 	private boolean justBodySwap;
 	private boolean justBack;
 

@@ -247,7 +247,7 @@ public class GameChar {
 						@Override
 						public void run() {
 							bursting = true;
-							Gdx.app.log(TAG, "burstin = " + String.valueOf(bursting));
+					//		Gdx.app.log(TAG, "burstin = " + String.valueOf(bursting));
 						}
 					}, spell.getBurstInterval(),
 					spell.getBurst() - 2);

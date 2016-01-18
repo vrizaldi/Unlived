@@ -5,6 +5,7 @@ package com.kmvrt.Unlived.menu;
 import com.kmvrt.Unlived.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Preferences;
 
 public class Menu implements Screen {
 	// the main menu screen
@@ -19,14 +20,14 @@ public class Menu implements Screen {
 
 
 // constructor ---------------------------------------------------------------------------------------------
-	public Menu(Manager manager, StateData data) {
+	public Menu(Manager manager, StateData data, Preferences prefs) {
 		
 //		Assets.init();
 		this.data = data;
 		this.manager = manager;
 
 		headClerk = new HeadClerk(this, data, 
-				manager.prefs);
+				prefs);
 		painter = new Painter(data);
 	}
 

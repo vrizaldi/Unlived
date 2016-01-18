@@ -127,7 +127,7 @@ class Chemist {
 		c.affectors.applyAccel(-c.affectors.getAccel() * d);*/
 		
 		float d = 0;
-			// d = delta / affectingTime
+			// ratio of delta : affectingTime
 		if(delta > c.affectingTime) {
 			d = 1;
 			c.affectingTime = 0;
@@ -136,7 +136,7 @@ class Chemist {
 			c.affectingTime -= delta;
 		}
 			
-		c.atts.applyMana(c.affectors.getMana() * d);
+		c.atts.applyMana(Math.min(c.affectors.getMana() * d, c.atts.getMana()));
 		c.affectors.applyMana(-c.affectors.getMana() * d);
 				
 		c.atts.applyForce(c.affectors.getForce() * d);

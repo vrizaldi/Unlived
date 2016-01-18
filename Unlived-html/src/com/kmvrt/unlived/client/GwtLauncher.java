@@ -1,6 +1,6 @@
 package com.kmvrt.unlived.client;
 
-import com.kmvrt.unlived.Manager;
+import com.kmvrt.Unlived.Manager;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;

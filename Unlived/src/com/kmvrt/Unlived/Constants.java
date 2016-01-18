@@ -95,8 +95,8 @@ public class Constants {
 	public static final float CREEPS_CHANGE_INTERVAL = 1f;	// in second
 
 	// number of rooms in a map
-	public static final int ROOMS_NUM_X = 2;
-	public static final int ROOMS_NUM_Y = 2;
+	public static final int ROOMS_NUM_X = 5;
+	public static final int ROOMS_NUM_Y = 1;
 	public static final int ROOMS_NUM_MIN = 4;//6;
 
 	// room type id

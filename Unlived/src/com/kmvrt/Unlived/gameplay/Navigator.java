@@ -112,12 +112,16 @@ class Navigator {
 	private void deployRooms(Room[][] map, int x, int y, boolean first) {
 		// deploy rooms to the map into the specified x and y by recursing
 
+		boolean northEdge = false;
+		boolean southEdge = false;
+		boolean eastEdge = false;
+		boolean westEdge = false;
+		
 		if(map[x][y] == null) {	// if haven't inited
 			int typeID = first ? Constants.ROOM_SPAWN : Constants.ROOM_NORMAL;
 			map[x][y] = new Room(typeID, x, y);
 			
 		} else {
-//			Gdx.app.debug(TAG, "Attempted to reinit a room");
 			return;
 		}
 		Room r = map[x][y];
@@ -154,10 +158,20 @@ class Navigator {
 			}
 		}
 		
-		if(y == Constants.ROOMS_NUM_Y || y == 0) {
+		if(y == Constants.ROOMS_NUM_Y - 1) {
+			northEdge = true;
 			doorCt++;
 		}
-		if(x == Constants.ROOMS_NUM_X || x == 0) {
+		if(y == 0) {
+			southEdge = true;
+			doorCt++;
+		}
+		if(x == Constants.ROOMS_NUM_X - 1) {
+			eastEdge = true;
+			doorCt++;
+		}
+		if(x == 0) {
+			westEdge = true;
 			doorCt++;
 		}
 
@@ -165,76 +179,67 @@ class Navigator {
 		boolean crNorth, crSouth, crEast, crWest;	// rooms to be created later
 		crNorth = crSouth = crEast = crWest = false;
 		
-		int moreDoor = doorCt < 2 ? (int)(Math.random() * (4 - doorCt)) + 1 
+		int moreDoor = doorCt < 4 ? (int)(Math.random() * (4 - doorCt)) + 1 
 				: (int)(Math.random() * (4 - doorCt));
-//		Gdx.app.debug(TAG, "moreDoor = " + moreDoor);
 		while(moreDoor > 0) {
-			int dir = (int)(Math.random() * 4) + 1;
-			switch(dir) {
-			case 1:
-				if(y < Constants.ROOMS_NUM_Y - 1 
-						&& map[x][y + 1] == null && !r.north) {
-					// init north 
-					r.north = true;
-					
-					crNorth = true;
-					break;
-					
-				} else if(y < Constants.ROOMS_NUM_Y - 1 
-						&& !r.north) {
-					break;
-				}
-
-			case 2:
-				if(x < Constants.ROOMS_NUM_X - 1 
-						&& map[x + 1][y] == null && !r.east) {
-					// init east
-					r.east = true;
-					
-					crEast = true;
-					break;
-					
-				} else if(x < Constants.ROOMS_NUM_X - 1 
-						&& !r.east) {
-					break;
-				}
-
-			case 3:
-				if(x > 0 && map[x - 1][y] == null && !r.west) {
-					// init west
-					r.west = true;
-					
-					crWest = true;
-					break;
-					
-				} else if(x > 0 && !r.west) {
-					break;
-				}
-
-			case 4:
-				if(y > 0 && map[x][y - 1] == null && !r.south) {
-					r.south = true;
-					
-					crSouth = true;		// init south
-					break;
+			boolean searching = true;
+			while(searching) {
+				int dir = (int)(Math.random() * 4) + 1;
+				switch(dir) {
+				case 1:
+					if(!northEdge && !r.north) {
+						// init north 
+						if(map[x][y + 1] == null) {
+							r.north = true;
+							crNorth = true;
+						}
+						searching = false;
+						break;					
+					} 
 				
-				} else if(y > 0 && !r.south) {
-					break;
-				}
-			}	// switch(dir)'s
+				case 2:
+					if(!eastEdge && !r.east) {
+						// init east
+						if(map[x + 1][y] == null) {
+							r.east = true;
+							crEast = true;
+						}
+						searching = false;
+						break;	
+					}
+
+				case 3:
+					if(!westEdge && !r.west) {
+						// init west
+						if(map[x - 1][y] == null) {
+							r.west = true;
+							crWest = true;
+						}
+						searching = false;
+						break;	
+					}
+
+				case 4:
+					if(!southEdge && !r.south) {
+						// init south
+						if(map[x][y - 1] == null) {
+							r.south = true;
+							crSouth = true;		
+						}
+						searching = false;
+						break;
+					}
+				}	// switch(dir)'s
+			}	// while searching
 			moreDoor--;
 		}	// while(times)'s
-//		Gdx.app.debug(TAG, "Adding doors finished");
 		
-		if(!r.south && !r.north && !r.east && !r.west
-				/*(crNorth || crSouth || crEast || crWest)*/) {
+		if(!r.south && !r.north && !r.east && !r.west) {
 			Gdx.app.error(TAG, "Room with no door inited");
-//			Gdx.app.exit();
 		}
 
 		// init other rooms
 		while(crNorth || crSouth || crEast || crWest) {
-//			Gdx.app.debug(TAG, "Adding rooms...");
 			int order = (int)(Math.random() * 4); 
 			if(order == 0 && crNorth) {
 				// deploy new room in the north

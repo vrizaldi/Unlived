@@ -20,8 +20,6 @@ public class Manager extends Game {
 	// game screens
 	private Arena arena;
 	private Menu menu;
-	
-	public Preferences prefs;
 
 	private StateData data;
 	
@@ -31,22 +29,30 @@ public class Manager extends Game {
 	public void create() {
 		
 		Gdx.app.log(TAG, "Initialising the game...");
-		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		Gdx.app.setLogLevel(Application.LOG_INFO);
 		resize(Gdx.graphics.getHeight());
 /*		UNIT_CONV = 16 * Gdx.graphics.getHeight() / 480;
 		Constants.init();*/
 		MagicFactory.init();
-		prefs = Gdx.app.getPreferences("Unlived");
+		
+		Preferences prefs = Gdx.app.getPreferences("Unlived");
+		if(Gdx.app.getType() == Application.ApplicationType.Desktop) {
+			initScreen(prefs);
+		}
+			
+		data = new StateData(this);
+		arena = new Arena(this, data);
+		menu = new Menu(this, data, prefs);
+		toMainMenu();
+		Gdx.app.log(TAG, "Game initialised");
+	}
+	
+	private void initScreen(Preferences prefs) {
 		DisplayMode defDM = Gdx.graphics.getDesktopDisplayMode();
 		Gdx.graphics.setDisplayMode(
 				prefs.getInteger("resWidth", defDM.width), 
 				prefs.getInteger("resHeight", defDM.height), 
 				prefs.getBoolean("fullscreen", true));
-		data = new StateData(this);
-		arena = new Arena(this, data);
-		menu = new Menu(this, data);
-		toMainMenu();
-		Gdx.app.log(TAG, "Game initialised");
 	}
 
 
@@ -148,9 +154,6 @@ public class Manager extends Game {
 		}
 			// save it to be returned later
 		Constants.init();
-	/*	if(Constants.ins.UNIT_CONV != oldUnitConv) {
-			MagicFactory.init();
-		}*/
 		
 		return oldUnitConv;
 	}
