@@ -3,6 +3,7 @@
 package com.kmvrt.Unlived;
 
 import com.kmvrt.Unlived.gameplay.Arena;
+import com.kmvrt.Unlived.wardrobe.Wardrobe;
 import com.kmvrt.Unlived.menu.Menu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
@@ -20,8 +21,7 @@ public class Manager extends Game {
 	// game screens
 	private Arena arena;
 	private Menu menu;
-	
-	public Preferences prefs;
+	private Wardrobe wardrobe;
 
 	private StateData data;
 	
@@ -32,43 +32,57 @@ public class Manager extends Game {
 		
 		Gdx.app.log(TAG, "Initialising the game...");
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		resize(Gdx.graphics.getHeight());
-/*		UNIT_CONV = 16 * Gdx.graphics.getHeight() / 480;
-		Constants.init();*/
+		resize();
 		MagicFactory.init();
-		prefs = Gdx.app.getPreferences("Unlived");
+		Identities.init();
+		
+		Preferences prefs = Gdx.app.getPreferences("Unlived");
+		if(Gdx.app.getType() == Application.ApplicationType.Desktop) {
+			initScreen(prefs);
+		}
+			
+		data = new StateData(this);
+		arena = new Arena(this, data);
+		menu = new Menu(this, data, prefs);
+		wardrobe = new Wardrobe(this, data);
+		toMainMenu();
+//		toWardrobe();
+		Gdx.app.log(TAG, "Game initialised");
+	}
+	
+	private void initScreen(Preferences prefs) {
 		DisplayMode defDM = Gdx.graphics.getDesktopDisplayMode();
 		Gdx.graphics.setDisplayMode(
 				prefs.getInteger("resWidth", defDM.width), 
 				prefs.getInteger("resHeight", defDM.height), 
 				prefs.getBoolean("fullscreen", true));
-		data = new StateData(this);
-		arena = new Arena(this, data);
-		menu = new Menu(this, data);
-		toMainMenu();
-		Gdx.app.log(TAG, "Game initialised");
 	}
 
 
 // switch between screens ----------------------------------------------------------------------------------
+	public void toWardrobe() {
+	
+		this.setScreen(wardrobe);
+	}
+	
 	public void startArena() {
 		// called when the player go to arena
-	
-		Gdx.app.log(TAG, "Switching to Arena...");
+
 		arena.initNewGame();
 		this.setScreen(arena);
 	}
-
-	public void toWardrobe() {
 	
-//		this.setScreen(wardrobe);
+	public void revive() {
+		
+		arena.revive();
+		this.setScreen(arena);
 	}
 
-	public void toNextLevel() {
+/*	public void toNextLevel() {
 	
 		arena.initNewLevel();
 		this.setScreen(arena);
-	}
+	} */
 
 	public void pauseArena() {
 		// pause the arena
@@ -140,17 +154,15 @@ public class Manager extends Game {
 
 	
 // resize ------------------------------------------------------------------------------------------------
-	public int resize(/*int width,*/ int height) {
+	public int resize() {
 		
 		int oldUnitConv = 0;
+			// save it to be returned later
 		if(Constants.ins != null) {
 			oldUnitConv = Constants.ins.UNIT_CONV;
 		}
-			// save it to be returned later
+			
 		Constants.init();
-	/*	if(Constants.ins.UNIT_CONV != oldUnitConv) {
-			MagicFactory.init();
-		}*/
 		
 		return oldUnitConv;
 	}

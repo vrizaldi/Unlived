@@ -10,6 +10,7 @@ public class Wardrobe implements Screen {
 
 	private Manager manager;
 	private StateData data;
+	private boolean sel = false;
 	
 	private HeadClerk headClerk;
 	private Painter painter;
@@ -31,8 +32,27 @@ public class Wardrobe implements Screen {
 	@Override
 	public void render(float delta) {
 	
+		data.receptionist.pollInput();
 		headClerk.update();
-		painter.render();
+		if(sel) { 
+			painter.render();
+		}
+	}
+	
+	public void ready() {
+		
+		if(data.gameOver) {
+			data.gameOver = false;
+			manager.revive();
+		} else {
+			manager.startArena();
+		}
+	}
+	
+	public void toMainMenu() {
+		
+		data.gameOver = false;
+		manager.toMainMenu();
 	}
 
 
@@ -43,12 +63,16 @@ public class Wardrobe implements Screen {
 	
 		Gdx.app.log(TAG, "Selected as the active screen");
 		Assets.init();
+		data.pointer = 0;
+		sel = true;
 	}
 
 	@Override
 	public void hide() {
 	
 		Gdx.app.log(TAG, "Unselected from being the active screen");
+		sel = false;
+		dispose();
 	}
 
 	@Override
@@ -63,6 +87,7 @@ public class Wardrobe implements Screen {
 	@Override
 	public void resize(int width, int height) {
 	
+		manager.resize();
 		painter.resize(width, height);
 	} 
 

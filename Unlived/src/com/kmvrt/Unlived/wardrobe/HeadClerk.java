@@ -1,11 +1,14 @@
 package com.kmvrt.Unlived.wardrobe;
 
+import com.badlogic.gdx.Gdx;
 import com.kmvrt.Unlived.*;
 //import com.badlogic.gdx.Gdx;
 //import com.badlogic.gdx.Input.Keys;
 
 class HeadClerk {
 
+	private static final String TAG = HeadClerk.class.getName();
+	
 	private Wardrobe wardrobe;
 	private StateData data;
 
@@ -43,22 +46,25 @@ class HeadClerk {
 		// if down is just pressed's
 		
 		} else if(data.receptionist.moveRight()) {
-			data.pointer = ++data.pointer % data.cOptions.length;
+			data.pointer = ++data.pointer % MagicFactory.totalSpells();
 			data.selChar = MagicFactory.getSpellName(data.pointer);
-			data.selCostume = 0;
+			data.selCostume = 1;
 		// if right is just pressed's
 
 		} else if(data.receptionist.moveLeft()) {
 			--data.pointer;
 			if(data.pointer < 0) {
-				data.pointer += data.cOptions.length;
+				data.pointer += MagicFactory.totalSpells();
 			}
 			data.selChar = MagicFactory.getSpellName(data.pointer);
-			data.selCostume = 0;
+			data.selCostume = 1;
 		// if left is just pressed's
 
 		} else if(data.receptionist.shootRight()) {
-			data.selChar = MagicFactory.getSpellName(data.pointer);
+			wardrobe.ready();
+			
+		} else if(data.receptionist.back()) {
+			wardrobe.toMainMenu();
 		}
 	}
 

@@ -415,7 +415,8 @@ public class MagicFactory {
 	
 	public static int totalSpells() {
 		
-		return spellBook.size();
+		Gdx.app.debug(TAG, "total spells = " + keys.size());
+		return keys.size();
 	}
 
 }

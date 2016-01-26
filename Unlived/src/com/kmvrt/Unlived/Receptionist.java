@@ -1,6 +1,7 @@
 package com.kmvrt.Unlived;
 
 import com.kmvrt.Unlived.menu.Menu;
+import com.kmvrt.Unlived.wardrobe.Wardrobe;
 import com.kmvrt.Unlived.gameplay.Arena;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.Input.Keys;
 
 public class Receptionist {
 	// handle all the input
+	
+	private static final String TAG = Receptionist.class.getName();
 	
 	private Manager manager;
 
@@ -35,7 +38,7 @@ public class Receptionist {
 	private boolean justMoveRight;
 	private boolean justMoveLeft;
 	private boolean justShootRight;
-	private boolean justShootLeft;
+//	private boolean justShootLeft;
 	private boolean justBodySwap;
 	private boolean justBack;
 
@@ -71,11 +74,12 @@ public class Receptionist {
 
 	private void pollKeyboard() {
 
-		if(manager.getScreen() instanceof Menu) {
+		if(manager.getScreen() instanceof Menu
+				|| manager.getScreen() instanceof Wardrobe) {
 			pollMenuKeyboard();
 		} else if(manager.getScreen() instanceof Arena) {
 			pollArenaKeyboard();
-		}
+		} 
 		
 	}
 

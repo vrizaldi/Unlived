@@ -16,7 +16,7 @@ class Clock {
 	private static final String TAG = Clock.class.getName();
 	
 	private StateData data;
-
+	
 	// rectangles for collision detection
 	private Rectangle rec1;
 	private Rectangle rec2;
@@ -27,7 +27,7 @@ class Clock {
 	public Clock(StateData data) {
 
 		this.data = data;
-
+		
 		rec1 = new Rectangle();
 		rec2 = new Rectangle();
 		inter = new Rectangle();
@@ -38,7 +38,7 @@ class Clock {
 // update the game ----------------------------------------------------------------------------------------------
 	public void update() {
 		// update the current state of the game		float delta = Gdx.graphics.getDeltaTime();
-
+		
 		moveParticles();
 		collisionFix();
 	}	// update()'s

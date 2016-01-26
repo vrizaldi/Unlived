@@ -18,6 +18,7 @@ public class Arena implements Screen {
 
 	// data of current state of the game
 	private StateData data;
+	private boolean sel = false;
 
 	// the renderer, map and sprites manager
 	private Council council;
@@ -50,6 +51,7 @@ public class Arena implements Screen {
 	public void show() {
 
 		Gdx.app.log(TAG, "Selected as current screen");
+		sel = true;
 	}
 
 	public void revive() {
@@ -70,7 +72,7 @@ public class Arena implements Screen {
 		revive();		
 	}
 
-	public void initNewLevel() {
+	private void initNewLevel() {
 	
 		Assets.init();	// init assets
 			
@@ -116,6 +118,7 @@ public class Arena implements Screen {
 	
 	@Override
 	public void hide() {
+		sel = false;
 		Gdx.app.log(TAG, "Unselected from being the current screen");
 	}
 
@@ -137,7 +140,9 @@ public class Arena implements Screen {
 	public void render(float delta) {
 
 		update();
-		painter.render();	// render game to the screen
+		if(sel) {
+			painter.render();	// render game to the screen
+		}
 	}
 
 	private void update() {
@@ -148,20 +153,26 @@ public class Arena implements Screen {
 		// restart
 		if(data.switchLevel) {
 			Gdx.app.debug(TAG, "A");
-			data.switchLevel = false;
 			dispose();
+//			manager.toWardrobe();
+			data.switchLevel = false;
 			initNewLevel();
+//			return;
 			
 		} else if(data.gameOver) {
 			Gdx.app.debug(TAG, "B");
-			data.gameOver = false;
+//			data.gameOver = false;
 			dispose();
-			revive();
+			data.selChar = "tiny";
+			data.selCostume = 1;
+			manager.toWardrobe();
+			return;
 			
 		} else if(data.receptionist.back()
 				&& !data.justResumed) {
 			Gdx.app.debug(TAG, "C");
 			pause();
+			return;
 			
 		}/*else if(Gdx.input.isKeyJustPressed(Keys.R)) {
 			dispose();
@@ -170,23 +181,21 @@ public class Arena implements Screen {
 		} */
 		
 		// the order is important: council before navigator
-		float delta = Gdx.graphics.getDeltaTime();
-		if(data.slowMo) {
-			delta *= Constants.SLOWMO_RATIO;
+		if(sel) {
+			float delta = Gdx.graphics.getDeltaTime();
+			if(data.slowMo) {
+				delta *= Constants.SLOWMO_RATIO;
+			}
+			WorldTimer.update(delta);
+			navigator.update();
+			if(!data.paused
+					&& !data.justResumed) {
+				council.update();
+				chemist.update();
+				clock.update();
+			}
 		}
-		WorldTimer.update(delta);
-		navigator.update();
-		if(!data.paused
-				&& !data.justResumed)
-		council.update();
-		chemist.update();
-		clock.update();
 
-		// if gameover
-/*		if(data.switchScreen) {
-			Gdx.app.log(TAG, "GAMEOVER");
-			manager.gameOver(data);
-		}*/
 	}
 
 
@@ -211,7 +220,7 @@ public class Arena implements Screen {
 	public void resize(int width, int height) {
 //		Constants.ins.CAM_WIDTH = width;
 //		Constants.ins.CAM_HEIGHT = height;
-		int oldUnitConv = manager.resize(height);
+		int oldUnitConv = manager.resize();
 //		Gdx.app.debug(TAG, "old unit conv = " + oldUnitConv);
 		float unitConvRatio = (float)Constants.ins.UNIT_CONV / oldUnitConv;
 			// the ratio of the new unit to the old unit

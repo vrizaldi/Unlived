@@ -1,7 +1,6 @@
 package com.kmvrt.Unlived;
 
 import com.badlogic.gdx.Gdx;
-//import com.kmvrt.Unlived.gameplay.Manager;
 
 public class Constants {
 	// store all the constants

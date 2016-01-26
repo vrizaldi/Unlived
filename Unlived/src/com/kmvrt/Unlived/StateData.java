@@ -13,7 +13,6 @@ public class StateData {
 	public final Receptionist receptionist ;
 
 	public boolean paused = false;
-//	public boolean switchScreen;
 	public boolean gameOver;
 	public boolean switchLevel;
 	

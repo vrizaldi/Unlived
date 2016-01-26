@@ -36,7 +36,7 @@ class Chemist {
 // update the magics -----------------------------------------------------------------------------------------
 	public void update() {
 		// update the magics in the current state of the game
-
+		
 		float delta = Gdx.graphics.getDeltaTime();
 		if(data.slowMo) {
 			delta *= Constants.SLOWMO_RATIO;

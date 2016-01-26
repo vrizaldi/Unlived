@@ -2,7 +2,7 @@ package com.kmvrt.Unlived;
 
 import java.util.HashMap;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.GdxRuntimeException;
+//import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class Identities {
 
@@ -17,7 +17,7 @@ public class Identities {
 		costumeNum = new HashMap<String, Integer>();
 	}
 
-	public void init() {
+	public static void init() {
 	
 		if(initialised) {
 			return;
@@ -28,15 +28,17 @@ public class Identities {
 		for(String name : MagicFactory.getSpellNames()) {
 			int count = 0;
 			while(true) {
+				++count;
 				// try to find the costume folder
 				// if can't be found it means that the previous folder
 				// was the last one
-				try {
-					Gdx.files.internal("res/chars/" + name + '/' + count);
-				} catch(GdxRuntimeException e) {
+				if(Gdx.files.internal(
+						"res/chars/" + name + '/' + count + '/')
+						.exists()) {
+					continue;
+				} else {
 					break;
 				}
-				count++;
 			}
 
 			ins.costumeNum.put(name, count);

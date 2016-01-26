@@ -52,6 +52,7 @@ class Council {
 // create or dispose current game --------------------------------------------------------------------------
 	public void initNewGame() {
 
+		
 		data.chars.clear();
 		data.magics.clear();
 
@@ -184,6 +185,9 @@ class Council {
 			if(creep != null) {
 				data.setMainChar(creep);
 			}
+			
+			data.selChar = data.getMainChar().getName();
+			data.selCostume = data.getMainChar().getCostume();
 		}
 
 		// horizontal movements
@@ -339,11 +343,6 @@ class Council {
 		}
 		moveCreeps(delta);
 		creepsAttack();
-		for(GameChar c : data.chars) {
-			if(c.cRoom == data.getMainChar().cRoom) {
-				Gdx.app.debug(TAG, "c type: " + c.getID());
-			}
-		}
 	} // updateCreeps()'s end
 
 	private void deployCreeps(int num) {

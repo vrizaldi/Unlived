@@ -1,6 +1,7 @@
 package com.kmvrt.Unlived.wardrobe;
 
 import com.kmvrt.Unlived.*;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 class Assets {
+	
+	private static final String TAG = Assets.class.getName();
 
 	public static Assets ins;
 
@@ -32,10 +35,12 @@ class Assets {
 		charImgs = new ArrayList<TextureAtlas>();
 		charSprites = new HashMap<String, Sprite>();
 		charAnims = new HashMap<String, Animation>();
+		Gdx.app.debug(TAG, "Initialising chars...");
 		for(String name : MagicFactory.getSpellNames()) {
 			for(int costume = 1; costume < Identities.ins.getCostumeNum(name); 
 					costume++) {
-				TextureAtlas img = new TextureAtlas("res/char/" + name + "/" + costume
+				Gdx.app.debug(TAG, "Initialising " + name + " " + costume);
+				TextureAtlas img = new TextureAtlas("res/chars/" + name + "/" + costume
 						+ "/" + name + ".pack");
 				Animation anim = getAnim(img, name);
 				Sprite s = new Sprite(anim.getKeyFrame(0));
@@ -48,7 +53,7 @@ class Assets {
 		}
 
 		// UI components
-		uiImgs = new TextureAtlas("char/ui/ui.pack");
+		uiImgs = new TextureAtlas("res/wardrobe/wardrobe.pack");
 		boxSprite = new Sprite(uiImgs.findRegion("box"));
 		boxSprite.setSize(Constants.ins.CHAR_WIDTH + 1,
 				Constants.ins.CHAR_HEIGHT + 1);
@@ -57,7 +62,7 @@ class Assets {
 	private Animation getAnim(TextureAtlas img, String name) {
 	
 		Array<TextureRegion> frames = new Array<TextureRegion>(1);
-		for(int i = 0; true; i++) {
+		for(int i = 1; true; i++) {
 			TextureRegion frame = img.findRegion(name + i);
 			if(frame == null){
 				break;
@@ -69,6 +74,7 @@ class Assets {
 				frames.ensureCapacity(1);
 				frames.add(frame);
 			}
+//			Gdx.app.debug(TAG, "i = " + i);
 		}
 		return new Animation((float)1 / (frames.size * 3),
 				frames, Animation.LOOP);
@@ -96,9 +102,24 @@ class Assets {
 		}
 		initialised = false;
 		
-		
-		
 		// dispose the assets ******************************
+		for(TextureAtlas charImg : ins.charImgs) {
+			charImg.dispose();
+		}
+		ins.charImgs.clear();
+		ins.charAnims.clear();
+		ins.charSprites.clear();
+		ins.uiImgs.dispose();
+	}
+	
+	public static void resize() {
+		
+		for(String key : ins.charSprites.keySet()) {
+			Sprite sp = ins.charSprites.get(key);
+			sp.setSize(Constants.ins.CHAR_WIDTH, Constants.ins.CHAR_HEIGHT);
+		}
+		ins.boxSprite.setSize(Constants.ins.CHAR_WIDTH + 1,
+				Constants.ins.CHAR_HEIGHT + 1);
 	}
 
 }

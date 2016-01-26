@@ -14,6 +14,7 @@ class Navigator {
 	
 	private StateData data;		// the current game state data
 
+	private Arena arena;
 	// for collision detection
 //	private Rectangle rec1;
 //	private Rectangle rec2;
@@ -28,6 +29,7 @@ class Navigator {
 	
 		this.data = data;
 		
+		this.arena = arena;
 //		rec1 = new Rectangle();
 //		rec2 = new Rectangle();
 //		inter = new Rectangle();

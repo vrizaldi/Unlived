@@ -111,7 +111,7 @@ class HeadClerk {
 			} else if(data.cOptions == Assets.ins.optionsMenu) {
 				if(p == Constants.OPT_START) {
 					// start the game
-					menu.startArena();
+					menu.toWardrobe();
 
 				} else if(p == Constants.OPT_SETTING) {
 					// open the settings
@@ -149,10 +149,7 @@ class HeadClerk {
 		} else if(data.receptionist.moveRight()) {
 			if(data.cOptions == Assets.ins.optionsSetting) {
 				if(p == Constants.OPT_RES) {
-					cDIndex = (cDIndex - 1) % Assets.ins.availableRes.length;
-					if(cDIndex < 0) {
-						cDIndex += Assets.ins.availableRes.length;
-					}
+					cDIndex = (cDIndex + 1) % Assets.ins.availableRes.length;
 					DisplayMode d = Assets.ins.availableRes[cDIndex];
 					Gdx.app.log(TAG, "Setting resolution to " + d.width + "x" + d.height + "...");
 					Gdx.graphics.setDisplayMode(d.width, d.height, fullscreen);
@@ -190,7 +187,10 @@ class HeadClerk {
 		} else if(data.receptionist.moveLeft()) {
 			if(data.cOptions == Assets.ins.optionsSetting) {
 				if(p == Constants.OPT_RES) {
-					cDIndex = (cDIndex + 1) % Assets.ins.availableRes.length;
+					cDIndex = (cDIndex - 1) % Assets.ins.availableRes.length;
+					if(cDIndex < 0) {
+						cDIndex += Assets.ins.availableRes.length;
+					}
 					DisplayMode d = Assets.ins.availableRes[cDIndex];
 					Gdx.app.log(TAG, "Setting resolution to " + d.width + "x" + d.height + "...");
 					Gdx.graphics.setDisplayMode(d.width, d.height, fullscreen);

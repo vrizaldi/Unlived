@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 class Painter {
 
+	private static final String TAG = Painter.class.getName();
+	
 	private StateData data;
 
 	private OrthographicCamera cam;
@@ -47,7 +49,10 @@ class Painter {
 		Assets.ins.boxSprite.draw(batch);
 
 		// draw the selected char
-		Sprite selC = Assets.ins.charSprites.get(data.selChar);
+//		Gdx.app.debug(TAG, "selChar = " + data.selChar);
+//		Gdx.app.debug(TAG, "selCostume = " + data.selCostume);
+//		Gdx.app.debug(TAG, "pointer = " + data.pointer);
+		Sprite selC = Assets.ins.charSprites.get(data.selChar + data.selCostume);
 		selC.setPosition((cam.viewportWidth - selC.getWidth()) / 2,
 				(cam.viewportHeight - selC.getHeight()) / 2);
 		selC.draw(batch);
@@ -60,6 +65,7 @@ class Painter {
 // resize -------------------------------------------------------------------------------------------------------
 	public void resize(int width, int height) {
 	
+		Assets.resize();
 		cam.viewportWidth = width;
 		cam.viewportHeight = height;
 		cam.position.set(width / 2, height / 2, 0);
