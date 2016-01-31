@@ -37,7 +37,7 @@ class Assets {
 		charAnims = new HashMap<String, Animation>();
 		Gdx.app.debug(TAG, "Initialising chars...");
 		for(String name : MagicFactory.getSpellNames()) {
-			for(int costume = 1; costume < Identities.ins.getCostumeNum(name); 
+			for(int costume = 1; costume <= Identities.ins.getCostumeNum(name); 
 					costume++) {
 				Gdx.app.debug(TAG, "Initialising " + name + " " + costume);
 				TextureAtlas img = new TextureAtlas("res/chars/" + name + "/" + costume
@@ -51,12 +51,17 @@ class Assets {
 				charAnims.put(name + costume, anim);
 			}
 		}
+		
+		for(String key : charSprites.keySet()) {
+			Gdx.app.debug(TAG, key);
+		}
 
 		// UI components
 		uiImgs = new TextureAtlas("res/wardrobe/wardrobe.pack");
 		boxSprite = new Sprite(uiImgs.findRegion("box"));
 		boxSprite.setSize(Constants.ins.CHAR_WIDTH + 1,
 				Constants.ins.CHAR_HEIGHT + 1);
+		
 	}
 
 	private Animation getAnim(TextureAtlas img, String name) {

@@ -63,7 +63,7 @@ public class Wardrobe implements Screen {
 	
 		Gdx.app.log(TAG, "Selected as the active screen");
 		Assets.init();
-		data.pointer = 0;
+		data.pointer = MagicFactory.getIndex("tiny");
 		sel = true;
 	}
 

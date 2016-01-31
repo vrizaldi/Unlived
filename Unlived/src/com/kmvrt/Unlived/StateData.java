@@ -56,8 +56,8 @@ public class StateData {
 		killCt = 0;
 		deathCt = 0;
 
-		selChar = "tiny";
-		selCostume = 1; 
+//		selChar = "tiny";
+//		selCostume = 1; 
 	} // new(int)'s end
 
 

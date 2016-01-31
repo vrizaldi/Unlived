@@ -402,6 +402,11 @@ public class MagicFactory {
 
 		return spellBook.get(name);
 	}
+	
+	public static int getIndex(String name) {
+		
+		return getSpellNames().indexOf(name);
+	}
 
 	public static String getSpellName(int index) {
 		
@@ -410,7 +415,7 @@ public class MagicFactory {
 
 	public static ArrayList<String> getSpellNames() {
 		
-		return keys;
+		return (ArrayList<String>)keys.clone();
 	}
 	
 	public static int totalSpells() {

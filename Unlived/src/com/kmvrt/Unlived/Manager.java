@@ -62,6 +62,8 @@ public class Manager extends Game {
 // switch between screens ----------------------------------------------------------------------------------
 	public void toWardrobe() {
 	
+		data.selChar = "tiny";
+		data.selCostume = 1;
 		this.setScreen(wardrobe);
 	}
 	

@@ -53,6 +53,9 @@ class Painter {
 //		Gdx.app.debug(TAG, "selCostume = " + data.selCostume);
 //		Gdx.app.debug(TAG, "pointer = " + data.pointer);
 		Sprite selC = Assets.ins.charSprites.get(data.selChar + data.selCostume);
+		if(selC == null) {
+			Gdx.app.error(TAG, "selC is null name:" + data.selChar + data.selCostume);
+		}
 		selC.setPosition((cam.viewportWidth - selC.getWidth()) / 2,
 				(cam.viewportHeight - selC.getHeight()) / 2);
 		selC.draw(batch);

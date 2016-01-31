@@ -163,8 +163,6 @@ public class Arena implements Screen {
 			Gdx.app.debug(TAG, "B");
 //			data.gameOver = false;
 			dispose();
-			data.selChar = "tiny";
-			data.selCostume = 1;
 			manager.toWardrobe();
 			return;
 			
